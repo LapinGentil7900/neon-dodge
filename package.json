@@ -1,0 +1,33 @@
+// ── NEON DODGE — Level System ──────────────────────────
+// speed  = pixels par frame à 60 fps
+// rate   = probabilité de spawn par frame (0-1)
+// tracker= si true, certains ennemis suivent le joueur
+// ──────────────────────────────────────────────────────
+const LevelSystem = {
+    levels: [
+        { name:'SÉCURITÉ',    color:'#00f3ff', speed:3,  rate:0.030, tracker:false, trackerRatio:0,    scoreReq:0    },
+        { name:'FRONTIÈRE',   color:'#00ff88', speed:5,  rate:0.050, tracker:true,  trackerRatio:0.15, scoreReq:100  },
+        { name:'ZONE ROUGE',  color:'#ffaa00', speed:8,  rate:0.085, tracker:true,  trackerRatio:0.30, scoreReq:500  },
+        { name:'SINGULARITÉ', color:'#ff3838', speed:12, rate:0.130, tracker:true,  trackerRatio:0.55, scoreReq:2000 }
+    ],
+
+    getCurrentLevel(score) {
+        for (let i = this.levels.length - 1; i >= 0; i--) {
+            if (score >= this.levels[i].scoreReq) return this.levels[i];
+        }
+        return this.levels[0];
+    },
+
+    getLevelIndex(score) {
+        let idx = 0;
+        for (let i = 0; i < this.levels.length; i++) {
+            if (score >= this.levels[i].scoreReq) idx = i;
+        }
+        return idx;
+    },
+
+    getNextLevelScore(score) {
+        const idx = this.getLevelIndex(score);
+        return idx < this.levels.length - 1 ? this.levels[idx + 1].scoreReq : null;
+    }
+};
