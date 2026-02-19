@@ -1,8 +1,3 @@
-// ── NEON DODGE — Level System ──────────────────────────
-// speed  = pixels par frame à 60 fps
-// rate   = probabilité de spawn par frame (0-1)
-// tracker= si true, certains ennemis suivent le joueur
-// ──────────────────────────────────────────────────────
 const LevelSystem = {
     levels: [
         { name:'SÉCURITÉ',    color:'#00f3ff', speed:3,  rate:0.030, tracker:false, trackerRatio:0,    scoreReq:0    },
