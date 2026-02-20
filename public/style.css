@@ -195,8 +195,8 @@ input:focus{ border-color:var(--neon); box-shadow:0 0 10px rgba(0,243,255,.12); 
 .daily-done     { font-size:.58rem; color:var(--green); text-align:center; padding:5px; }
 
 /* ── GAME ─────────────────────────────────── */
-#layer-game{ position:absolute; inset:0; display:none; }
-#gameCanvas { display:block; }
+#layer-game{ position:absolute; inset:0; display:none; overflow:hidden; }
+#gameCanvas { display:block; position:absolute; top:0; left:0; }
 
 /* ── HUD ──────────────────────────────────── */
 #hud{
