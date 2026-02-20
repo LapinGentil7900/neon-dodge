@@ -723,6 +723,10 @@ const Game = {
         this._puCount = 0; this._prevLvlIdx = -1;
         clearTimeout(this._slowTimer);
 
+        // IMPORTANT: forcer les bonnes dimensions du canvas avant tout
+        this.canvas.width  = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+
         this.player.x = this.canvas.width  / 2 - this.player.size / 2;
         this.player.y = this.canvas.height - 80;
 
@@ -1304,12 +1308,6 @@ const Dev = {
 // ════════════════════════════════════════════════════
 window.addEventListener('load', () => {
     Game.init();
-    setTimeout(() => {
-        Game.resize();
-        Game.canvas.width  = window.innerWidth;
-        Game.canvas.height = window.innerHeight;
-        Game.player.y = Game.canvas.height - 80;
-    }, 200);
     console.log('%cNEON DODGE DEV', 'color:#ffaa00;font-size:18px;font-weight:900;font-family:monospace');
     console.log('%cShift+D → console dev', 'color:#555;font-family:monospace');
 });
