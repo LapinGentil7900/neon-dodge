@@ -9,12 +9,11 @@
 </head>
 <body>
 
-<!-- toasts -->
 <div id="notif"></div>
 <div id="ach-popup"><div class="ap-title">★ ACHIEVEMENT DÉBLOQUÉ</div><div class="ap-name" id="ap-name"></div><div class="ap-desc" id="ap-desc"></div></div>
 <div id="fps-el">00 FPS</div>
 
-<!-- ════════ MENU ════════ -->
+<!-- MENU -->
 <div id="layer-menu" class="screen">
     <div id="user-tag">NON CONNECTÉ</div>
     <h1 class="neon-title">NEON DODGE</h1>
@@ -28,33 +27,28 @@
     <div id="daily-preview" style="margin-top:14px"></div>
 </div>
 
-<!-- ════════ AUTH ════════ -->
+<!-- AUTH -->
 <div id="layer-auth" class="screen" style="display:none">
     <h2 class="sc-title">ACCÈS RÉSEAU</h2>
     <div class="auth-tabs">
         <div class="auth-tab active" id="tab-login"    onclick="Auth.tab('login')">CONNEXION</div>
         <div class="auth-tab"        id="tab-register" onclick="Auth.tab('register')">INSCRIPTION</div>
     </div>
-
     <div id="form-login" class="auth-form">
         <input type="text"     id="l-user" placeholder="Pseudo" autocomplete="username">
-        <input type="password" id="l-pass" placeholder="Mot de passe" autocomplete="current-password"
-               onkeydown="if(event.key==='Enter') Auth.login()">
+        <input type="password" id="l-pass" placeholder="Mot de passe" autocomplete="current-password" onkeydown="if(event.key==='Enter') Auth.login()">
         <button class="btn btn-full" id="btn-login" onclick="Auth.login()">SE CONNECTER</button>
     </div>
-
     <div id="form-register" class="auth-form" style="display:none">
         <input type="text"     id="r-user"    placeholder="Pseudo (3-16 car.)" autocomplete="username">
         <input type="password" id="r-pass"    placeholder="Mot de passe (4 min)" autocomplete="new-password">
-        <input type="password" id="r-confirm" placeholder="Confirmer" autocomplete="new-password"
-               onkeydown="if(event.key==='Enter') Auth.register()">
+        <input type="password" id="r-confirm" placeholder="Confirmer" autocomplete="new-password" onkeydown="if(event.key==='Enter') Auth.register()">
         <button class="btn btn-green btn-full" id="btn-register" onclick="Auth.register()">CRÉER MON COMPTE</button>
     </div>
-
     <button class="btn btn-red btn-full btn-sm" onclick="UI.show('layer-menu')">← RETOUR</button>
 </div>
 
-<!-- ════════ PROFIL ════════ -->
+<!-- PROFIL -->
 <div id="layer-profile" class="screen" style="display:none">
     <h2 class="sc-title">MON PROFIL</h2>
     <div id="prof-rank" class="rank-label" style="margin-bottom:3px"></div>
@@ -69,38 +63,39 @@
     <button class="btn btn-red btn-full btn-sm" onclick="UI.show('layer-menu')" style="margin-top:6px">← RETOUR</button>
 </div>
 
-<!-- ════════ ACHIEVEMENTS ════════ -->
+<!-- ACHIEVEMENTS -->
 <div id="layer-ach" class="screen" style="display:none">
     <h2 class="sc-title">ACHIEVEMENTS</h2>
     <div class="ach-grid" id="ach-grid"></div>
     <button class="btn btn-red btn-full btn-sm" onclick="UI.show('layer-profile')" style="margin-top:10px">← RETOUR</button>
 </div>
 
-<!-- ════════ BOUTIQUE ════════ -->
+<!-- BOUTIQUE -->
 <div id="layer-shop" class="screen" style="display:none">
     <h2 class="sc-title">BOUTIQUE DE SKINS</h2>
-    <p style="font-size:.58rem;color:rgba(255,255,255,.38);margin:0 0 6px">
-        CRÉDITS : <span id="shop-cr" style="color:var(--neon)">0</span>
-    </p>
+    <p style="font-size:.58rem;color:rgba(255,255,255,.38);margin:0 0 6px">CRÉDITS : <span id="shop-cr" style="color:var(--neon)">0</span></p>
     <div id="skin-list"></div>
     <button class="btn btn-red btn-full btn-sm" onclick="UI.show('layer-menu')" style="margin-top:10px">← RETOUR</button>
 </div>
 
-<!-- ════════ LEADERBOARD ════════ -->
+<!-- LEADERBOARD -->
 <div id="layer-lead" class="screen" style="display:none">
     <h2 class="sc-title">TOP JOUEURS MONDIAUX</h2>
     <div id="lead-list"></div>
     <button class="btn btn-red btn-full btn-sm" onclick="UI.show('layer-menu')" style="margin-top:10px">← RETOUR</button>
 </div>
 
-<!-- ════════ JEU ════════ -->
-<div id="layer-game" style="display:none;position:absolute;width:100%;height:100%">
-    <canvas id="gameCanvas"></canvas>
-    <div id="hud">
+<!-- JEU -->
+<div id="layer-game" style="display:none;position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden">
+    <canvas id="gameCanvas" style="display:block;position:absolute;top:0;left:0"></canvas>
+    <div id="hud" style="position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:flex-start;padding:13px 17px;pointer-events:none">
         <div class="hud-l">
             <div class="hud-lbl">SCORE</div>
             <div class="hud-val" id="ui-score">0</div>
             <div class="hud-hi">HI: <span id="ui-hi">0</span></div>
+        </div>
+        <div style="position:absolute;top:13px;left:50%;transform:translateX(-50%);text-align:center">
+            <div style="font-size:.42rem;color:rgba(255,255,255,.3);letter-spacing:.1em">APPUYEZ SUR ECHAP POUR PAUSE</div>
         </div>
         <div class="hud-r">
             <div class="hud-lbl">NIVEAU</div>
@@ -108,15 +103,28 @@
             <div class="hud-next" id="ui-next-wrap">→ <span id="ui-next">100</span></div>
         </div>
     </div>
-    <div id="combo-hud"><div class="combo-num" id="combo-num">x2</div><div class="combo-lbl">COMBO</div></div>
-    <div id="pu-hud"></div>
-    <div id="god-badge">⚡ GOD MODE</div>
-    <div id="level-bar-wrap"><div id="level-bar"></div></div>
+    <div id="combo-hud" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;display:none">
+        <div class="combo-num" id="combo-num">x2</div>
+        <div class="combo-lbl">COMBO</div>
+    </div>
+    <div id="pu-hud" style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);font-size:.58rem;letter-spacing:.14em;pointer-events:none;display:none;animation:blink-pu 1s ease infinite"></div>
+    <div id="god-badge" style="position:absolute;top:13px;left:50%;transform:translateX(-50%);font-size:.48rem;color:var(--orange);letter-spacing:.18em;border:1px solid var(--orange);padding:3px 10px;display:none;pointer-events:none;animation:blink-pu 1s ease infinite">⚡ GOD MODE</div>
+    <div id="level-bar-wrap" style="position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,.04)"><div id="level-bar" style="height:100%;transition:width .3s"></div></div>
 </div>
 
-<!-- ════════ ÉCRAN DE MORT ════════ -->
-<div id="layer-death" style="display:none;position:absolute;inset:0;z-index:20;
-     flex-direction:column;justify-content:center;align-items:center;gap:7px;background:rgba(0,0,0,.88)">
+<!-- PAUSE -->
+<div id="layer-pause" style="display:none;position:absolute;inset:0;z-index:25;flex-direction:column;justify-content:center;align-items:center;gap:12px;background:rgba(0,0,0,.85)">
+    <div style="font-size:clamp(1.5rem,5vw,3rem);font-weight:900;color:var(--neon);letter-spacing:.2em;text-shadow:0 0 20px var(--neon)">PAUSE</div>
+    <div style="font-size:.6rem;color:rgba(255,255,255,.3);letter-spacing:.1em">SCORE: <span id="pause-score">0</span></div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:10px;width:min(240px,80vw)">
+        <button class="btn btn-full" onclick="Game.resume()">▶ REPRENDRE</button>
+        <button class="btn btn-blue btn-full" onclick="UI.show('layer-shop')">BOUTIQUE</button>
+        <button class="btn btn-red btn-full"  onclick="Game.quitToMenu()">QUITTER</button>
+    </div>
+</div>
+
+<!-- MORT -->
+<div id="layer-death" style="display:none;position:absolute;inset:0;z-index:20;flex-direction:column;justify-content:center;align-items:center;gap:7px;background:rgba(0,0,0,.88)">
     <div class="death-title">GAME OVER</div>
     <div class="death-score">SCORE : <span id="d-score">0</span></div>
     <div class="death-new" id="d-new" style="display:none">★ NOUVEAU RECORD !</div>
@@ -128,13 +136,13 @@
     </div>
     <div class="death-daily" id="d-daily"></div>
     <div class="death-btns">
-        <button class="btn"          onclick="Game.start()">↺ REJOUER</button>
-        <button class="btn btn-red"  onclick="UI.show('layer-menu')">MENU</button>
+        <button class="btn"         onclick="Game.start()">↺ REJOUER</button>
+        <button class="btn btn-red" onclick="UI.show('layer-menu')">MENU</button>
     </div>
 </div>
 
-<!-- ════════ DEV CONSOLE ════════ -->
-<div id="dev-tab" onclick="Dev.toggle()">⚙ DEV</div>
+<!-- DEV CONSOLE (accès restreint) -->
+<div id="dev-tab" onclick="Dev.toggle()" style="display:none">⚙ DEV</div>
 <div id="dev-panel">
     <div class="dev-header">
         <span class="dev-htitle">⚙ CONSOLE DÉVELOPPEUR</span>
@@ -164,22 +172,50 @@
     </div>
     <div class="dev-cmd">
         <span class="dev-prompt">&gt;</span>
-        <input id="dev-input" type="text" placeholder="commande..." autocomplete="off"
-               onkeydown="Dev.key(event)">
+        <input id="dev-input" type="text" placeholder="commande..." autocomplete="off" onkeydown="Dev.key(event)">
         <button class="dev-send" onclick="Dev.send()">↵</button>
     </div>
 </div>
 
-<!-- ════════════════════════════════════════
-     SCRIPTS
-     ════════════════════════════════════════ -->
-<script src="levels.js"></script>
 <script>
 'use strict';
 
-// ════════════════════════════════════════════════════
-//  CONSTANTS
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
+//  COMPTES AUTORISÉS À ACCÉDER À LA DEV CONSOLE
+//  Ajoute ici les pseudos des comptes dev
+// ══════════════════════════════════════════════
+const DEV_ACCOUNTS = ['admin', 'dev', 'LapinGentil7900'];
+
+// ══════════════════════════════════════════════
+//  LEVEL SYSTEM (inliné pour éviter les erreurs de chargement)
+// ══════════════════════════════════════════════
+const LevelSystem = {
+    levels: [
+        { name:'SÉCURITÉ',    color:'#00f3ff', speed:3,  rate:0.030, tracker:false, trackerRatio:0,    scoreReq:0    },
+        { name:'FRONTIÈRE',   color:'#00ff88', speed:5,  rate:0.050, tracker:true,  trackerRatio:0.15, scoreReq:100  },
+        { name:'ZONE ROUGE',  color:'#ffaa00', speed:8,  rate:0.085, tracker:true,  trackerRatio:0.30, scoreReq:500  },
+        { name:'SINGULARITÉ', color:'#ff3838', speed:12, rate:0.130, tracker:true,  trackerRatio:0.55, scoreReq:2000 }
+    ],
+    getCurrentLevel(score) {
+        for (let i = this.levels.length-1; i >= 0; i--)
+            if (score >= this.levels[i].scoreReq) return this.levels[i];
+        return this.levels[0];
+    },
+    getLevelIndex(score) {
+        let idx = 0;
+        for (let i = 0; i < this.levels.length; i++)
+            if (score >= this.levels[i].scoreReq) idx = i;
+        return idx;
+    },
+    getNextLevelScore(score) {
+        const idx = this.getLevelIndex(score);
+        return idx < this.levels.length-1 ? this.levels[idx+1].scoreReq : null;
+    }
+};
+
+// ══════════════════════════════════════════════
+//  CONSTANTES
+// ══════════════════════════════════════════════
 const SKINS = [
     { id:'neon_blue', name:'Neon Blue', color:'#00f3ff', price:0    },
     { id:'emerald',   name:'Emerald',   color:'#00ff88', price:500  },
@@ -211,7 +247,7 @@ const ACHIEVEMENTS = [
 const RANKS = [
     { min:0,     label:'RECRUE',      color:'#888'    },
     { min:200,   label:'AGENT',       color:'#00f3ff' },
-    { min:600,   label:'OPÉRATEUR',  color:'#00ff88' },
+    { min:600,   label:'OPÉRATEUR',   color:'#00ff88' },
     { min:1500,  label:'SPÉCIALISTE', color:'#ffaa00' },
     { min:4000,  label:'FANTÔME',     color:'#cc66ff' },
     { min:9000,  label:'LÉGENDE',     color:'#ff3838' }
@@ -223,44 +259,31 @@ const PU_TYPES = {
     credits: { color:'#00ff88', label:'$', desc:'+150 CR'  }
 };
 
-// ════════════════════════════════════════════════════
-//  STATE — session data (in memory, synced with server)
-// ════════════════════════════════════════════════════
-let S = null;       // account data object
-let TOKEN = null;   // auth token
+// ══════════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════════
+let S = null;
+let TOKEN = null;
 
-// Guest defaults
 function guestState() {
-    return {
-        username:    'Pilote',
-        credits:     0,
-        highScore:   0,
-        totalTime:   0,
-        deathCount:  0,
-        gamesPlayed: 0,
-        xp:          0,
-        ownedSkins:  ['neon_blue'],
-        equippedSkin:'neon_blue',
-        achievements:{},
-        daily:       null
-    };
+    return { username:'Pilote', credits:0, highScore:0, totalTime:0, deathCount:0,
+             gamesPlayed:0, xp:0, ownedSkins:['neon_blue'], equippedSkin:'neon_blue',
+             achievements:{}, daily:null };
 }
 
 function isLogged() { return TOKEN !== null; }
+function isDevAccount() { return S && DEV_ACCOUNTS.includes(S.username); }
 
 function getRank(xp) {
-    for (let i = RANKS.length - 1; i >= 0; i--) {
+    for (let i = RANKS.length-1; i >= 0; i--)
         if (xp >= RANKS[i].min) return RANKS[i];
-    }
     return RANKS[0];
 }
-function getNextRank(xp) {
-    return RANKS.find(r => r.min > xp) || null;
-}
+function getNextRank(xp) { return RANKS.find(r => r.min > xp) || null; }
 
-// ════════════════════════════════════════════════════
-//  API CLIENT
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
+//  API
+// ══════════════════════════════════════════════
 const API = {
     async call(method, path, body) {
         try {
@@ -268,235 +291,189 @@ const API = {
             if (body) opts.body = JSON.stringify(body);
             const r = await fetch(path, opts);
             return await r.json();
-        } catch(e) {
-            Dev.log('e', 'API error: ' + e.message);
-            return { ok:false, error:'Erreur réseau' };
-        }
+        } catch(e) { return { ok:false, error:'Erreur réseau' }; }
     },
-    register: (u,p)   => API.call('POST', '/api/register', { username:u, password:p }),
-    login:    (u,p)   => API.call('POST', '/api/login',    { username:u, password:p }),
-    save:     (data)  => TOKEN ? API.call('POST', '/api/save',  { token:TOKEN, data }) : Promise.resolve({ ok:true }),
-    score:    (s,c)   => TOKEN ? API.call('POST', '/api/score', { token:TOKEN, score:s, combo:c }) : Promise.resolve({ ok:true }),
-    leaderboard:()    => API.call('GET',  '/api/leaderboard'),
-    logout:   ()      => TOKEN ? API.call('POST', '/api/logout', { token:TOKEN }) : Promise.resolve({ ok:true })
+    register: (u,p) => API.call('POST', '/api/register', { username:u, password:p }),
+    login:    (u,p) => API.call('POST', '/api/login',    { username:u, password:p }),
+    save:     (d)   => TOKEN ? API.call('POST', '/api/save',  { token:TOKEN, data:d }) : Promise.resolve({ok:true}),
+    score:    (s,c) => TOKEN ? API.call('POST', '/api/score', { token:TOKEN, score:s, combo:c }) : Promise.resolve({ok:true}),
+    leaderboard: () => API.call('GET', '/api/leaderboard'),
+    logout:   ()    => TOKEN ? API.call('POST', '/api/logout', { token:TOKEN }) : Promise.resolve({ok:true})
 };
 
-// Debounced save (avoid hammering server)
 let _saveTimer = null;
 function scheduleSave() {
     clearTimeout(_saveTimer);
     _saveTimer = setTimeout(() => {
-        if (isLogged() && S) {
-            API.save(S).then(r => {
-                if (!r.ok) Dev.log('w', 'Save échoué: ' + (r.error||'?'));
-            });
-        }
+        if (isLogged() && S) API.save(S);
     }, 1000);
 }
 
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
 //  NOTIFICATIONS
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
 let _nt, _at;
 function notify(msg, type='neon') {
     const el = document.getElementById('notif');
-    const c  = { neon:'var(--neon)', red:'var(--pink)', orange:'var(--orange)', green:'var(--green)' };
+    const c = { neon:'var(--neon)', red:'var(--pink)', orange:'var(--orange)', green:'var(--green)' };
     el.innerText = msg;
-    el.style.borderColor = c[type] || c.neon;
-    el.style.color       = c[type] || c.neon;
-    el.style.display     = 'block';
+    el.style.borderColor = el.style.color = c[type]||c.neon;
+    el.style.display = 'block';
     clearTimeout(_nt);
     _nt = setTimeout(() => el.style.display = 'none', 2800);
 }
-
 function achPopup(def) {
     document.getElementById('ap-name').innerText = def.label;
     document.getElementById('ap-desc').innerText = def.desc;
     const el = document.getElementById('ach-popup');
     el.style.display = 'block';
-    el.style.animation = 'none';
-    void el.offsetWidth;
-    el.style.animation = '';
+    el.style.animation = 'none'; void el.offsetWidth; el.style.animation = '';
     clearTimeout(_at);
-    _at = setTimeout(() => el.style.display = 'none', 3500);
+    _at = setTimeout(() => el.style.display='none', 3500);
 }
-
-// ════════════════════════════════════════════════════
-//  ACHIEVEMENTS
-// ════════════════════════════════════════════════════
 function checkAch(id) {
     if (!S || S.achievements[id]) return;
     S.achievements[id] = true;
     const def = ACHIEVEMENTS.find(a => a.id === id);
-    if (def) {
-        S.xp = (S.xp || 0) + def.xp;
-        achPopup(def);
-        notify('🏆 ' + def.label, 'orange');
-        Dev.log('s', '🏆 ' + def.label + ' (+' + def.xp + ' XP)');
-        scheduleSave();
-    }
+    if (def) { S.xp=(S.xp||0)+def.xp; achPopup(def); notify('🏆 '+def.label,'orange'); scheduleSave(); }
 }
 
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
 //  AUTH
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
 const Auth = {
     tab(t) {
-        const isL = t === 'login';
+        const isL = t==='login';
         document.getElementById('tab-login').classList.toggle('active', isL);
         document.getElementById('tab-register').classList.toggle('active', !isL);
         document.getElementById('form-login').style.display    = isL ? 'flex' : 'none';
         document.getElementById('form-register').style.display = isL ? 'none' : 'flex';
     },
-
     async login() {
         const u = document.getElementById('l-user').value.trim();
         const p = document.getElementById('l-pass').value;
-        if (!u) return notify('Entrez votre pseudo', 'red');
-        if (!p) return notify('Entrez votre mot de passe', 'red');
+        if (!u) return notify('Entrez votre pseudo','red');
+        if (!p) return notify('Entrez votre mot de passe','red');
         const btn = document.getElementById('btn-login');
-        btn.textContent = '...'; btn.disabled = true;
-
+        btn.textContent='...'; btn.disabled=true;
         const r = await API.login(u, p);
-        btn.textContent = 'SE CONNECTER'; btn.disabled = false;
-
-        if (!r.ok) { notify(r.error || 'Erreur connexion', 'red'); return; }
+        btn.textContent='SE CONNECTER'; btn.disabled=false;
+        if (!r.ok) return notify(r.error||'Erreur connexion','red');
         this._setSession(r.token, r.account);
-        Dev.log('s', 'Connexion : ' + r.account.username);
     },
-
     async register() {
         const u = document.getElementById('r-user').value.trim();
         const p = document.getElementById('r-pass').value;
         const c = document.getElementById('r-confirm').value;
-        if (!u) return notify('Entrez un pseudo', 'red');
-        if (!p) return notify('Entrez un mot de passe', 'red');
-        if (p !== c) return notify('Les mots de passe ne correspondent pas', 'red');
+        if (!u) return notify('Entrez un pseudo','red');
+        if (!p) return notify('Entrez un mot de passe','red');
+        if (p!==c) return notify('Mots de passe différents','red');
         const btn = document.getElementById('btn-register');
-        btn.textContent = '...'; btn.disabled = true;
-
+        btn.textContent='...'; btn.disabled=true;
         const r = await API.register(u, p);
-        btn.textContent = 'CRÉER MON COMPTE'; btn.disabled = false;
-
-        if (!r.ok) { notify(r.error || 'Erreur inscription', 'red'); return; }
+        btn.textContent='CRÉER MON COMPTE'; btn.disabled=false;
+        if (!r.ok) return notify(r.error||'Erreur inscription','red');
         this._setSession(r.token, r.account);
-        Dev.log('s', 'Nouveau compte : ' + r.account.username);
-        notify('Compte créé ! Bienvenue ' + r.account.username, 'green');
+        notify('Bienvenue '+r.account.username+' !','green');
     },
-
     _setSession(token, account) {
-        TOKEN = token;
-        S     = account;
+        TOKEN = token; S = account;
         if (!S.achievements) S.achievements = {};
         if (!S.ownedSkins)   S.ownedSkins   = ['neon_blue'];
-        // Restore skin color
-        const skin = SKINS.find(sk => sk.id === S.equippedSkin) || SKINS[0];
+        const skin = SKINS.find(sk => sk.id===S.equippedSkin)||SKINS[0];
         Game.player.color = skin.color;
-        // Update UI
-        document.getElementById('user-tag').innerText = '● ' + S.username.toUpperCase();
+        document.getElementById('user-tag').innerText = '● '+S.username.toUpperCase();
         document.getElementById('btn-auth').textContent = 'MON PROFIL';
         document.getElementById('btn-auth').onclick = () => UI.show('layer-profile');
-        notify('Connecté : ' + S.username);
+        // Afficher ou cacher le bouton DEV
+        document.getElementById('dev-tab').style.display = isDevAccount() ? 'block' : 'none';
+        notify('Connecté : '+S.username);
         UI.show('layer-menu');
     },
-
     async logout() {
         await API.logout();
-        TOKEN = null;
-        S     = guestState();
-        Game.player.color = '#00f3ff';
-        document.getElementById('user-tag').innerText = 'NON CONNECTÉ';
-        document.getElementById('btn-auth').textContent = 'CONNEXION';
+        TOKEN=null; S=guestState(); Game.player.color='#00f3ff';
+        document.getElementById('user-tag').innerText='NON CONNECTÉ';
+        document.getElementById('btn-auth').textContent='CONNEXION';
         document.getElementById('btn-auth').onclick = () => UI.gotoAuth();
+        document.getElementById('dev-tab').style.display='none';
+        document.getElementById('dev-panel').classList.remove('open');
         notify('Déconnecté');
-        Dev.log('i', 'Déconnexion');
         UI.show('layer-menu');
     }
 };
 
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
 //  UI
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
+function fmtTime(t) { return Math.floor(t/3600)+'h '+Math.floor((t%3600)/60)+'m '+(t%60)+'s'; }
+
+function dailyProgress(type, value) {
+    if (!S||!S.daily||!S.daily.mission||S.daily.completed) return;
+    const d = S.daily;
+    if (d.mission.type!==type) return;
+    if (['score','survive','combo'].includes(type)) { if (value>(d.progress||0)) d.progress=value; }
+    else d.progress=(d.progress||0)+value;
+    if (d.progress>=d.mission.target) {
+        d.completed=true; S.credits=(S.credits||0)+d.mission.reward;
+        checkAch('daily_done');
+        notify('🎯 Mission complétée ! +'+d.mission.reward+' crédits','orange');
+        scheduleSave();
+    }
+}
+
 const UI = {
     show(id) {
-        document.querySelectorAll('.screen').forEach(el => el.style.display = 'none');
-        document.getElementById('layer-death').style.display = 'none';
-        document.getElementById('layer-game').style.display  = 'none';
-        const el = document.getElementById(id);
-        if (el) el.style.display = 'flex';
-
-        const actions = {
-            'layer-menu':    () => this._menuRefresh(),
-            'layer-shop':    () => this._shop(),
-            'layer-lead':    () => this._leaderboard(),
-            'layer-profile': () => this._profile(),
-            'layer-ach':     () => this._achievements()
-        };
-        if (actions[id]) actions[id]();
+        document.querySelectorAll('.screen').forEach(el => el.style.display='none');
+        ['layer-death','layer-game','layer-pause'].forEach(x => {
+            const el=document.getElementById(x); if(el) el.style.display='none';
+        });
+        const target = document.getElementById(id);
+        if (target) target.style.display='flex';
+        if (id==='layer-menu')    this._menuRefresh();
+        if (id==='layer-shop')    this._shop();
+        if (id==='layer-lead')    this._leaderboard();
+        if (id==='layer-profile') this._profile();
+        if (id==='layer-ach')     this._achievements();
     },
-
-    gotoAuth() {
-        if (isLogged()) this.show('layer-profile');
-        else            this.show('layer-auth');
-    },
+    gotoAuth() { isLogged() ? this.show('layer-profile') : this.show('layer-auth'); },
 
     _menuRefresh() {
         if (!S) return;
-        const d = S.daily;
-        const el = document.getElementById('daily-preview');
-        if (!d || !d.mission) { el.innerHTML = ''; return; }
-        const pct = Math.min((d.progress || 0) / d.mission.target * 100, 100);
-        el.innerHTML = `
-        <div class="daily-card">
+        const d=S.daily; const el=document.getElementById('daily-preview');
+        if (!d||!d.mission) { el.innerHTML=''; return; }
+        const pct=Math.min((d.progress||0)/d.mission.target*100,100);
+        el.innerHTML=`<div class="daily-card">
             <div class="daily-title">🎯 MISSION DU JOUR</div>
             <div class="daily-desc">${d.mission.desc}</div>
-            ${d.completed
-                ? '<div class="daily-done">✓ COMPLÉTÉE !</div>'
-                : `<div class="daily-prog-wrap"><div class="daily-prog" style="width:${pct}%"></div></div>
-                   <div class="daily-prog-text">${d.progress||0} / ${d.mission.target}</div>`}
+            ${d.completed?'<div class="daily-done">✓ COMPLÉTÉE !</div>':`<div class="daily-prog-wrap"><div class="daily-prog" style="width:${pct}%"></div></div><div class="daily-prog-text">${d.progress||0} / ${d.mission.target}</div>`}
             <div class="daily-reward">Récompense : +${d.mission.reward} crédits</div>
         </div>`;
     },
 
     _shop() {
         if (!S) return;
-        document.getElementById('shop-cr').innerText = S.credits || 0;
-        const list = document.getElementById('skin-list');
-        list.innerHTML = '';
+        document.getElementById('shop-cr').innerText=S.credits||0;
+        const list=document.getElementById('skin-list'); list.innerHTML='';
         SKINS.forEach(sk => {
-            const owned    = (S.ownedSkins || []).includes(sk.id);
-            const equipped = S.equippedSkin === sk.id;
-            const btn = document.createElement('button');
-            btn.className = 'btn-skin';
-            btn.style.borderColor = equipped ? sk.color + '99' : 'rgba(255,255,255,.1)';
-            let badge;
-            if (equipped)   badge = '<span class="skin-badge badge-equipped">ÉQUIPÉ</span>';
-            else if (owned) badge = '<span class="skin-badge badge-owned">ACHETÉ</span>';
-            else            badge = `<span class="skin-badge badge-price">◈ ${sk.price}</span>`;
-            btn.innerHTML = `
-                <span style="display:flex;align-items:center;gap:8px">
-                    <span class="skin-dot" style="background:${sk.color};box-shadow:0 0 8px ${sk.color}"></span>
-                    ${sk.name.toUpperCase()}
-                </span>${badge}`;
-            btn.onclick = () => {
+            const owned=(S.ownedSkins||[]).includes(sk.id);
+            const equipped=S.equippedSkin===sk.id;
+            const btn=document.createElement('button');
+            btn.className='btn-skin';
+            btn.style.borderColor=equipped?sk.color+'99':'rgba(255,255,255,.1)';
+            let badge=equipped?'<span class="skin-badge badge-equipped">ÉQUIPÉ</span>':owned?'<span class="skin-badge badge-owned">ACHETÉ</span>':`<span class="skin-badge badge-price">◈ ${sk.price}</span>`;
+            btn.innerHTML=`<span style="display:flex;align-items:center;gap:8px"><span class="skin-dot" style="background:${sk.color};box-shadow:0 0 8px ${sk.color}"></span>${sk.name.toUpperCase()}</span>${badge}`;
+            btn.onclick=()=>{
                 if (equipped) return;
-                if (owned || sk.price === 0) {
-                    S.equippedSkin = sk.id;
-                    Game.player.color = sk.color;
-                    scheduleSave();
-                    notify('Skin équipé : ' + sk.name);
-                } else if ((S.credits||0) >= sk.price) {
-                    S.credits -= sk.price;
+                if (owned||sk.price===0) {
+                    S.equippedSkin=sk.id; Game.player.color=sk.color; scheduleSave(); notify('Skin équipé : '+sk.name);
+                } else if ((S.credits||0)>=sk.price) {
+                    S.credits-=sk.price;
                     if (!S.ownedSkins.includes(sk.id)) S.ownedSkins.push(sk.id);
-                    S.equippedSkin = sk.id;
-                    Game.player.color = sk.color;
-                    scheduleSave();
-                    notify('Skin acheté : ' + sk.name);
-                    Dev.log('s', `Skin acheté : ${sk.name} (-${sk.price} cr.)`);
-                    if ((S.credits||0) >= 1000) checkAch('rich');
-                } else {
-                    notify('Pas assez de crédits (besoin : ' + sk.price + ')', 'red');
-                }
+                    S.equippedSkin=sk.id; Game.player.color=sk.color; scheduleSave();
+                    notify('Skin acheté : '+sk.name);
+                    if ((S.credits||0)>=1000) checkAch('rich');
+                } else notify('Pas assez de crédits (besoin : '+sk.price+')','red');
                 this._shop();
             };
             list.appendChild(btn);
@@ -504,276 +481,201 @@ const UI = {
     },
 
     async _leaderboard() {
-        const el = document.getElementById('lead-list');
-        el.innerHTML = '<div class="lead-empty">Chargement...</div>';
-        const r = await API.leaderboard();
-        if (!r.ok || !r.scores || !r.scores.length) {
-            el.innerHTML = '<div class="lead-empty">AUCUN SCORE ENREGISTRÉ</div>';
-            return;
-        }
-        const medals = ['gold','silver','bronze'];
-        el.innerHTML = r.scores.map((s, i) => `
-            <div class="lead-row">
-                <div class="lead-rank ${medals[i]||''}">#${i+1}</div>
-                <div class="lead-name">${s.username}</div>
-                <div class="lead-score">${s.score} pts</div>
-                <div class="lead-date">${s.date}</div>
-            </div>`).join('');
+        const el=document.getElementById('lead-list');
+        el.innerHTML='<div class="lead-empty">Chargement...</div>';
+        const r=await API.leaderboard();
+        if (!r.ok||!r.scores||!r.scores.length) { el.innerHTML='<div class="lead-empty">AUCUN SCORE ENREGISTRÉ</div>'; return; }
+        const medals=['gold','silver','bronze'];
+        el.innerHTML=r.scores.map((s,i)=>`<div class="lead-row"><div class="lead-rank ${medals[i]||''}">#${i+1}</div><div class="lead-name">${s.username}</div><div class="lead-score">${s.score} pts</div><div class="lead-date">${s.date}</div></div>`).join('');
     },
 
     _profile() {
         if (!S) return;
-        const xp   = S.xp || 0;
-        const rank = getRank(xp);
-        const next = getNextRank(xp);
-        document.getElementById('prof-rank').innerText = rank.label;
-        document.getElementById('prof-rank').style.color = rank.color;
-        const pct = next ? Math.min((xp - rank.min) / (next.min - rank.min) * 100, 100) : 100;
-        document.getElementById('prof-bar').style.width      = pct + '%';
-        document.getElementById('prof-bar').style.background = rank.color;
-        document.getElementById('prof-xp').innerText = next
-            ? `${xp} XP → ${next.label} : ${next.min} XP`
-            : `${xp} XP — RANG MAXIMUM`;
-        const achDone = Object.keys(S.achievements || {}).length;
-        document.getElementById('prof-stats').innerHTML = `
+        const xp=S.xp||0; const rank=getRank(xp); const next=getNextRank(xp);
+        document.getElementById('prof-rank').innerText=rank.label;
+        document.getElementById('prof-rank').style.color=rank.color;
+        const pct=next?Math.min((xp-rank.min)/(next.min-rank.min)*100,100):100;
+        document.getElementById('prof-bar').style.width=pct+'%';
+        document.getElementById('prof-bar').style.background=rank.color;
+        document.getElementById('prof-xp').innerText=next?`${xp} XP → ${next.label} : ${next.min} XP`:`${xp} XP — RANG MAXIMUM`;
+        const achDone=Object.keys(S.achievements||{}).length;
+        document.getElementById('prof-stats').innerHTML=`
             <div class="stat-item"><div class="stat-val">${S.highScore||0}</div><div class="stat-lbl">MEILLEUR</div></div>
             <div class="stat-item"><div class="stat-val">${S.credits||0}</div><div class="stat-lbl">CRÉDITS</div></div>
             <div class="stat-item"><div class="stat-val">${S.deathCount||0}</div><div class="stat-lbl">MORTS</div></div>
             <div class="stat-item"><div class="stat-val">${S.gamesPlayed||0}</div><div class="stat-lbl">PARTIES</div></div>
             <div class="stat-item"><div class="stat-val" style="font-size:.75rem">${fmtTime(S.totalTime||0)}</div><div class="stat-lbl">TEMPS</div></div>
             <div class="stat-item"><div class="stat-val">${achDone}/${ACHIEVEMENTS.length}</div><div class="stat-lbl">ACHIEVEMENTS</div></div>`;
-        const d = S.daily;
-        const pd = document.getElementById('prof-daily');
-        if (d && d.mission) {
-            const pct2 = Math.min((d.progress||0) / d.mission.target * 100, 100);
-            pd.innerHTML = `
-            <div class="daily-card">
-                <div class="daily-title">🎯 MISSION DU JOUR</div>
-                <div class="daily-desc">${d.mission.desc}</div>
-                ${d.completed
-                    ? '<div class="daily-done">✓ COMPLÉTÉE !</div>'
-                    : `<div class="daily-prog-wrap"><div class="daily-prog" style="width:${pct2}%"></div></div>
-                       <div class="daily-prog-text">${d.progress||0} / ${d.mission.target}</div>`}
-                <div class="daily-reward">Récompense : +${d.mission.reward} crédits</div>
-            </div>`;
-        } else pd.innerHTML = '';
+        const d=S.daily; const pd=document.getElementById('prof-daily');
+        if (d&&d.mission) {
+            const pct2=Math.min((d.progress||0)/d.mission.target*100,100);
+            pd.innerHTML=`<div class="daily-card"><div class="daily-title">🎯 MISSION DU JOUR</div><div class="daily-desc">${d.mission.desc}</div>${d.completed?'<div class="daily-done">✓ COMPLÉTÉE !</div>':`<div class="daily-prog-wrap"><div class="daily-prog" style="width:${pct2}%"></div></div><div class="daily-prog-text">${d.progress||0} / ${d.mission.target}</div>`}<div class="daily-reward">Récompense : +${d.mission.reward} crédits</div></div>`;
+        } else pd.innerHTML='';
     },
 
     _achievements() {
         if (!S) return;
-        document.getElementById('ach-grid').innerHTML = ACHIEVEMENTS.map(a => {
-            const done = !!(S.achievements||{})[a.id];
-            return `<div class="ach-item ${done?'unlocked':''}">
-                <div class="ach-icon">${done?'✦':'○'}</div>
-                <div class="ach-name">${a.label}</div>
-                <div class="ach-desc">${a.desc}</div>
-                <div class="ach-xp">${done?'+'+a.xp+' XP':'?? XP'}</div>
-            </div>`;
+        document.getElementById('ach-grid').innerHTML=ACHIEVEMENTS.map(a=>{
+            const done=!!(S.achievements||{})[a.id];
+            return `<div class="ach-item ${done?'unlocked':''}"><div class="ach-icon">${done?'✦':'○'}</div><div class="ach-name">${a.label}</div><div class="ach-desc">${a.desc}</div><div class="ach-xp">${done?'+'+a.xp+' XP':'?? XP'}</div></div>`;
         }).join('');
     }
 };
 
-function fmtTime(t) {
-    return Math.floor(t/3600)+'h '+Math.floor((t%3600)/60)+'m '+(t%60)+'s';
-}
-
-// Daily progress helper
-function dailyProgress(type, value) {
-    if (!S || !S.daily || !S.daily.mission || S.daily.completed) return;
-    const d = S.daily;
-    if (d.mission.type !== type) return;
-    if (type === 'score' || type === 'survive' || type === 'combo') {
-        if (value > (d.progress||0)) d.progress = value;
-    } else {
-        d.progress = (d.progress||0) + value;
-    }
-    if (d.progress >= d.mission.target) {
-        d.completed = true;
-        S.credits = (S.credits||0) + d.mission.reward;
-        checkAch('daily_done');
-        notify('🎯 Mission complétée ! +' + d.mission.reward + ' crédits', 'orange');
-        Dev.log('s', 'Mission journalière complétée !');
-        scheduleSave();
-    }
-}
-
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
 //  PARTICLES
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
 const Particles = {
-    list: [],
-    spawn(x, y, color, n=16) {
-        for (let i = 0; i < n; i++) {
-            const a = Math.random() * Math.PI * 2;
-            const s = 1 + Math.random() * 5;
-            this.list.push({ x, y, vx:Math.cos(a)*s, vy:Math.sin(a)*s-1,
-                life:1, decay:.02+Math.random()*.03, size:2+Math.random()*4, color });
+    list:[],
+    spawn(x,y,color,n=16) {
+        for (let i=0;i<n;i++) {
+            const a=Math.random()*Math.PI*2, s=1+Math.random()*5;
+            this.list.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-1,life:1,decay:.02+Math.random()*.03,size:2+Math.random()*4,color});
         }
     },
     update() {
-        for (let i = this.list.length-1; i >= 0; i--) {
-            const p = this.list[i];
-            p.x += p.vx; p.y += p.vy; p.vy += .12; p.life -= p.decay;
-            if (p.life <= 0) this.list.splice(i,1);
+        for (let i=this.list.length-1;i>=0;i--) {
+            const p=this.list[i]; p.x+=p.vx; p.y+=p.vy; p.vy+=.12; p.life-=p.decay;
+            if (p.life<=0) this.list.splice(i,1);
         }
     },
     draw(ctx) {
-        this.list.forEach(p => {
-            ctx.globalAlpha = p.life;
-            ctx.fillStyle = p.color;
-            ctx.shadowBlur = 5; ctx.shadowColor = p.color;
-            ctx.fillRect(p.x, p.y, p.size, p.size);
+        this.list.forEach(p=>{
+            ctx.globalAlpha=p.life; ctx.fillStyle=p.color; ctx.shadowBlur=5; ctx.shadowColor=p.color;
+            ctx.fillRect(p.x,p.y,p.size,p.size);
         });
-        ctx.globalAlpha = 1; ctx.shadowBlur = 0;
+        ctx.globalAlpha=1; ctx.shadowBlur=0;
     }
 };
 
-// Matrix FX
 const Matrix = {
-    cols: [],
-    init(w) { this.cols = Array.from({length:Math.floor(w/16)},()=>({y:Math.random()*-100,sp:1+Math.random()*2})); },
-    draw(ctx, h) {
-        ctx.fillStyle = 'rgba(0,255,70,.11)';
-        ctx.font = '12px monospace';
-        this.cols.forEach((c,i) => {
-            ctx.fillText(String.fromCharCode(0x30A0+Math.random()*96), i*16, c.y);
-            c.y += c.sp*14;
-            if (c.y > h) c.y = -20;
-        });
+    cols:[],
+    init(w) { this.cols=Array.from({length:Math.floor(w/16)},()=>({y:Math.random()*-100,sp:1+Math.random()*2})); },
+    draw(ctx,h) {
+        ctx.fillStyle='rgba(0,255,70,.11)'; ctx.font='12px monospace';
+        this.cols.forEach((c,i)=>{ ctx.fillText(String.fromCharCode(0x30A0+Math.random()*96),i*16,c.y); c.y+=c.sp*14; if(c.y>h)c.y=-20; });
     }
 };
 
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
 //  GAME ENGINE
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
 const Game = {
-    canvas:  null, ctx: null,
-    running: false, score: 0,
-
-    // flags
-    _god:         false,
-    _hitbox:      false,
-    _fps:         false,
-    _slowDev:     false,
-    _matrix:      false,
-    _forceLvl:    null,
-
-    // objects
-    player:   { x:0, y:0, size:28, color:'#00f3ff' },
-    enemies:  [],
-    powerups: [],
-
-    // gameplay
-    combo:        0,
-    maxCombo:     0,
-    _lastDodge:   0,
-    _comboReset:  3000, // ms with no dodge before reset
-    shield:       false,
-    slowActive:   false,
-    _slowTimer:   null,
-
-    // tracking
-    _timeAcc:     0,
-    _surviveMs:   0,
-    _lastTs:      0,
-    _fpsBuf:      [],
-    _puCount:     0,
-    _prevLvlIdx:  -1,
+    canvas:null, ctx:null, running:false, paused:false, score:0,
+    _god:false, _hitbox:false, _fps:false, _slowDev:false, _matrix:false, _forceLvl:null,
+    player:{ x:0, y:0, size:28, color:'#00f3ff' },
+    enemies:[], powerups:[],
+    combo:0, maxCombo:0, _lastDodge:0, _comboReset:3000,
+    shield:false, slowActive:false, _slowTimer:null,
+    _timeAcc:0, _surviveMs:0, _lastTs:0, _fpsBuf:[], _puCount:0, _prevLvlIdx:-1,
 
     init() {
         this.canvas = document.getElementById('gameCanvas');
         this.ctx    = this.canvas.getContext('2d');
-        this.resize();
+        // Taille initiale
+        this.canvas.width  = window.innerWidth;
+        this.canvas.height = window.innerHeight;
         S = guestState();
         Matrix.init(this.canvas.width);
 
-        window.addEventListener('resize', () => this.resize());
+        window.addEventListener('resize', () => {
+            this.canvas.width  = window.innerWidth;
+            this.canvas.height = window.innerHeight;
+            if (this.running && !this.paused) this.player.y = this.canvas.height - 80;
+            Matrix.init(this.canvas.width);
+        });
 
         window.addEventListener('mousemove', e => {
-            if (this.running) this.player.x = e.clientX - this.player.size/2;
+            if (this.running && !this.paused) this.player.x = e.clientX - this.player.size/2;
         });
         window.addEventListener('touchmove', e => {
-            if (this.running) { e.preventDefault(); this.player.x = e.touches[0].clientX - this.player.size/2; }
-        }, { passive:false });
+            if (this.running && !this.paused) { e.preventDefault(); this.player.x=e.touches[0].clientX-this.player.size/2; }
+        }, {passive:false});
 
+        // PAUSE avec ECHAP
         window.addEventListener('keydown', e => {
-            if (e.shiftKey && e.key === 'D') Dev.toggle();
+            if (e.key==='Escape') {
+                if (this.running && !this.paused) this.pause();
+                else if (this.paused) this.resume();
+            }
+            if (e.shiftKey && e.key==='D' && isDevAccount()) Dev.toggle();
         });
 
         Dev.init();
-        Dev.log('x', 'NEON DODGE v3 — Shift+D = console dev');
-    },
-
-    resize() {
-        if (!this.canvas) return;
-        this.canvas.width  = window.innerWidth;
-        this.canvas.height = window.innerHeight;
-        if (this.running) this.player.y = this.canvas.height - 80;
-        Matrix.init(this.canvas.width);
+        Dev.log('x', 'NEON DODGE v3 — compte dev requis pour accéder à la console');
     },
 
     start() {
-        if (!S) S = guestState();
-        this.running = true; this.score = 0;
-        this.enemies = []; this.powerups = [];
-        Particles.list = [];
-        this.combo = 0; this.maxCombo = 0; this._lastDodge = 0;
-        this.shield = false; this.slowActive = false;
-        this._timeAcc = 0; this._surviveMs = 0;
-        this._puCount = 0; this._prevLvlIdx = -1;
+        if (!S) S=guestState();
+        this.running=true; this.paused=false; this.score=0;
+        this.enemies=[]; this.powerups=[]; Particles.list=[];
+        this.combo=0; this.maxCombo=0; this._lastDodge=0;
+        this.shield=false; this.slowActive=false;
+        this._timeAcc=0; this._surviveMs=0; this._puCount=0; this._prevLvlIdx=-1;
         clearTimeout(this._slowTimer);
 
-        // IMPORTANT: forcer les bonnes dimensions du canvas avant tout
+        // Forcer les dimensions du canvas
         this.canvas.width  = window.innerWidth;
         this.canvas.height = window.innerHeight;
 
         this.player.x = this.canvas.width  / 2 - this.player.size / 2;
         this.player.y = this.canvas.height - 80;
 
-        document.querySelectorAll('.screen').forEach(el => el.style.display = 'none');
-        document.getElementById('layer-death').style.display = 'none';
-        document.getElementById('layer-game').style.display  = 'block';
-        document.getElementById('ui-hi').innerText = S.highScore || 0;
-        document.getElementById('combo-hud').style.display = 'none';
-        document.getElementById('pu-hud').style.display    = 'none';
-        document.getElementById('god-badge').style.display = this._god ? 'block' : 'none';
+        document.querySelectorAll('.screen').forEach(el => el.style.display='none');
+        document.getElementById('layer-death').style.display='none';
+        document.getElementById('layer-pause').style.display='none';
+        document.getElementById('layer-game').style.display='block';
+        document.getElementById('ui-hi').innerText=S.highScore||0;
+        document.getElementById('combo-hud').style.display='none';
+        document.getElementById('pu-hud').style.display='none';
+        document.getElementById('god-badge').style.display=this._god?'block':'none';
 
-        this._lastTs = performance.now();
-        Dev.log('g', `Partie démarrée — ${S.username} | skin: ${S.equippedSkin}`);
+        this._lastTs=performance.now();
+        Dev.log('g','Partie démarrée — '+S.username);
         requestAnimationFrame(ts => this.loop(ts));
     },
 
+    pause() {
+        if (!this.running || this.paused) return;
+        this.paused=true;
+        document.getElementById('pause-score').innerText=this.score;
+        document.getElementById('layer-pause').style.display='flex';
+        Dev.log('i','Pause');
+    },
+
+    resume() {
+        if (!this.paused) return;
+        this.paused=false;
+        document.getElementById('layer-pause').style.display='none';
+        this._lastTs=performance.now();
+        Dev.log('i','Reprise');
+        requestAnimationFrame(ts => this.loop(ts));
+    },
+
+    quitToMenu() {
+        this.running=false; this.paused=false;
+        document.getElementById('layer-pause').style.display='none';
+        UI.show('layer-menu');
+    },
+
     loop(ts) {
-        if (!this.running) return;
+        if (!this.running || this.paused) return;
+        const rawMs=ts-this._lastTs; this._lastTs=ts;
+        const clampedMs=Math.min(rawMs,50);
 
-        const rawMs = ts - this._lastTs;
-        this._lastTs = ts;
-        const clampedMs = Math.min(rawMs, 50); // cap at 50ms (20fps min)
-
-        // FPS
-        this._fpsBuf.push(1000 / rawMs);
-        if (this._fpsBuf.length > 30) this._fpsBuf.shift();
+        this._fpsBuf.push(1000/rawMs);
+        if (this._fpsBuf.length>30) this._fpsBuf.shift();
         if (this._fps) {
-            const avg = this._fpsBuf.reduce((a,b) => a+b, 0) / this._fpsBuf.length;
-            document.getElementById('fps-el').innerText = Math.round(avg) + ' FPS';
+            const avg=this._fpsBuf.reduce((a,b)=>a+b,0)/this._fpsBuf.length;
+            document.getElementById('fps-el').innerText=Math.round(avg)+' FPS';
         }
 
-        const mult  = (this._slowDev || this.slowActive) ? 0.3 : 1;
-        const dtMs  = clampedMs * mult;
+        const dtMs=clampedMs*((this._slowDev||this.slowActive)?0.3:1);
+        this._timeAcc+=dtMs; this._surviveMs+=dtMs;
+        while (this._timeAcc>=1000) { if(S) S.totalTime=(S.totalTime||0)+1; this._timeAcc-=1000; }
 
-        this._timeAcc   += dtMs;
-        this._surviveMs += dtMs;
-
-        // Increment totalTime every second
-        while (this._timeAcc >= 1000) {
-            if (S) S.totalTime = (S.totalTime||0) + 1;
-            this._timeAcc -= 1000;
-        }
-
-        // Combo timeout: reset if too long since last dodge
-        if (this.combo > 0 && (ts - this._lastDodge) > this._comboReset) {
-            this.combo = 0;
-            document.getElementById('combo-hud').style.display = 'none';
+        if (this.combo>0 && (ts-this._lastDodge)>this._comboReset) {
+            this.combo=0; document.getElementById('combo-hud').style.display='none';
         }
 
         this.update(dtMs);
@@ -782,534 +684,242 @@ const Game = {
     },
 
     update(dtMs) {
-        const dtFrames = dtMs / (1000/60); // 1.0 at 60fps
-        const lvlIdx = this._forceLvl !== null
-            ? Math.max(0, Math.min(3, this._forceLvl))
-            : LevelSystem.getLevelIndex(this.score);
-        const lvl = LevelSystem.levels[lvlIdx];
+        const dtF=dtMs/(1000/60);
+        const lvlIdx=this._forceLvl!==null?Math.max(0,Math.min(3,this._forceLvl)):LevelSystem.getLevelIndex(this.score);
+        const lvl=LevelSystem.levels[lvlIdx];
 
-        // Level up notification
-        if (lvlIdx > this._prevLvlIdx && this._prevLvlIdx >= 0) {
-            Dev.log('w', '⚡ Niveau : ' + lvl.name);
-            notify('⚡ ' + lvl.name, 'orange');
+        if (lvlIdx>this._prevLvlIdx && this._prevLvlIdx>=0) { Dev.log('w','⚡ '+lvl.name); notify('⚡ '+lvl.name,'orange'); }
+        this._prevLvlIdx=lvlIdx;
+
+        // Spawn ennemis
+        if (Math.random()<lvl.rate*dtF) {
+            const tracker=lvl.tracker&&Math.random()<lvl.trackerRatio;
+            this.enemies.push({x:Math.random()*(this.canvas.width-25),y:-55,speed:lvl.speed,tracker,color:tracker?'#ff9900':'#ff3838'});
         }
-        this._prevLvlIdx = lvlIdx;
-
-        // Spawn enemies
-        if (Math.random() < lvl.rate * dtFrames) {
-            const tracker = lvl.tracker && Math.random() < lvl.trackerRatio;
-            this.enemies.push({
-                x:       Math.random() * (this.canvas.width - 25),
-                y:       -55,
-                speed:   lvl.speed,
-                tracker,
-                color:   tracker ? '#ff9900' : '#ff3838'
-            });
-        }
-
         // Spawn power-ups
-        if (Math.random() < 0.004 * dtFrames) {
-            const types = Object.keys(PU_TYPES);
-            this.powerups.push({
-                x:     Math.random() * (this.canvas.width - 26),
-                y:     -35,
-                type:  types[Math.floor(Math.random() * types.length)],
-                speed: 2
-            });
+        if (Math.random()<0.004*dtF) {
+            const types=Object.keys(PU_TYPES);
+            this.powerups.push({x:Math.random()*(this.canvas.width-26),y:-35,type:types[Math.floor(Math.random()*types.length)],speed:2});
         }
 
-        const ps = this.player.size;
+        const ps=this.player.size;
 
-        // Update + collide enemies
-        for (let i = this.enemies.length - 1; i >= 0; i--) {
-            const e = this.enemies[i];
-
-            // Tracker homing
+        // Ennemis
+        for (let i=this.enemies.length-1;i>=0;i--) {
+            const e=this.enemies[i];
             if (e.tracker) {
-                const dx = (this.player.x + ps/2) - (e.x + 12.5);
-                const dy = (this.player.y + ps/2) - (e.y + 12.5);
-                const dist = Math.hypot(dx, dy) || 1;
-                e.x += (dx/dist) * lvl.speed * 0.16 * dtFrames;
+                const dx=(this.player.x+ps/2)-(e.x+12.5), dy=(this.player.y+ps/2)-(e.y+12.5);
+                const dist=Math.hypot(dx,dy)||1;
+                e.x+=(dx/dist)*lvl.speed*0.16*dtF;
             }
-
-            e.y += e.speed * dtFrames;
-
-            // Collision (AABB, slightly inset for fairness)
-            const inset = 3;
-            const hit =
-                !this._god &&
-                this.player.x + inset    < e.x + 22 &&
-                this.player.x + ps - inset > e.x &&
-                this.player.y + inset    < e.y + 22 &&
-                this.player.y + ps - inset > e.y;
-
+            e.y+=e.speed*dtF;
+            const inset=3;
+            const hit=!this._god&&this.player.x+inset<e.x+22&&this.player.x+ps-inset>e.x&&this.player.y+inset<e.y+22&&this.player.y+ps-inset>e.y;
             if (hit) {
                 if (this.shield) {
-                    this.shield = false;
-                    this.enemies.splice(i, 1);
-                    Particles.spawn(e.x+12, e.y+12, '#ffd700', 20);
+                    this.shield=false; this.enemies.splice(i,1);
+                    Particles.spawn(e.x+12,e.y+12,'#ffd700',20);
                     checkAch('shield_break');
-                    document.getElementById('pu-hud').style.display = 'none';
-                    notify('BOUCLIER BRISÉ !', 'orange');
-                    Dev.log('w', 'Bouclier absorbé un coup');
-                    continue;
+                    document.getElementById('pu-hud').style.display='none';
+                    notify('BOUCLIER BRISÉ !','orange'); continue;
                 }
-                Particles.spawn(e.x+12, e.y+12, e.color, 10);
-                this.stop();
-                return;
+                Particles.spawn(e.x+12,e.y+12,e.color,10);
+                this.stop(); return;
             }
-
-            // Enemy passed — score + combo
-            if (e.y > this.canvas.height + 55) {
-                this.enemies.splice(i, 1);
-                const mult = this.combo >= 10 ? 3 : this.combo >= 5 ? 2 : 1;
-                this.score += 10 * mult;
-                this.combo++;
-                this._lastDodge = performance.now();
-                if (this.combo > this.maxCombo) this.maxCombo = this.combo;
-
-                dailyProgress('combo', this.combo);
-
-                // Combo HUD
-                if (this.combo >= 3) {
-                    const ch = document.getElementById('combo-hud');
-                    ch.style.display = 'block';
-                    ch.style.animation = 'none'; void ch.offsetWidth; ch.style.animation = '';
-                    document.getElementById('combo-num').innerText = 'x' + mult;
+            if (e.y>this.canvas.height+55) {
+                this.enemies.splice(i,1);
+                const m=this.combo>=10?3:this.combo>=5?2:1;
+                this.score+=10*m; this.combo++; this._lastDodge=performance.now();
+                if (this.combo>this.maxCombo) this.maxCombo=this.combo;
+                dailyProgress('combo',this.combo);
+                if (this.combo>=3) {
+                    const ch=document.getElementById('combo-hud');
+                    ch.style.display='block'; ch.style.animation='none'; void ch.offsetWidth; ch.style.animation='';
+                    document.getElementById('combo-num').innerText='x'+m;
                 }
             }
         }
 
-        // Update power-ups
-        for (let i = this.powerups.length - 1; i >= 0; i--) {
-            const pu = this.powerups[i];
-            pu.y += pu.speed * dtFrames;
-
-            const hit =
-                this.player.x        < pu.x + 24 &&
-                this.player.x + ps   > pu.x &&
-                this.player.y        < pu.y + 24 &&
-                this.player.y + ps   > pu.y;
-
+        // Power-ups
+        for (let i=this.powerups.length-1;i>=0;i--) {
+            const pu=this.powerups[i]; pu.y+=pu.speed*dtF;
+            const hit=this.player.x<pu.x+24&&this.player.x+ps>pu.x&&this.player.y<pu.y+24&&this.player.y+ps>pu.y;
             if (hit) {
-                this._activatePU(pu.type);
-                Particles.spawn(pu.x+12, pu.y+12, PU_TYPES[pu.type].color, 14);
-                this.powerups.splice(i, 1);
-                this._puCount++;
-                dailyProgress('powerups', 1);
-                checkAch('pu_used');
-                continue;
+                this._activatePU(pu.type); Particles.spawn(pu.x+12,pu.y+12,PU_TYPES[pu.type].color,14);
+                this.powerups.splice(i,1); this._puCount++; dailyProgress('powerups',1); checkAch('pu_used'); continue;
             }
-            if (pu.y > this.canvas.height + 40) this.powerups.splice(i, 1);
+            if (pu.y>this.canvas.height+40) this.powerups.splice(i,1);
         }
 
         Particles.update();
+        dailyProgress('survive',Math.floor(this._surviveMs/1000));
+        dailyProgress('score',this.score);
 
-        // ── HUD ──
-        const safe = el => document.getElementById(el);
-        safe('ui-score').innerText = this.score;
-
-        const nw  = LevelSystem.getNextLevelScore(this.score);
-        const lvlEl = safe('ui-lvl');
-        if (lvlEl) { lvlEl.innerText = lvl.name; lvlEl.style.color = lvl.color; }
-        const nwEl = safe('ui-next-wrap');
-        if (nwEl) nwEl.style.display = nw !== null ? '' : 'none';
-        if (nw !== null) { safe('ui-next').innerText = nw; }
-        const bar = safe('level-bar');
-        if (bar) {
-            const pct = nw !== null
-                ? Math.min((this.score - lvl.scoreReq) / (nw - lvl.scoreReq) * 100, 100)
-                : 100;
-            bar.style.width = pct + '%';
-            bar.style.background = lvl.color;
-        }
-
-        // Daily survive
-        dailyProgress('survive', Math.floor(this._surviveMs / 1000));
-        dailyProgress('score', this.score);
+        // HUD
+        const g=id=>document.getElementById(id);
+        g('ui-score').innerText=this.score;
+        const nw=LevelSystem.getNextLevelScore(this.score);
+        const lvlEl=g('ui-lvl'); if(lvlEl){lvlEl.innerText=lvl.name;lvlEl.style.color=lvl.color;}
+        const nwEl=g('ui-next-wrap'); if(nwEl)nwEl.style.display=nw!==null?'':'none';
+        if(nw!==null)g('ui-next').innerText=nw;
+        const bar=g('level-bar');
+        if(bar){const pct=nw!==null?Math.min((this.score-lvl.scoreReq)/(nw-lvl.scoreReq)*100,100):100;bar.style.width=pct+'%';bar.style.background=lvl.color;}
     },
 
     _activatePU(type) {
-        const info  = PU_TYPES[type];
-        const puHud = document.getElementById('pu-hud');
-        Dev.log('s', 'Power-up : ' + type);
-
-        if (type === 'shield') {
-            this.shield = true;
-            puHud.style.display = 'block';
-            puHud.innerText = '🛡 BOUCLIER';
-            puHud.style.color = info.color;
-            notify('🛡 BOUCLIER !', 'orange');
-        }
-        if (type === 'slow') {
-            this.slowActive = true;
-            puHud.style.display = 'block';
-            puHud.innerText = '⏳ SLOWMO 5s';
-            puHud.style.color = info.color;
-            notify('⏳ SLOWMO !', 'neon');
+        const info=PU_TYPES[type]; const ph=document.getElementById('pu-hud');
+        if (type==='shield') { this.shield=true; ph.style.display='block'; ph.innerText='🛡 BOUCLIER'; ph.style.color=info.color; notify('🛡 BOUCLIER !','orange'); }
+        if (type==='slow') {
+            this.slowActive=true; ph.style.display='block'; ph.innerText='⏳ SLOWMO 5s'; ph.style.color=info.color;
             clearTimeout(this._slowTimer);
-            this._slowTimer = setTimeout(() => {
-                this.slowActive = false;
-                puHud.style.display = 'none';
-                Dev.log('i', 'Slowmo terminé');
-            }, 5000);
+            this._slowTimer=setTimeout(()=>{this.slowActive=false;ph.style.display='none';},5000);
         }
-        if (type === 'credits') {
-            if (S) { S.credits = (S.credits||0) + 150; scheduleSave(); }
-            notify('💰 +150 CRÉDITS', 'green');
-        }
+        if (type==='credits') { if(S){S.credits=(S.credits||0)+150;scheduleSave();} notify('💰 +150 CRÉDITS','green'); }
     },
 
     async stop() {
         if (!this.running) return;
-        this.running = false;
-
-        Particles.spawn(this.player.x + this.player.size/2, this.player.y + this.player.size/2,
-                        this.player.color, 35);
-        this.draw(); // final frame
-
-        if (!S) S = guestState();
-
-        const isNew    = this.score > (S.highScore || 0);
-        const credits  = Math.floor(this.score / 10) + (this.maxCombo >= 5 ? 50 : 0);
-        const xpGain   = Math.floor(this.score / 5) + (this.maxCombo >= 3 ? 10 : 0);
-
-        S.credits    = (S.credits||0)  + credits;
-        S.xp         = (S.xp||0)       + xpGain;
-        S.deathCount = (S.deathCount||0) + 1;
-        S.gamesPlayed= (S.gamesPlayed||0) + 1;
-        if (isNew) S.highScore = this.score;
-
-        dailyProgress('deaths', 1);
-
-        // Achievements
+        this.running=false; this.paused=false;
+        Particles.spawn(this.player.x+this.player.size/2,this.player.y+this.player.size/2,this.player.color,35);
+        this.draw();
+        if (!S) S=guestState();
+        const isNew=this.score>(S.highScore||0);
+        const credits=Math.floor(this.score/10)+(this.maxCombo>=5?50:0);
+        const xpGain=Math.floor(this.score/5)+(this.maxCombo>=3?10:0);
+        S.credits=(S.credits||0)+credits; S.xp=(S.xp||0)+xpGain;
+        S.deathCount=(S.deathCount||0)+1; S.gamesPlayed=(S.gamesPlayed||0)+1;
+        if(isNew) S.highScore=this.score;
+        dailyProgress('deaths',1);
         checkAch('first_death');
-        if (this.score >= 100)  checkAch('score_100');
-        if (this.score >= 500)  checkAch('score_500');
-        if (this.score >= 2000) checkAch('score_2000');
-        if (this.score >= 5000) checkAch('score_5000');
-        if (this.maxCombo >= 5)  checkAch('combo_5');
-        if (this.maxCombo >= 10) checkAch('combo_10');
-        if ((S.gamesPlayed||0) >= 10) checkAch('ten_games');
-        if (this._surviveMs >= 60000)  checkAch('survive_60');
-        const li = LevelSystem.getLevelIndex(this.score);
-        if (li >= 1) checkAch('frontier');
-        if (li >= 2) checkAch('red_zone');
-        if (li >= 3) checkAch('singularity');
-        if ((S.credits||0) >= 1000) checkAch('rich');
-
-        // Save + submit score to server
-        scheduleSave();
-        API.score(this.score, this.maxCombo);
-
-        // Death screen
-        document.getElementById('d-score').innerText = this.score;
-        document.getElementById('d-hi').innerText    = S.highScore;
-        document.getElementById('d-new').style.display = isNew ? 'block' : 'none';
-        document.getElementById('d-cr').innerText    = '+' + credits;
-        document.getElementById('d-xp').innerText    = '+' + xpGain;
-        document.getElementById('d-cmb').innerText   = 'x' + this.maxCombo;
-        const dd = S.daily;
-        document.getElementById('d-daily').innerText = dd && dd.completed && dd.date === new Date().toISOString().slice(0,10)
-            ? '🎯 Mission complétée ! +' + dd.mission.reward + ' crédits'
-            : '';
-
-        document.getElementById('layer-death').style.display = 'flex';
-
-        Dev.log('e', `💀 Mort — score:${this.score} | combo:${this.maxCombo} | survive:${Math.floor(this._surviveMs/1000)}s`);
-        Dev.log('i', `  +${credits} cr. | +${xpGain} XP`);
+        if(this.score>=100)checkAch('score_100'); if(this.score>=500)checkAch('score_500');
+        if(this.score>=2000)checkAch('score_2000'); if(this.score>=5000)checkAch('score_5000');
+        if(this.maxCombo>=5)checkAch('combo_5'); if(this.maxCombo>=10)checkAch('combo_10');
+        if((S.gamesPlayed||0)>=10)checkAch('ten_games'); if(this._surviveMs>=60000)checkAch('survive_60');
+        const li=LevelSystem.getLevelIndex(this.score);
+        if(li>=1)checkAch('frontier'); if(li>=2)checkAch('red_zone'); if(li>=3)checkAch('singularity');
+        if((S.credits||0)>=1000)checkAch('rich');
+        scheduleSave(); API.score(this.score,this.maxCombo);
+        document.getElementById('d-score').innerText=this.score;
+        document.getElementById('d-hi').innerText=S.highScore;
+        document.getElementById('d-new').style.display=isNew?'block':'none';
+        document.getElementById('d-cr').innerText='+'+credits;
+        document.getElementById('d-xp').innerText='+'+xpGain;
+        document.getElementById('d-cmb').innerText='x'+this.maxCombo;
+        const dd=S.daily;
+        document.getElementById('d-daily').innerText=dd&&dd.completed?'🎯 Mission complétée ! +'+dd.mission.reward+' crédits':'';
+        document.getElementById('layer-game').style.display='none';
+        document.getElementById('layer-death').style.display='flex';
+        Dev.log('e','💀 score:'+this.score+' | combo:'+this.maxCombo+' | survive:'+Math.floor(this._surviveMs/1000)+'s');
     },
 
     draw() {
-        const ctx = this.ctx;
-        const W = this.canvas.width, H = this.canvas.height;
-
-        ctx.fillStyle = '#050508';
-        ctx.fillRect(0, 0, W, H);
-
-        if (this._matrix) Matrix.draw(ctx, H);
-
-        // Grid
-        ctx.strokeStyle = 'rgba(0,243,255,.022)';
-        ctx.lineWidth = 1;
-        for (let x = 0; x < W; x += 60) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
-        for (let y = 0; y < H; y += 60) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
-
+        const ctx=this.ctx; const W=this.canvas.width; const H=this.canvas.height;
+        ctx.fillStyle='#050508'; ctx.fillRect(0,0,W,H);
+        if(this._matrix) Matrix.draw(ctx,H);
+        ctx.strokeStyle='rgba(0,243,255,.022)'; ctx.lineWidth=1;
+        for(let x=0;x<W;x+=60){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+        for(let y=0;y<H;y+=60){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
         Particles.draw(ctx);
-
-        // Power-ups
-        ctx.textAlign = 'center';
-        this.powerups.forEach(pu => {
-            const info = PU_TYPES[pu.type];
-            ctx.fillStyle   = info.color;
-            ctx.shadowBlur  = 14; ctx.shadowColor = info.color;
-            ctx.fillRect(pu.x, pu.y, 24, 24);
-            ctx.shadowBlur  = 0;
-            ctx.fillStyle   = '#000';
-            ctx.font        = 'bold 13px Orbitron, sans-serif';
-            ctx.fillText(info.label, pu.x+12, pu.y+17);
+        ctx.textAlign='center';
+        this.powerups.forEach(pu=>{
+            const info=PU_TYPES[pu.type];
+            ctx.fillStyle=info.color; ctx.shadowBlur=14; ctx.shadowColor=info.color;
+            ctx.fillRect(pu.x,pu.y,24,24); ctx.shadowBlur=0;
+            ctx.fillStyle='#000'; ctx.font='bold 13px Orbitron,sans-serif';
+            ctx.fillText(info.label,pu.x+12,pu.y+17);
         });
-        ctx.textAlign = 'left';
-
-        // Enemies
-        this.enemies.forEach(e => {
-            ctx.fillStyle   = e.color;
-            ctx.shadowBlur  = 12; ctx.shadowColor = e.color;
-            ctx.fillRect(e.x, e.y, 25, 25);
-            if (e.tracker) {
-                ctx.shadowBlur = 0;
-                ctx.strokeStyle = '#ff9900'; ctx.lineWidth = 1;
-                ctx.strokeRect(e.x-2, e.y-2, 29, 29);
-            }
-            if (this._hitbox) {
-                ctx.shadowBlur = 0;
-                ctx.strokeStyle = 'rgba(255,255,0,.5)'; ctx.lineWidth = 1;
-                const inset = 3;
-                ctx.strokeRect(e.x+inset, e.y+inset, 22-inset*2, 22-inset*2);
-            }
+        ctx.textAlign='left';
+        this.enemies.forEach(e=>{
+            ctx.fillStyle=e.color; ctx.shadowBlur=12; ctx.shadowColor=e.color;
+            ctx.fillRect(e.x,e.y,25,25);
+            if(e.tracker){ctx.shadowBlur=0;ctx.strokeStyle='#ff9900';ctx.lineWidth=1;ctx.strokeRect(e.x-2,e.y-2,29,29);}
+            if(this._hitbox){ctx.shadowBlur=0;ctx.strokeStyle='rgba(255,255,0,.5)';ctx.lineWidth=1;ctx.strokeRect(e.x+3,e.y+3,16,16);}
         });
-
-        // Player
-        const p = this.player;
-        if (this.shield) {
-            ctx.shadowBlur = 28; ctx.shadowColor = '#ffd700';
-            ctx.strokeStyle = '#ffd700'; ctx.lineWidth = 2;
-            ctx.strokeRect(p.x-4, p.y-4, p.size+8, p.size+8);
-        }
-        ctx.fillStyle  = p.color;
-        ctx.shadowBlur = 20; ctx.shadowColor = p.color;
-        ctx.fillRect(p.x, p.y, p.size, p.size);
-        ctx.fillStyle = 'rgba(255,255,255,.55)'; ctx.shadowBlur = 0;
-        ctx.fillRect(p.x+6, p.y+6, 8, 8);
-
-        if (this._hitbox) {
-            const inset = 3;
-            ctx.strokeStyle = 'rgba(0,255,0,.8)'; ctx.lineWidth = 1;
-            ctx.strokeRect(p.x+inset, p.y+inset, p.size-inset*2, p.size-inset*2);
-        }
-        ctx.shadowBlur = 0;
+        const p=this.player;
+        if(this.shield){ctx.shadowBlur=28;ctx.shadowColor='#ffd700';ctx.strokeStyle='#ffd700';ctx.lineWidth=2;ctx.strokeRect(p.x-4,p.y-4,p.size+8,p.size+8);}
+        ctx.fillStyle=p.color; ctx.shadowBlur=20; ctx.shadowColor=p.color;
+        ctx.fillRect(p.x,p.y,p.size,p.size);
+        ctx.fillStyle='rgba(255,255,255,.55)'; ctx.shadowBlur=0;
+        ctx.fillRect(p.x+6,p.y+6,8,8);
+        if(this._hitbox){ctx.strokeStyle='rgba(0,255,0,.8)';ctx.lineWidth=1;ctx.strokeRect(p.x+3,p.y+3,p.size-6,p.size-6);}
+        ctx.shadowBlur=0;
     }
 };
 
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
 //  DEV CONSOLE
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
 const Dev = {
-    _hist: [], _hi: -1,
+    _hist:[], _hi:-1,
 
     init() {
-        this.log('x', 'Console prête — tapez "help" pour les commandes');
-        const inp = document.getElementById('dev-input');
-        inp.addEventListener('keydown', e => {
-            if (e.key === 'ArrowUp')   { this._hi = Math.min(this._hi+1, this._hist.length-1); inp.value = this._hist[this._hist.length-1-this._hi]||''; e.preventDefault(); }
-            if (e.key === 'ArrowDown') { this._hi = Math.max(this._hi-1, -1);                  inp.value = this._hi>=0 ? this._hist[this._hist.length-1-this._hi] : ''; e.preventDefault(); }
+        this.log('x','Console prête — accès restreint aux comptes dev');
+        const inp=document.getElementById('dev-input');
+        inp.addEventListener('keydown',e=>{
+            if(e.key==='ArrowUp'){this._hi=Math.min(this._hi+1,this._hist.length-1);inp.value=this._hist[this._hist.length-1-this._hi]||'';e.preventDefault();}
+            if(e.key==='ArrowDown'){this._hi=Math.max(this._hi-1,-1);inp.value=this._hi>=0?this._hist[this._hist.length-1-this._hi]:'';e.preventDefault();}
         });
     },
 
-    toggle() { document.getElementById('dev-panel').classList.toggle('open'); },
-
-    log(type, msg) {
-        const log = document.getElementById('dev-log');
-        if (!log) return;
-        const ts  = new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-        const cls = {i:'li',g:'lg',w:'lw',s:'ls',e:'le',c:'lc',x:'lx'}[type]||'li';
-        const div = document.createElement('div');
-        div.className = 'll';
-        div.innerHTML = `<span class="ts">[${ts}]</span><span class="${cls}">${msg}</span>`;
-        log.appendChild(div);
-        log.scrollTop = log.scrollHeight;
+    toggle() {
+        if (!isDevAccount()) { notify('Accès refusé — compte dev requis','red'); return; }
+        document.getElementById('dev-panel').classList.toggle('open');
     },
 
-    key(e) { if (e.key === 'Enter') this.send(); },
+    log(type,msg) {
+        const log=document.getElementById('dev-log'); if(!log)return;
+        const ts=new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+        const cls={i:'li',g:'lg',w:'lw',s:'ls',e:'le',c:'lc',x:'lx'}[type]||'li';
+        const div=document.createElement('div'); div.className='ll';
+        div.innerHTML=`<span class="ts">[${ts}]</span><span class="${cls}">${msg}</span>`;
+        log.appendChild(div); log.scrollTop=log.scrollHeight;
+    },
+
+    key(e){ if(e.key==='Enter')this.send(); },
 
     send() {
-        const inp = document.getElementById('dev-input');
-        const cmd = inp.value.trim();
-        if (!cmd) return;
-        inp.value = '';
-        this._hist.push(cmd); this._hi = -1;
+        const inp=document.getElementById('dev-input');
+        const cmd=inp.value.trim(); if(!cmd)return;
+        inp.value=''; this._hist.push(cmd); this._hi=-1;
         this.run(cmd);
     },
 
     run(raw) {
-        const parts = raw.trim().split(/\s+/);
-        const cmd   = parts[0].toLowerCase();
-        const arg   = parts[1];
-        this.log('c', '> ' + raw);
-
+        if (!isDevAccount()) { notify('Accès refusé','red'); return; }
+        const parts=raw.trim().split(/\s+/); const cmd=parts[0].toLowerCase(); const arg=parts[1];
+        this.log('c','> '+raw);
         const cmds = {
-            help: () => {
-                ['── COMMANDES ──',
-                 'god            → invincibilité on/off',
-                 'hitbox         → hitboxes on/off',
-                 'fps            → compteur FPS on/off',
-                 'slow           → ralenti dev on/off',
-                 'credits <n>    → ajouter n crédits',
-                 'xp <n>         → ajouter n XP',
-                 'score <n>      → forcer le score (partie active)',
-                 'level <0-3>    → forcer le niveau (partie active)',
-                 'spawn <n>      → spawn n ennemis (partie active)',
-                 'shield         → activer le bouclier',
-                 'slow_pu        → activer slowmo power-up',
-                 'kill           → mort instantanée',
-                 'unlockall      → débloquer tous les skins',
-                 'daily          → compléter la mission du jour',
-                 'stats          → afficher les stats actuelles',
-                 'accounts       → voir les comptes (admin)',
-                 'matrix         → easter egg (5s)',
-                 'clear          → effacer la console',
-                 'reset          → RESET TOTAL'].forEach(l => this.log('i', l));
-            },
-
-            god: () => {
-                Game._god = !Game._god;
-                document.getElementById('god-badge').style.display = (Game._god && Game.running) ? 'block' : 'none';
-                this.log(Game._god ? 's' : 'w', 'God mode : ' + (Game._god ? 'ON' : 'OFF'));
-            },
-
-            hitbox: () => {
-                Game._hitbox = !Game._hitbox;
-                this.log('i', 'Hitbox : ' + (Game._hitbox ? 'ON' : 'OFF'));
-            },
-
-            fps: () => {
-                Game._fps = !Game._fps;
-                document.getElementById('fps-el').style.display = Game._fps ? 'block' : 'none';
-                this.log('i', 'FPS : ' + (Game._fps ? 'ON' : 'OFF'));
-            },
-
-            slow: () => {
-                Game._slowDev = !Game._slowDev;
-                this.log('w', 'Ralenti dev : ' + (Game._slowDev ? 'ON (0.3x)' : 'OFF'));
-            },
-
-            credits: () => {
-                const n = parseInt(arg) || 100;
-                if (S) { S.credits = (S.credits||0) + n; scheduleSave(); }
-                this.log('s', `+${n} crédits → total : ${S ? S.credits : '?'}`);
-                notify('+' + n + ' crédits');
-            },
-
-            xp: () => {
-                const n = parseInt(arg) || 100;
-                if (S) { S.xp = (S.xp||0) + n; scheduleSave(); }
-                this.log('s', `+${n} XP → total : ${S ? S.xp : '?'}`);
-            },
-
-            score: () => {
-                if (!Game.running) { this.log('e', 'Lance une partie d\'abord'); return; }
-                Game.score = parseInt(arg) || 0;
-                this.log('s', 'Score forcé : ' + Game.score);
-            },
-
-            level: () => {
-                const n = parseInt(arg);
-                Game._forceLvl = (n >= 0 && n <= 3) ? n : null;
-                this.log('s', Game._forceLvl !== null
-                    ? 'Niveau forcé : ' + LevelSystem.levels[Game._forceLvl].name
-                    : 'Niveau déverrouillé (auto)');
-            },
-
-            spawn: () => {
-                if (!Game.running) { this.log('e', 'Lance une partie d\'abord'); return; }
-                const n = parseInt(arg) || 5;
-                const lvl = LevelSystem.getCurrentLevel(Game.score);
-                for (let i = 0; i < n; i++) {
-                    Game.enemies.push({ x:Math.random()*(Game.canvas.width-25), y:-55-Math.random()*200,
-                        speed:lvl.speed, tracker:false, color:'#ff3838' });
-                }
-                this.log('w', n + ' ennemis spawned');
-            },
-
-            shield: () => {
-                if (!Game.running) { this.log('e', 'Lance une partie d\'abord'); return; }
-                Game._activatePU('shield');
-                this.log('s', 'Bouclier activé');
-            },
-
-            slow_pu: () => {
-                if (!Game.running) { this.log('e', 'Lance une partie d\'abord'); return; }
-                Game._activatePU('slow');
-                this.log('s', 'Slowmo activé');
-            },
-
-            kill: () => {
-                if (!Game.running) { this.log('e', 'Aucune partie en cours'); return; }
-                this.log('e', 'Mort forcée');
-                Game.stop();
-            },
-
-            unlockall: () => {
-                if (S) {
-                    S.ownedSkins = SKINS.map(sk => sk.id);
-                    scheduleSave();
-                }
-                this.log('s', 'Tous les skins débloqués');
-                notify('Tous les skins débloqués !', 'orange');
-            },
-
-            daily: () => {
-                if (!S || !S.daily || !S.daily.mission) { this.log('e', 'Pas de mission'); return; }
-                if (S.daily.completed) { this.log('w', 'Déjà complétée'); return; }
-                S.daily.progress = S.daily.mission.target;
-                S.daily.completed = true;
-                S.credits = (S.credits||0) + S.daily.mission.reward;
-                checkAch('daily_done');
-                scheduleSave();
-                this.log('s', 'Mission complétée ! +' + S.daily.mission.reward + ' crédits');
-                notify('🎯 Mission complétée !', 'orange');
-            },
-
-            stats: () => {
-                if (!S) { this.log('e', 'Pas de session'); return; }
-                [`── STATS : ${S.username} ──`,
-                 `Meilleur  : ${S.highScore}`,
-                 `Crédits   : ${S.credits}`,
-                 `XP        : ${S.xp} (${getRank(S.xp||0).label})`,
-                 `Morts     : ${S.deathCount}`,
-                 `Parties   : ${S.gamesPlayed}`,
-                 `Temps     : ${fmtTime(S.totalTime||0)}`,
-                 `Ach.      : ${Object.keys(S.achievements||{}).length}/${ACHIEVEMENTS.length}`,
-                 `Connecté  : ${isLogged()}`].forEach(l => this.log('i', l));
-            },
-
-            accounts: async () => {
-                const r = await fetch('/api/admin/stats');
-                const d = await r.json();
-                this.log('i', `Joueurs : ${d.players} | Scores : ${d.totalScores} | Sessions : ${d.activeSessions}`);
-                if (d.topScore) this.log('i', `Top score : ${d.topScore.username} — ${d.topScore.score} pts`);
-            },
-
-            matrix: () => {
-                Game._matrix = true;
-                this.log('s', 'Matrix mode ON (5s)');
-                setTimeout(() => { Game._matrix = false; this.log('x', 'Matrix mode OFF'); }, 5000);
-            },
-
-            clear: () => { document.getElementById('dev-log').innerHTML = ''; },
-
-            reset: async () => {
-                if (!confirm('⚠️ Supprimer TOUTES les données ? (irréversible)')) return;
-                if (isLogged()) await Auth.logout();
-                S = guestState();
-                Game.player.color = '#00f3ff';
-                this.log('e', 'RESET TOTAL EFFECTUÉ');
-                UI.show('layer-menu');
-            }
+            help:()=>['── COMMANDES ──','god / hitbox / fps / slow','credits <n> / xp <n>','score <n> / level <0-3> / spawn <n>','shield / slow_pu / kill','unlockall / daily / stats / accounts','matrix / clear / reset'].forEach(l=>this.log('i',l)),
+            god:()=>{ Game._god=!Game._god; document.getElementById('god-badge').style.display=(Game._god&&Game.running)?'block':'none'; this.log(Game._god?'s':'w','God mode: '+(Game._god?'ON':'OFF')); },
+            hitbox:()=>{ Game._hitbox=!Game._hitbox; this.log('i','Hitbox: '+(Game._hitbox?'ON':'OFF')); },
+            fps:()=>{ Game._fps=!Game._fps; document.getElementById('fps-el').style.display=Game._fps?'block':'none'; this.log('i','FPS: '+(Game._fps?'ON':'OFF')); },
+            slow:()=>{ Game._slowDev=!Game._slowDev; this.log('w','Ralenti: '+(Game._slowDev?'ON':'OFF')); },
+            credits:()=>{ const n=parseInt(arg)||100; if(S){S.credits=(S.credits||0)+n;scheduleSave();} this.log('s','+'+n+' crédits'); notify('+'+n+' crédits'); },
+            xp:()=>{ const n=parseInt(arg)||100; if(S){S.xp=(S.xp||0)+n;scheduleSave();} this.log('s','+'+n+' XP'); },
+            score:()=>{ if(!Game.running){this.log('e','Lance une partie dabord');return;} Game.score=parseInt(arg)||0; this.log('s','Score: '+Game.score); },
+            level:()=>{ const n=parseInt(arg); Game._forceLvl=(n>=0&&n<=3)?n:null; this.log('s',Game._forceLvl!==null?'Niveau: '+LevelSystem.levels[Game._forceLvl].name:'Auto'); },
+            spawn:()=>{ if(!Game.running){this.log('e','Lance une partie dabord');return;} const n=parseInt(arg)||5; const lvl=LevelSystem.getCurrentLevel(Game.score); for(let i=0;i<n;i++)Game.enemies.push({x:Math.random()*(Game.canvas.width-25),y:-55,speed:lvl.speed,tracker:false,color:'#ff3838'}); this.log('w',n+' ennemis'); },
+            shield:()=>{ if(!Game.running){this.log('e','Lance une partie dabord');return;} Game._activatePU('shield'); },
+            slow_pu:()=>{ if(!Game.running){this.log('e','Lance une partie dabord');return;} Game._activatePU('slow'); },
+            kill:()=>{ if(!Game.running){this.log('e','Aucune partie');return;} this.log('e','Mort forcée'); Game.stop(); },
+            unlockall:()=>{ if(S){S.ownedSkins=SKINS.map(sk=>sk.id);scheduleSave();} this.log('s','Tous les skins débloqués'); notify('Tous les skins !','orange'); },
+            daily:()=>{ if(!S||!S.daily||!S.daily.mission){this.log('e','Pas de mission');return;} if(S.daily.completed){this.log('w','Déjà complétée');return;} S.daily.progress=S.daily.mission.target; S.daily.completed=true; S.credits=(S.credits||0)+S.daily.mission.reward; checkAch('daily_done'); scheduleSave(); this.log('s','Mission complétée !'); },
+            stats:()=>{ if(!S)return; [`${S.username}`,`Score: ${S.highScore} | Crédits: ${S.credits} | XP: ${S.xp}`,`Rang: ${getRank(S.xp||0).label} | Morts: ${S.deathCount} | Parties: ${S.gamesPlayed}`].forEach(l=>this.log('i',l)); },
+            accounts:async()=>{ const r=await fetch('/api/admin/stats'); const d=await r.json(); this.log('i',`Joueurs: ${d.players} | Scores: ${d.totalScores} | Sessions: ${d.activeSessions}`); if(d.topScore)this.log('i',`Top: ${d.topScore.username} — ${d.topScore.score} pts`); },
+            matrix:()=>{ Game._matrix=true; this.log('s','Matrix ON (5s)'); setTimeout(()=>{Game._matrix=false;this.log('x','Matrix OFF');},5000); },
+            clear:()=>{ document.getElementById('dev-log').innerHTML=''; },
+            reset:async()=>{ if(!confirm('⚠️ RESET TOTAL ?'))return; if(isLogged())await Auth.logout(); S=guestState(); Game.player.color='#00f3ff'; this.log('e','RESET TOTAL'); UI.show('layer-menu'); }
         };
-
-        if (cmds[cmd]) { try { cmds[cmd](); } catch(e) { this.log('e', 'Erreur : ' + e.message); } }
-        else this.log('e', `Commande inconnue : "${cmd}" — tapez "help"`);
+        if(cmds[cmd]){try{cmds[cmd]();}catch(e){this.log('e','Erreur: '+e.message);}}
+        else this.log('e','Inconnu: "'+cmd+'" — tapez "help"');
     }
 };
 
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
 //  BOOT
-// ════════════════════════════════════════════════════
+// ══════════════════════════════════════════════
 window.addEventListener('load', () => {
     Game.init();
-    console.log('%cNEON DODGE DEV', 'color:#ffaa00;font-size:18px;font-weight:900;font-family:monospace');
-    console.log('%cShift+D → console dev', 'color:#555;font-family:monospace');
 });
 </script>
 </body>
