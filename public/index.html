@@ -9,18 +9,27 @@
 </head>
 <body>
 
+<!-- ══════════════════════════════════════════════ -->
+<!--  MENU PRINCIPAL                               -->
+<!-- ══════════════════════════════════════════════ -->
 <div id="layer-menu" class="screen">
     <div id="user-tag">Non connecté</div>
     <h1 class="neon-title">NEON DODGE</h1>
+    <p id="menu-highscore">MEILLEUR SCORE : <span id="hs-val">0</span></p>
+
     <div class="menu-grid">
-        <button class="btn" onclick="Game.start()">JOUER</button>
+        <button class="btn"          onclick="Game.start()">JOUER</button>
         <button class="btn btn-blue" onclick="UI.show('layer-shop')">BOUTIQUE</button>
         <button class="btn btn-blue" onclick="UI.show('layer-lead')">CLASSEMENT</button>
         <button class="btn btn-blue" onclick="UI.show('layer-auth')">COMPTE</button>
+        <button class="btn btn-blue" onclick="UI.show('layer-stats')">STATISTIQUES</button>
+        <button class="btn btn-red"  onclick="UI.confirmQuit()">QUITTER</button>
     </div>
-    <div id="highscore-display">MEILLEUR : <span id="hs-val">0</span> pts</div>
 </div>
 
+<!-- ══════════════════════════════════════════════ -->
+<!--  BOUTIQUE DE SKINS                            -->
+<!-- ══════════════════════════════════════════════ -->
 <div id="layer-shop" class="screen" style="display:none;">
     <h2>BOUTIQUE DE SKINS</h2>
     <p>CRÉDITS : <span id="shop-credits">0</span></p>
@@ -28,352 +37,728 @@
     <button class="btn btn-red" onclick="UI.show('layer-menu')">RETOUR</button>
 </div>
 
+<!-- ══════════════════════════════════════════════ -->
+<!--  CLASSEMENT                                   -->
+<!-- ══════════════════════════════════════════════ -->
 <div id="layer-lead" class="screen" style="display:none;">
     <h2>TOP JOUEURS</h2>
     <div id="leaderboard-content"></div>
     <button class="btn btn-red" onclick="UI.show('layer-menu')">RETOUR</button>
 </div>
 
+<!-- ══════════════════════════════════════════════ -->
+<!--  CONNEXION / INSCRIPTION                      -->
+<!-- ══════════════════════════════════════════════ -->
 <div id="layer-auth" class="screen" style="display:none;">
-    <h2>CONNEXION / INSCRIPTION</h2>
-    <input type="text" id="auth-user" placeholder="Pseudo">
-    <input type="password" id="auth-pass" placeholder="Mot de passe">
-    <button class="btn" onclick="Auth.sign()">VALIDER</button>
+    <h2 id="auth-title">CONNEXION</h2>
+    <input type="text"     id="auth-user" placeholder="Pseudo (min. 3 caractères)">
+    <input type="password" id="auth-pass" placeholder="Mot de passe (min. 4 car.)">
+    <div class="auth-tabs">
+        <button class="btn"         id="btn-login"    onclick="Auth.login()">SE CONNECTER</button>
+        <button class="btn btn-blue" id="btn-register" onclick="Auth.register()">S'INSCRIRE</button>
+    </div>
+    <button class="btn btn-red" onclick="UI.show('layer-menu')">RETOUR</button>
+    <p id="auth-msg"></p>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!--  STATISTIQUES                                 -->
+<!-- ══════════════════════════════════════════════ -->
+<div id="layer-stats" class="screen" style="display:none;">
+    <h2>STATISTIQUES</h2>
+    <div id="stats-content"></div>
     <button class="btn btn-red" onclick="UI.show('layer-menu')">RETOUR</button>
 </div>
 
-<div id="layer-game" style="display:none;">
-    <canvas id="gameCanvas"></canvas>
-    <div id="hud">
-        <div id="score-container">SCORE: <span id="ui-score">0</span></div>
-        <div id="level-container">
-            <span id="ui-level-name">TUTORIAL</span>
-            <div id="level-desc"></div>
+<!-- ══════════════════════════════════════════════ -->
+<!--  DEV TOOLS (visible seulement si dev/admin)   -->
+<!-- ══════════════════════════════════════════════ -->
+<div id="layer-devtools" class="screen" style="display:none;">
+    <h2 class="dev-title">⚙ DEV TOOLS ⚙</h2>
+    <div class="dev-panel">
+        <div class="dev-row">
+            <label>CRÉDITS</label>
+            <input type="number" id="dev-credits" value="0">
+            <button class="btn btn-blue" onclick="DevTools.setCredits()">SET</button>
         </div>
-        <div id="tier-container"><span id="ui-tier"></span></div>
-        <div id="next-level-bar">
-            <div id="next-level-fill"></div>
-            <span id="next-level-label"></span>
+        <div class="dev-row">
+            <label>HIGH SCORE</label>
+            <input type="number" id="dev-hs" value="0">
+            <button class="btn btn-blue" onclick="DevTools.setHS()">SET</button>
         </div>
+        <div class="dev-row">
+            <label>SPAWN SCORE</label>
+            <input type="number" id="dev-score" value="0">
+            <button class="btn btn-blue" onclick="DevTools.setScore()">SET (en jeu)</button>
+        </div>
+        <div class="dev-row">
+            <label>DÉBLOQUER SKINS</label>
+            <button class="btn btn-blue" onclick="DevTools.unlockAll()">TOUT DÉVERROUILLER</button>
+        </div>
+        <div class="dev-row">
+            <label>INVINCIBILITÉ</label>
+            <button class="btn btn-blue" id="btn-god" onclick="DevTools.toggleGod()">OFF</button>
+        </div>
+        <div class="dev-row">
+            <label>RESET DONNÉES</label>
+            <button class="btn btn-red" onclick="DevTools.reset()">RESET COMPLET</button>
+        </div>
+        <div id="dev-info"></div>
     </div>
-    <div id="level-announce"></div>
+    <button class="btn btn-red" onclick="UI.show('layer-menu')">RETOUR</button>
 </div>
 
+<!-- ══════════════════════════════════════════════ -->
+<!--  ÉCRAN DE JEU                                 -->
+<!-- ══════════════════════════════════════════════ -->
+<div id="layer-game" style="display:none; position:relative; width:100%; height:100%;">
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- HUD principal -->
+    <div id="hud">
+        <div id="score-container">SCORE: <span id="ui-score">0</span></div>
+        <div id="level-hud">
+            <span id="ui-level-name">TUTORIAL</span>
+            <span id="ui-level-desc"></span>
+        </div>
+        <div id="ui-tier"></div>
+        <div id="next-level-bar">
+            <div id="next-level-fill"></div>
+        </div>
+        <div id="next-level-label"></div>
+    </div>
+
+    <!-- Bouton pause -->
+    <button id="btn-pause" onclick="Game.togglePause()">⏸</button>
+
+    <!-- Annonce de niveau -->
+    <div id="level-announce"></div>
+
+    <!-- Menu PAUSE -->
+    <div id="pause-menu" style="display:none;">
+        <h2>EN PAUSE</h2>
+        <p id="pause-score-info"></p>
+        <button class="btn"         onclick="Game.togglePause()">REPRENDRE</button>
+        <button class="btn btn-red" onclick="Game.quit()">QUITTER LA PARTIE</button>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!--  ÉCRAN DE MORT / GAME OVER                    -->
+<!-- ══════════════════════════════════════════════ -->
+<div id="layer-death" class="screen" style="display:none;">
+    <h2 class="death-title">GAME OVER</h2>
+    <div id="death-stats"></div>
+    <button class="btn"          onclick="Game.start()">REJOUER</button>
+    <button class="btn btn-blue" onclick="UI.show('layer-menu')">MENU</button>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!--  CONFIRM QUIT                                 -->
+<!-- ══════════════════════════════════════════════ -->
+<div id="layer-confirm" class="screen" style="display:none;">
+    <h2>QUITTER ?</h2>
+    <p>Voulez-vous vraiment fermer le jeu ?</p>
+    <button class="btn btn-red"  onclick="window.close()">OUI, QUITTER</button>
+    <button class="btn btn-blue" onclick="UI.show('layer-menu')">ANNULER</button>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!--  SCRIPTS                                      -->
+<!-- ══════════════════════════════════════════════ -->
 <script src="levels.js"></script>
 <script src="stats_manager.js"></script>
 <script>
-    // --- AUTH ---
-    const Auth = {
-        currentUser: null,
-        sign() {
-            const user = document.getElementById('auth-user').value;
-            if(user.length < 3) return alert("Pseudo trop court");
-            this.currentUser = user;
-            document.getElementById('user-tag').innerText = "Connecté: " + user;
-            StatsManager.data.username = user;
-            StatsManager.save();
-            UI.show('layer-menu');
+// ════════════════════════════════════════════════
+//  AUTH — Connexion & Inscription séparées
+// ════════════════════════════════════════════════
+const DEV_USERS = ["dev", "admin", "root", "devmode"];
+
+const Auth = {
+    currentUser: null,
+    accounts: JSON.parse(localStorage.getItem('neon_accounts') || '{}'),
+
+    saveAccounts() {
+        localStorage.setItem('neon_accounts', JSON.stringify(this.accounts));
+    },
+
+    _validate() {
+        const user = document.getElementById('auth-user').value.trim();
+        const pass = document.getElementById('auth-pass').value.trim();
+        const msg  = document.getElementById('auth-msg');
+        msg.style.color = '#ff3838';
+        if (user.length < 3) { msg.innerText = "Pseudo trop court (min. 3 car.)"; return null; }
+        if (pass.length < 4) { msg.innerText = "Mot de passe trop court (min. 4 car.)"; return null; }
+        return { user, pass };
+    },
+
+    login() {
+        const v = this._validate(); if (!v) return;
+        const { user, pass } = v;
+        const msg = document.getElementById('auth-msg');
+        if (!this.accounts[user]) {
+            msg.innerText = "Compte introuvable. Inscrivez-vous d'abord.";
+            return;
         }
-    };
-
-    // --- UI ---
-    const UI = {
-        show(id) {
-            document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
-            const el = document.getElementById(id);
-            if(el) el.style.display = 'flex';
-            if(id === 'layer-shop') this.renderShop();
-            if(id === 'layer-lead') this.renderLead();
-            if(id === 'layer-menu') {
-                document.getElementById('hs-val').innerText = StatsManager.data.highScore;
-            }
-        },
-        renderShop() {
-            const list = document.getElementById('skin-list');
-            list.innerHTML = "";
-            const skins = [
-                {name: "Neon Blue", color: "#00f3ff", price: 0},
-                {name: "Emerald", color: "#00ff88", price: 500},
-                {name: "Ruby", color: "#ff3838", price: 1500},
-                {name: "Gold", color: "#ffcc00", price: 3000},
-                {name: "Violet", color: "#cc00ff", price: 5000},
-                {name: "White", color: "#ffffff", price: 8000}
-            ];
-            document.getElementById('shop-credits').innerText = StatsManager.data.credits;
-            skins.forEach(s => {
-                const btn = document.createElement('button');
-                btn.className = "btn-skin";
-                btn.style.borderColor = s.color;
-                btn.style.color = s.color;
-                btn.innerText = `${s.name}\n${s.price > 0 ? s.price + ' cr' : 'GRATUIT'}`;
-                btn.onclick = () => {
-                    if(StatsManager.data.credits >= s.price) {
-                        Game.player.color = s.color;
-                        alert("Skin équipé !");
-                    } else { alert("Pas assez de crédits"); }
-                };
-                list.appendChild(btn);
-            });
-        },
-        renderLead() {
-            const content = document.getElementById('leaderboard-content');
-            content.innerHTML = `<p>1. ${Auth.currentUser || 'Joueur'} — ${StatsManager.data.highScore} pts</p>`;
+        if (this.accounts[user] !== pass) {
+            msg.innerText = "Mot de passe incorrect.";
+            return;
         }
-    };
+        this._connectUser(user);
+    },
 
-    // --- GAME ENGINE ---
-    const Game = {
-        canvas: document.getElementById('gameCanvas'),
-        ctx: null, running: false, score: 0,
-        player: { x: 0, y: 0, size: 30, color: '#00f3ff' },
-        enemies: [],
-        currentLevelName: '',
-        burstTimer: 0,
-        glitchTimer: 0,
-        bgParticles: [],
+    register() {
+        const v = this._validate(); if (!v) return;
+        const { user, pass } = v;
+        const msg = document.getElementById('auth-msg');
+        if (this.accounts[user]) {
+            msg.innerText = "Ce pseudo est déjà pris.";
+            return;
+        }
+        this.accounts[user] = pass;
+        this.saveAccounts();
+        msg.style.color = '#00ff88';
+        msg.innerText = "Compte créé ! Connexion...";
+        setTimeout(() => this._connectUser(user), 800);
+    },
 
-        init() {
-            this.ctx = this.canvas.getContext('2d');
-            this.resize();
-            StatsManager.init();
-            document.getElementById('hs-val').innerText = StatsManager.data.highScore;
-            window.addEventListener('resize', () => this.resize());
+    // Ancienne méthode originale conservée
+    sign() {
+        const user = document.getElementById('auth-user').value.trim();
+        if (user.length < 3) return alert("Pseudo trop court");
+        this._connectUser(user);
+    },
 
-            // Init bg particles
-            for(let i = 0; i < 60; i++) {
-                this.bgParticles.push({
-                    x: Math.random() * window.innerWidth,
-                    y: Math.random() * window.innerHeight,
-                    size: Math.random() * 1.5 + 0.3,
-                    speed: Math.random() * 0.4 + 0.1
-                });
-            }
-        },
+    _connectUser(user) {
+        this.currentUser = user;
+        document.getElementById('user-tag').innerText = "Connecté: " + user;
+        StatsManager.data.username = user;
+        StatsManager.save();
 
-        resize() {
-            this.canvas.width = window.innerWidth;
-            this.canvas.height = window.innerHeight;
-        },
+        // Accès dev tools si compte dev/admin
+        if (DEV_USERS.includes(user.toLowerCase())) {
+            document.getElementById('btn-devtools') && 
+                (document.getElementById('btn-devtools').style.display = 'block');
+        }
+        UI.show('layer-menu');
+    },
 
-        start() {
-            this.running = true; this.score = 0; this.enemies = [];
-            this.burstTimer = 0; this.glitchTimer = 0;
-            this.player.x = this.canvas.width / 2 - 15;
-            this.player.y = this.canvas.height - 80;
-            this.currentLevelName = '';
+    logout() {
+        this.currentUser = null;
+        document.getElementById('user-tag').innerText = "Non connecté";
+    }
+};
 
-            document.getElementById('layer-menu').style.display = 'none';
-            document.getElementById('layer-game').style.display = 'block';
-            this.loop();
-        },
+// ════════════════════════════════════════════════
+//  UI
+// ════════════════════════════════════════════════
+const UI = {
+    show(id) {
+        document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'flex';
 
-        stop() {
-            this.running = false;
-            StatsManager.data.credits += Math.floor(this.score / 10);
-            if(this.score > StatsManager.data.highScore) StatsManager.data.highScore = this.score;
-            StatsManager.recordDeath();
-            // Flash red on death
-            this.canvas.style.filter = 'brightness(3) saturate(0)';
-            setTimeout(() => {
-                this.canvas.style.filter = '';
-                UI.show('layer-menu');
-            }, 300);
-        },
+        if (id === 'layer-shop')  this.renderShop();
+        if (id === 'layer-lead')  this.renderLead();
+        if (id === 'layer-stats') this.renderStats();
+        if (id === 'layer-menu')  this.renderMenu();
+        if (id === 'layer-devtools') DevTools.refresh();
+        if (id === 'layer-auth') {
+            document.getElementById('auth-msg').innerText = '';
+        }
+    },
 
-        announceLevel(name, color, desc) {
-            const el = document.getElementById('level-announce');
-            el.innerText = name;
-            el.style.color = color;
-            el.style.opacity = '1';
-            el.style.transform = 'scale(1.3)';
-            if(desc) {
-                const sub = document.createElement('div');
-                sub.style.fontSize = '14px';
-                sub.style.marginTop = '8px';
-                sub.innerText = desc;
-                el.appendChild(sub);
-            }
-            setTimeout(() => {
-                el.style.opacity = '0';
-                el.style.transform = 'scale(1)';
-                setTimeout(() => el.innerHTML = el.innerText = name, 600);
-            }, 2000);
-        },
+    renderMenu() {
+        document.getElementById('hs-val').innerText = StatsManager.data.highScore;
+        // Afficher btn devtools si user dev
+        const devBtn = document.getElementById('btn-devtools');
+        if (devBtn) {
+            devBtn.style.display = Auth.currentUser && DEV_USERS.includes(Auth.currentUser.toLowerCase())
+                ? 'block' : 'none';
+        }
+    },
 
-        loop() {
-            if(!this.running) return;
-            this.update(); this.draw();
-            requestAnimationFrame(() => this.loop());
-        },
+    renderShop() {
+        const list = document.getElementById('skin-list');
+        list.innerHTML = "";
+        const skins = [
+            { name: "Neon Blue",  color: "#00f3ff", price: 0     },
+            { name: "Emerald",    color: "#00ff88", price: 500    },
+            { name: "Ruby",       color: "#ff3838", price: 1500   },
+            { name: "Gold",       color: "#ffcc00", price: 3000   },
+            { name: "Violet",     color: "#cc00ff", price: 5000   },
+            { name: "White",      color: "#ffffff", price: 8000   },
+            { name: "Inferno",    color: "#ff4400", price: 12000  },
+            { name: "Ghost",      color: "#aaaaaa", price: 20000  }
+        ];
+        document.getElementById('shop-credits').innerText = StatsManager.data.credits;
+        const unlocked = StatsManager.data.unlockedSkins || ["#00f3ff"];
 
-        update() {
-            const lvl = LevelSystem.getCurrentLevel(this.score);
+        skins.forEach(s => {
+            const btn = document.createElement('button');
+            btn.className = "btn-skin";
+            btn.style.borderColor = s.color;
+            btn.style.color = s.color;
 
-            // Level change announce
-            if(lvl.name !== this.currentLevelName) {
-                this.currentLevelName = lvl.name;
-                document.getElementById('ui-level-name').innerText = lvl.name;
-                document.getElementById('ui-level-name').style.color = lvl.color || '#00f3ff';
-                document.getElementById('level-desc').innerText = lvl.description || '';
-                document.getElementById('ui-tier').innerText = LevelSystem.getTierName(this.score);
-                this.announceLevel(lvl.name, lvl.color, lvl.description);
-            }
+            const owned    = unlocked.includes(s.color);
+            const equipped = StatsManager.data.equippedSkin === s.color;
+            const label    = equipped ? "ÉQUIPÉ" : owned ? "ÉQUIPER" : (s.price === 0 ? "GRATUIT" : s.price + " cr");
 
-            // Progress bar to next level
-            const next = LevelSystem.getNextLevel(this.score);
-            if(next) {
-                const from = lvl.scoreReq;
-                const to = next.scoreReq;
-                const pct = Math.min(100, ((this.score - from) / (to - from)) * 100);
-                document.getElementById('next-level-fill').style.width = pct + '%';
-                document.getElementById('next-level-fill').style.background = lvl.color || '#00f3ff';
-                document.getElementById('next-level-label').innerText = `→ ${next.name} (${next.scoreReq})`;
-            } else {
-                document.getElementById('next-level-fill').style.width = '100%';
-                document.getElementById('next-level-label').innerText = '∞ MAX';
-            }
+            btn.innerHTML = `<span style="font-size:18px;display:block;margin-bottom:4px">■</span>${s.name}<br><small>${label}</small>`;
 
-            // Spawn standard
-            if(Math.random() < lvl.rate) {
-                this.spawnEnemy(lvl);
-            }
-
-            // Burst mode: volée de 5 ennemis
-            if(lvl.burst) {
-                this.burstTimer++;
-                if(this.burstTimer >= 90) {
-                    this.burstTimer = 0;
-                    for(let i = 0; i < 5; i++) {
-                        setTimeout(() => this.spawnEnemy(lvl), i * 80);
-                    }
-                }
-            }
-
-            // Glitch: flash + spawn surprise
-            if(lvl.glitch) {
-                this.glitchTimer++;
-                if(this.glitchTimer >= 150) {
-                    this.glitchTimer = 0;
-                    this.canvas.style.filter = `hue-rotate(${Math.random()*360}deg) brightness(2)`;
-                    setTimeout(() => this.canvas.style.filter = '', 120);
-                    // Spawn surprise en cercle
-                    for(let a = 0; a < 6; a++) {
-                        const angle = (a / 6) * Math.PI * 2;
-                        const e = this.createEnemy(lvl);
-                        e.x = this.canvas.width/2 + Math.cos(angle) * 200;
-                        e.y = -20;
-                        e.vx = Math.cos(angle) * 2;
-                        this.enemies.push(e);
-                    }
-                }
-            }
-
-            // Move + collide enemies
-            for(let i = this.enemies.length - 1; i >= 0; i--) {
-                const e = this.enemies[i];
-
-                // Tracker
-                if(e.tracker && this.running) {
-                    const dx = this.player.x - e.x;
-                    const dy = this.player.y - e.y;
-                    const dist = Math.hypot(dx, dy) || 1;
-                    e.x += (dx / dist) * e.trackSpeed;
-                    e.y += (dy / dist) * e.trackSpeed;
+            btn.onclick = () => {
+                if (owned) {
+                    Game.player.color = s.color;
+                    StatsManager.data.equippedSkin = s.color;
+                    StatsManager.save();
+                    this.renderShop();
+                } else if (StatsManager.data.credits >= s.price) {
+                    StatsManager.data.credits -= s.price;
+                    if (!StatsManager.data.unlockedSkins) StatsManager.data.unlockedSkins = ["#00f3ff"];
+                    StatsManager.data.unlockedSkins.push(s.color);
+                    Game.player.color = s.color;
+                    StatsManager.data.equippedSkin = s.color;
+                    StatsManager.save();
+                    alert("Skin déverrouillé et équipé !");
+                    this.renderShop();
                 } else {
-                    // Zigzag
-                    if(e.zigzag) e.x += Math.sin(e.y * 0.05 + e.phase) * 3;
-                    e.x += e.vx || 0;
-                    e.y += e.speed;
+                    alert("Pas assez de crédits !");
                 }
+            };
+            list.appendChild(btn);
+        });
+    },
 
-                // Collision
-                if(Math.hypot(this.player.x + 15 - (e.x + 12), this.player.y + 15 - (e.y + 12)) < 28) {
+    renderLead() {
+        const content = document.getElementById('leaderboard-content');
+        // Classement local (plusieurs comptes possibles)
+        const scores = JSON.parse(localStorage.getItem('neon_scores') || '[]');
+        if (!scores.length) {
+            scores.push({ user: Auth.currentUser || 'Joueur', score: StatsManager.data.highScore });
+        }
+        scores.sort((a, b) => b.score - a.score);
+        content.innerHTML = scores.slice(0, 10).map((s, i) =>
+            `<div class="lead-row">
+                <span class="lead-rank">${i+1}.</span>
+                <span class="lead-user">${s.user}</span>
+                <span class="lead-score">${s.score} pts</span>
+            </div>`
+        ).join('');
+    },
+
+    renderStats() {
+        const d = StatsManager.data;
+        document.getElementById('stats-content').innerHTML = `
+            <div class="stat-row"><span>Pseudo</span><span>${d.username}</span></div>
+            <div class="stat-row"><span>Meilleur score</span><span>${d.highScore} pts</span></div>
+            <div class="stat-row"><span>Crédits</span><span>${d.credits}</span></div>
+            <div class="stat-row"><span>Parties jouées</span><span>${d.gamesPlayed || 0}</span></div>
+            <div class="stat-row"><span>Morts totales</span><span>${d.deathCount}</span></div>
+            <div class="stat-row"><span>Temps de jeu</span><span>${StatsManager.getFormattedTime()}</span></div>
+            <div class="stat-row"><span>Meilleur niveau atteint</span><span>${d.bestLevel || 'TUTORIAL'}</span></div>
+            <div class="stat-row"><span>Skins débloqués</span><span>${(d.unlockedSkins||[]).length} / 8</span></div>
+        `;
+    },
+
+    confirmQuit() {
+        this.show('layer-confirm');
+    }
+};
+
+// ════════════════════════════════════════════════
+//  DEV TOOLS (accès réservé aux comptes dev/admin)
+// ════════════════════════════════════════════════
+const DevTools = {
+    godMode: false,
+
+    refresh() {
+        document.getElementById('dev-credits').value = StatsManager.data.credits;
+        document.getElementById('dev-hs').value      = StatsManager.data.highScore;
+        document.getElementById('dev-score').value   = 0;
+        document.getElementById('btn-god').innerText = this.godMode ? 'ON ✓' : 'OFF';
+        document.getElementById('dev-info').innerHTML = `
+            <div class="dev-info-block">
+                Username : ${StatsManager.data.username}<br>
+                Morts    : ${StatsManager.data.deathCount}<br>
+                Temps    : ${StatsManager.getFormattedTime()}<br>
+                Parties  : ${StatsManager.data.gamesPlayed || 0}
+            </div>`;
+    },
+
+    setCredits() {
+        const v = parseInt(document.getElementById('dev-credits').value);
+        if (!isNaN(v)) { StatsManager.data.credits = v; StatsManager.save(); alert("Crédits mis à jour !"); }
+    },
+
+    setHS() {
+        const v = parseInt(document.getElementById('dev-hs').value);
+        if (!isNaN(v)) { StatsManager.data.highScore = v; StatsManager.save(); alert("High score mis à jour !"); }
+    },
+
+    setScore() {
+        const v = parseInt(document.getElementById('dev-score').value);
+        if (!isNaN(v) && Game.running) { Game.score = v; alert("Score en jeu modifié !"); }
+        else if (!Game.running) alert("Lance une partie d'abord !");
+    },
+
+    unlockAll() {
+        const skins = ["#00f3ff","#00ff88","#ff3838","#ffcc00","#cc00ff","#ffffff","#ff4400","#aaaaaa"];
+        StatsManager.data.unlockedSkins = skins;
+        StatsManager.save();
+        alert("Tous les skins débloqués !");
+    },
+
+    toggleGod() {
+        this.godMode = !this.godMode;
+        document.getElementById('btn-god').innerText = this.godMode ? 'ON ✓' : 'OFF';
+    },
+
+    reset() {
+        if (confirm("Vraiment tout réinitialiser ?")) {
+            StatsManager.reset();
+            this.godMode = false;
+            this.refresh();
+            alert("Données réinitialisées.");
+        }
+    }
+};
+
+// ════════════════════════════════════════════════
+//  MOTEUR DE JEU
+// ════════════════════════════════════════════════
+const Game = {
+    canvas: document.getElementById('gameCanvas'),
+    ctx: null,
+    running: false,
+    paused: false,
+    score: 0,
+    player: { x: 0, y: 0, color: '#00f3ff' },
+    enemies: [],
+    currentLevelName: '',
+    burstTimer: 0,
+    glitchTimer: 0,
+    timeTimer: 0,
+    bgParticles: [],
+
+    init() {
+        this.ctx = this.canvas.getContext('2d');
+        this.resize();
+        StatsManager.init();
+
+        // Restaurer skin équipé
+        if (StatsManager.data.equippedSkin) {
+            this.player.color = StatsManager.data.equippedSkin;
+        }
+
+        // Init particules de fond
+        for (let i = 0; i < 80; i++) {
+            this.bgParticles.push({
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight,
+                size: Math.random() * 1.5 + 0.3,
+                speed: Math.random() * 0.4 + 0.1,
+                opacity: Math.random() * 0.5 + 0.1
+            });
+        }
+
+        window.addEventListener('resize', () => this.resize());
+
+        // Touches clavier : ESC = pause, P = pause
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' || e.key === 'p' || e.key === 'P') {
+                if (this.running) this.togglePause();
+            }
+        });
+
+        // Contrôle tactile
+        this.canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            this.player.x = e.touches[0].clientX - 15;
+        }, { passive: false });
+
+        UI.renderMenu();
+    },
+
+    resize() {
+        this.canvas.width  = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+    },
+
+    start() {
+        this.running = true;
+        this.paused  = false;
+        this.score   = 0;
+        this.enemies = [];
+        this.burstTimer = 0;
+        this.glitchTimer = 0;
+        this.timeTimer  = 0;
+        this.currentLevelName = '';
+
+        this.player.x = this.canvas.width / 2 - 15;
+        this.player.y = this.canvas.height - 80;
+
+        // Masquer tous les écrans
+        document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
+        document.getElementById('layer-game').style.display = 'block';
+        document.getElementById('pause-menu').style.display = 'none';
+
+        this.loop();
+    },
+
+    stop() {
+        if (!this.running) return;
+        this.running = false;
+        this.paused  = false;
+
+        // Crédits gagnés
+        StatsManager.data.credits += Math.floor(this.score / 10);
+
+        // High score
+        const isNew = this.score > StatsManager.data.highScore;
+        if (isNew) StatsManager.data.highScore = this.score;
+
+        // Meilleur niveau
+        const lvl = LevelSystem.getCurrentLevel(this.score);
+        if (!StatsManager.data.bestLevel || this.score > (StatsManager.data.highScore - 1)) {
+            StatsManager.data.bestLevel = lvl.name;
+        }
+
+        StatsManager.recordDeath();
+
+        // Sauvegarder dans le classement local
+        const scores = JSON.parse(localStorage.getItem('neon_scores') || '[]');
+        scores.push({ user: Auth.currentUser || StatsManager.data.username, score: this.score });
+        scores.sort((a, b) => b.score - a.score);
+        localStorage.setItem('neon_scores', JSON.stringify(scores.slice(0, 50)));
+
+        // Afficher écran de mort
+        document.getElementById('layer-game').style.display = 'none';
+        document.getElementById('layer-death').style.display = 'flex';
+        document.getElementById('death-stats').innerHTML = `
+            <div class="stat-row"><span>Score</span><span>${this.score} pts</span></div>
+            <div class="stat-row"><span>Niveau atteint</span><span>${lvl.name}</span></div>
+            <div class="stat-row"><span>Crédits gagnés</span><span>+${Math.floor(this.score/10)}</span></div>
+            ${isNew ? '<p class="new-record">🏆 NOUVEAU RECORD !</p>' : ''}
+        `;
+    },
+
+    quit() {
+        this.running = false;
+        this.paused  = false;
+        StatsManager.data.credits += Math.floor(this.score / 10);
+        if (this.score > StatsManager.data.highScore) StatsManager.data.highScore = this.score;
+        StatsManager.save();
+        document.getElementById('layer-game').style.display = 'none';
+        document.getElementById('pause-menu').style.display = 'none';
+        UI.show('layer-menu');
+    },
+
+    togglePause() {
+        if (!this.running && !this.paused) return;
+        this.paused = !this.paused;
+        const pm = document.getElementById('pause-menu');
+        pm.style.display = this.paused ? 'flex' : 'none';
+        document.getElementById('btn-pause').innerText = this.paused ? '▶' : '⏸';
+        document.getElementById('pause-score-info').innerText = `Score actuel : ${this.score} pts`;
+        if (!this.paused) this.loop();
+    },
+
+    loop() {
+        if (!this.running || this.paused) return;
+        this.update();
+        this.draw();
+        requestAnimationFrame(() => this.loop());
+    },
+
+    update() {
+        const lvl = LevelSystem.getCurrentLevel(this.score);
+
+        // ── Changement de niveau
+        if (lvl.name !== this.currentLevelName) {
+            this.currentLevelName = lvl.name;
+            document.getElementById('ui-level-name').innerText = lvl.name;
+            document.getElementById('ui-level-name').style.color = lvl.color || '#00f3ff';
+            document.getElementById('ui-level-desc').innerText = lvl.description || '';
+            document.getElementById('ui-tier').innerText = LevelSystem.getTierName(this.score);
+            this._announceLevel(lvl.name, lvl.color, lvl.description);
+            if (this.score > 0) StatsManager.data.bestLevel = lvl.name;
+        }
+
+        // ── Barre de progression
+        const next = LevelSystem.getNextLevel(this.score);
+        if (next) {
+            const pct = Math.min(100, ((this.score - lvl.scoreReq) / (next.scoreReq - lvl.scoreReq)) * 100);
+            document.getElementById('next-level-fill').style.width = pct + '%';
+            document.getElementById('next-level-fill').style.background = lvl.color || '#00f3ff';
+            document.getElementById('next-level-label').innerText = `→ ${next.name} dans ${next.scoreReq - this.score} pts`;
+        } else {
+            document.getElementById('next-level-fill').style.width = '100%';
+            document.getElementById('next-level-label').innerText = '∞ MAX NIVEAU';
+        }
+
+        // ── Spawn standard
+        if (Math.random() < lvl.rate) this._spawnEnemy(lvl);
+
+        // ── Mode Burst (volée de 5)
+        if (lvl.burst) {
+            this.burstTimer++;
+            if (this.burstTimer >= 90) {
+                this.burstTimer = 0;
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => { if (this.running && !this.paused) this._spawnEnemy(lvl); }, i * 80);
+                }
+            }
+        }
+
+        // ── Mode Glitch (flash + apparition en cercle)
+        if (lvl.glitch) {
+            this.glitchTimer++;
+            if (this.glitchTimer >= 160) {
+                this.glitchTimer = 0;
+                this.canvas.style.filter = `hue-rotate(${Math.random()*360}deg) brightness(2)`;
+                setTimeout(() => { this.canvas.style.filter = ''; }, 120);
+                for (let a = 0; a < 6; a++) {
+                    const angle = (a / 6) * Math.PI * 2;
+                    const e = this._createEnemy(lvl);
+                    e.x  = this.canvas.width / 2 + Math.cos(angle) * 250;
+                    e.y  = -30;
+                    e.vx = Math.cos(angle) * 2;
+                    this.enemies.push(e);
+                }
+            }
+        }
+
+        // ── Timer temps de jeu (chaque ~60 frames ≈ 1s)
+        this.timeTimer++;
+        if (this.timeTimer >= 60) { this.timeTimer = 0; StatsManager.incrementTime(); }
+
+        // ── Déplacement & collision ennemis
+        for (let i = this.enemies.length - 1; i >= 0; i--) {
+            const e = this.enemies[i];
+
+            if (e.tracker) {
+                const dx = (this.player.x + 15) - (e.x + 12);
+                const dy = (this.player.y + 15) - (e.y + 12);
+                const d  = Math.hypot(dx, dy) || 1;
+                e.x += (dx / d) * e.trackSpeed;
+                e.y += (dy / d) * e.trackSpeed;
+            } else {
+                if (e.zigzag) e.x += Math.sin(e.y * 0.05 + e.phase) * 3;
+                e.x += e.vx || 0;
+                e.y += e.speed;
+            }
+
+            // Collision (sauf god mode)
+            if (!DevTools.godMode) {
+                if (Math.hypot(this.player.x + 15 - (e.x + 12), this.player.y + 15 - (e.y + 12)) < 26) {
                     this.stop(); return;
                 }
-
-                if(e.y > this.canvas.height + 50 || e.x < -100 || e.x > this.canvas.width + 100) {
-                    this.enemies.splice(i, 1);
-                    this.score += 10;
-                }
             }
 
-            // Update score display
-            document.getElementById('ui-score').innerText = this.score;
-
-            // Mouse control
-            window.onmousemove = (ev) => { this.player.x = ev.clientX - 15; };
-
-            // Bg particles
-            this.bgParticles.forEach(p => {
-                p.y += p.speed;
-                if(p.y > this.canvas.height) p.y = 0;
-            });
-        },
-
-        createEnemy(lvl) {
-            return {
-                x: Math.random() * this.canvas.width,
-                y: -50,
-                speed: lvl.speed + (Math.random() * 2 - 1),
-                tracker: lvl.tracker && Math.random() < 0.4,
-                trackSpeed: lvl.speed * 0.35,
-                zigzag: lvl.zigzag && Math.random() < 0.5,
-                phase: Math.random() * Math.PI * 2,
-                color: lvl.color || '#ff3838',
-                vx: 0,
-                size: 20 + Math.random() * 10
-            };
-        },
-
-        spawnEnemy(lvl) {
-            this.enemies.push(this.createEnemy(lvl));
-        },
-
-        draw() {
-            const lvl = LevelSystem.getCurrentLevel(this.score);
-            const bg = lvl.bgColor || '#050505';
-
-            // Background
-            this.ctx.fillStyle = bg;
-            this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-            // BG particles
-            this.ctx.fillStyle = (lvl.color || '#00f3ff') + '22';
-            this.bgParticles.forEach(p => {
-                this.ctx.beginPath();
-                this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                this.ctx.fill();
-            });
-
-            // Player
-            this.ctx.shadowBlur = 20;
-            this.ctx.shadowColor = this.player.color;
-            this.ctx.fillStyle = this.player.color;
-            this.ctx.fillRect(this.player.x, this.player.y, 30, 30);
-            // Player core highlight
-            this.ctx.fillStyle = '#ffffff66';
-            this.ctx.fillRect(this.player.x + 5, this.player.y + 5, 10, 10);
-
-            // Enemies
-            this.enemies.forEach(e => {
-                const c = e.color || '#ff3838';
-                this.ctx.shadowBlur = 12;
-                this.ctx.shadowColor = c;
-                this.ctx.fillStyle = c;
-                this.ctx.fillRect(e.x, e.y, e.size || 25, e.size || 25);
-                // Tracker marker
-                if(e.tracker) {
-                    this.ctx.strokeStyle = '#ffffff';
-                    this.ctx.lineWidth = 1;
-                    this.ctx.strokeRect(e.x - 3, e.y - 3, (e.size||25) + 6, (e.size||25) + 6);
-                }
-            });
-
-            this.ctx.shadowBlur = 0;
+            // Sortie d'écran
+            if (e.y > this.canvas.height + 60 || e.x < -100 || e.x > this.canvas.width + 100) {
+                this.enemies.splice(i, 1);
+                this.score += 10;
+            }
         }
-    };
 
-    window.onload = () => Game.init();
+        // ── Contrôle souris
+        window.onmousemove = (ev) => { this.player.x = ev.clientX - 15; };
+
+        // ── Score display
+        document.getElementById('ui-score').innerText = this.score;
+
+        // ── Particules de fond
+        const W = this.canvas.width, H = this.canvas.height;
+        this.bgParticles.forEach(p => { p.y += p.speed; if (p.y > H) { p.y = 0; p.x = Math.random() * W; } });
+    },
+
+    _createEnemy(lvl) {
+        return {
+            x: Math.random() * this.canvas.width,
+            y: -50,
+            speed: lvl.speed + (Math.random() * 2 - 1),
+            tracker: lvl.tracker && Math.random() < 0.4,
+            trackSpeed: lvl.speed * 0.35,
+            zigzag: lvl.zigzag && Math.random() < 0.5,
+            phase: Math.random() * Math.PI * 2,
+            color: lvl.color || '#ff3838',
+            vx: 0,
+            size: 20 + Math.random() * 10
+        };
+    },
+
+    _spawnEnemy(lvl) {
+        this.enemies.push(this._createEnemy(lvl));
+    },
+
+    _announceLevel(name, color, desc) {
+        const el = document.getElementById('level-announce');
+        el.style.color   = color || '#00f3ff';
+        el.style.opacity = '1';
+        el.style.transform = 'scale(1.2)';
+        el.innerHTML = name + (desc ? `<div class="announce-sub">${desc}</div>` : '');
+        clearTimeout(this._announceTO);
+        this._announceTO = setTimeout(() => {
+            el.style.opacity   = '0';
+            el.style.transform = 'scale(1)';
+        }, 2200);
+    },
+
+    draw() {
+        const lvl = LevelSystem.getCurrentLevel(this.score);
+        const C   = this.ctx;
+
+        // Fond
+        C.fillStyle = lvl.bgColor || '#050505';
+        C.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+        // Particules de fond
+        C.shadowBlur = 0;
+        this.bgParticles.forEach(p => {
+            C.fillStyle = (lvl.color || '#00f3ff') + '18';
+            C.beginPath();
+            C.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            C.fill();
+        });
+
+        // Joueur
+        C.shadowBlur  = 20;
+        C.shadowColor = this.player.color;
+        C.fillStyle   = this.player.color;
+        C.fillRect(this.player.x, this.player.y, 30, 30);
+        C.fillStyle = '#ffffff55';
+        C.fillRect(this.player.x + 6, this.player.y + 6, 10, 10);
+
+        // God mode indicator
+        if (DevTools.godMode) {
+            C.strokeStyle = '#ffcc00';
+            C.lineWidth   = 2;
+            C.shadowColor = '#ffcc00';
+            C.shadowBlur  = 10;
+            C.strokeRect(this.player.x - 4, this.player.y - 4, 38, 38);
+        }
+
+        // Ennemis
+        this.enemies.forEach(e => {
+            const c = e.color || '#ff3838';
+            C.shadowBlur  = 14;
+            C.shadowColor = c;
+            C.fillStyle   = c;
+            C.fillRect(e.x, e.y, e.size, e.size);
+            // Contour tracker
+            if (e.tracker) {
+                C.strokeStyle = '#ffffff88';
+                C.lineWidth   = 1;
+                C.strokeRect(e.x - 3, e.y - 3, e.size + 6, e.size + 6);
+            }
+        });
+
+        C.shadowBlur = 0;
+    }
+};
+
+window.onload = () => Game.init();
 </script>
 </body>
 </html>
