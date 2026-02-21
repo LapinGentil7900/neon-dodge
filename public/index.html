@@ -202,7 +202,7 @@ const JSONBin = {
     async pushScore(entry) {
         try {
             const scores = await this.getScores();
-            scores.push(entry);
+            const i = scores.findIndex(s => s.user === entry.user); if (i === -1) scores.push(entry); else if (entry.score > scores[i].score) scores[i] = entry;
             scores.sort((a, b) => b.score - a.score);
             const top = scores.slice(0, 100);
             await fetch(`${this.BASE}/${this.BIN_ID}`, {
