@@ -9,837 +9,541 @@
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════════ -->
-<!--  MENU PRINCIPAL                               -->
-<!-- ══════════════════════════════════════════════ -->
+<!-- ══════════════════ MENU PRINCIPAL ══════════════════ -->
 <div id="layer-menu" class="screen">
-    <div id="user-tag">Non connecté</div>
-    <h1 class="neon-title" id="main-title" onclick="DevTools.titleClick()">NEON DODGE</h1>
-    <p id="menu-highscore">MEILLEUR SCORE : <span id="hs-val">0</span></p>
-    <p id="dev-hint" style="display:none; font-size:9px; color:#ffffff33; letter-spacing:2px; margin:0;">CLIQUEZ ENCORE...</p>
-
+    <div id="user-tag" onclick="UI.show('layer-profile')">
+        <div id="user-tag-avatar"></div>
+        <span id="user-tag-name">Non connecté</span>
+    </div>
+    <h1 class="neon-title">NEON DODGE</h1>
     <div class="menu-grid">
-        <button class="btn"          onclick="Game.start()">JOUER</button>
+        <button class="btn" onclick="Game.start()">JOUER</button>
         <button class="btn btn-blue" onclick="UI.show('layer-shop')">BOUTIQUE</button>
         <button class="btn btn-blue" onclick="UI.show('layer-lead')">CLASSEMENT</button>
-        <button class="btn btn-blue" onclick="UI.show('layer-auth')">COMPTE</button>
-        <button class="btn btn-blue" onclick="UI.show('layer-stats')">STATISTIQUES</button>
-        <button class="btn btn-red"  onclick="UI.confirmQuit()">QUITTER</button>
-        <button class="btn" id="btn-devtools" style="display:none; border-color:#ffcc00; color:#ffcc00; grid-column:1/-1;" onclick="UI.show('layer-devtools')">⚙ DEV TOOLS</button>
+        <button class="btn btn-blue" onclick="UI.show('layer-profile')">COMPTE</button>
     </div>
+    <div id="menu-highscore"></div>
 </div>
 
-<!-- ══════════════════════════════════════════════ -->
-<!--  BOUTIQUE DE SKINS                            -->
-<!-- ══════════════════════════════════════════════ -->
+<!-- ══════════════════ BOUTIQUE ══════════════════ -->
 <div id="layer-shop" class="screen" style="display:none;">
     <h2>BOUTIQUE DE SKINS</h2>
-    <p>CRÉDITS : <span id="shop-credits">0</span></p>
-    <div id="skin-list"></div>
+    <p class="credits-display">CRÉDITS : <span id="shop-credits">0</span></p>
+    <div id="skin-list" class="skin-grid"></div>
     <button class="btn btn-red" onclick="UI.show('layer-menu')">RETOUR</button>
 </div>
 
-<!-- ══════════════════════════════════════════════ -->
-<!--  CLASSEMENT                                   -->
-<!-- ══════════════════════════════════════════════ -->
+<!-- ══════════════════ CLASSEMENT ══════════════════ -->
 <div id="layer-lead" class="screen" style="display:none;">
     <h2>TOP JOUEURS</h2>
-    <div id="leaderboard-content"></div>
+    <div id="leaderboard-content" class="leaderboard-list"></div>
     <button class="btn btn-red" onclick="UI.show('layer-menu')">RETOUR</button>
 </div>
 
-<!-- ══════════════════════════════════════════════ -->
-<!--  CONNEXION / INSCRIPTION                      -->
-<!-- ══════════════════════════════════════════════ -->
+<!-- ══════════════════ COMPTE / TERMINAL OS ══════════════════ -->
+<div id="layer-profile" class="screen" style="display:none;">
+    <div id="profile-connected" style="display:none;">
+        <div id="profile-avatar-wrap">
+            <img id="profile-avatar" src="" alt="Avatar">
+        </div>
+        <h2 id="profile-username">-</h2>
+        <div class="profile-stats">
+            <div class="stat-box"><div class="stat-val" id="profile-credits">0</div><div class="stat-lbl">CRÉDITS</div></div>
+            <div class="stat-box"><div class="stat-val" id="profile-hs">0</div><div class="stat-lbl">HIGH SCORE</div></div>
+            <div class="stat-box"><div class="stat-val" id="profile-level">-</div><div class="stat-lbl">NIVEAU MAX</div></div>
+        </div>
+        <button class="btn btn-red" onclick="Auth.logout()">DÉCONNEXION</button>
+        <button class="btn" onclick="UI.show('layer-menu')">RETOUR</button>
+    </div>
+    <div id="profile-guest" style="display:none;">
+        <h2>TERMINAL OS</h2>
+        <p style="color:#888; font-size:12px;">Connecte-toi pour sauvegarder tes scores et accéder à la boutique.</p>
+        <button class="btn" onclick="UI.show('layer-auth')">CONNEXION</button>
+        <button class="btn" onclick="UI.show('layer-menu')">RETOUR</button>
+    </div>
+</div>
+
+<!-- ══════════════════ AUTH (LOGIN + REGISTER) ══════════════════ -->
 <div id="layer-auth" class="screen" style="display:none;">
-    <h2 id="auth-title">CONNEXION</h2>
-    <input type="text"     id="auth-user" placeholder="Pseudo (min. 3 caractères)">
-    <input type="password" id="auth-pass" placeholder="Mot de passe (min. 4 car.)">
+    <h2>ACCÈS RÉSEAU</h2>
     <div class="auth-tabs">
-        <button class="btn"         id="btn-login"    onclick="Auth.login()">SE CONNECTER</button>
-        <button class="btn btn-blue" id="btn-register" onclick="Auth.register()">S'INSCRIRE</button>
+        <button id="tab-login" class="tab-btn tab-active" onclick="Auth.switchTab('login')">CONNEXION</button>
+        <button id="tab-register" class="tab-btn" onclick="Auth.switchTab('register')">INSCRIPTION</button>
     </div>
-    <button class="btn btn-red" onclick="UI.show('layer-menu')">RETOUR</button>
-    <p id="auth-msg"></p>
-</div>
 
-<!-- ══════════════════════════════════════════════ -->
-<!--  STATISTIQUES                                 -->
-<!-- ══════════════════════════════════════════════ -->
-<div id="layer-stats" class="screen" style="display:none;">
-    <h2>STATISTIQUES</h2>
-    <div id="stats-content"></div>
-    <button class="btn btn-red" onclick="UI.show('layer-menu')">RETOUR</button>
-</div>
-
-<!-- ══════════════════════════════════════════════ -->
-<!--  DEV TOOLS (visible seulement si dev/admin)   -->
-<!-- ══════════════════════════════════════════════ -->
-<div id="layer-devtools" class="screen" style="display:none;">
-    <h2 class="dev-title">⚙ DEV TOOLS ⚙</h2>
-    <div class="dev-panel">
-        <div class="dev-row">
-            <label>CRÉDITS</label>
-            <input type="number" id="dev-credits" value="0">
-            <button class="btn btn-blue" onclick="DevTools.setCredits()">SET</button>
-        </div>
-        <div class="dev-row">
-            <label>HIGH SCORE</label>
-            <input type="number" id="dev-hs" value="0">
-            <button class="btn btn-blue" onclick="DevTools.setHS()">SET</button>
-        </div>
-        <div class="dev-row">
-            <label>SPAWN SCORE</label>
-            <input type="number" id="dev-score" value="0">
-            <button class="btn btn-blue" onclick="DevTools.setScore()">SET (en jeu)</button>
-        </div>
-        <div class="dev-row">
-            <label>DÉBLOQUER SKINS</label>
-            <button class="btn btn-blue" onclick="DevTools.unlockAll()">TOUT DÉVERROUILLER</button>
-        </div>
-        <div class="dev-row">
-            <label>INVINCIBILITÉ</label>
-            <button class="btn btn-blue" id="btn-god" onclick="DevTools.toggleGod()">OFF</button>
-        </div>
-        <div class="dev-row">
-            <label>RESET DONNÉES</label>
-            <button class="btn btn-red" onclick="DevTools.reset()">RESET COMPLET</button>
-        </div>
-        <div id="dev-info"></div>
+    <!-- Connexion -->
+    <div id="form-login">
+        <input type="text" id="login-user" placeholder="Pseudo" autocomplete="username">
+        <input type="password" id="login-pass" placeholder="Mot de passe" autocomplete="current-password">
+        <div id="login-error" class="form-error"></div>
+        <button class="btn" onclick="Auth.login()">CONNEXION</button>
     </div>
+
+    <!-- Inscription -->
+    <div id="form-register" style="display:none;">
+        <input type="text" id="reg-user" placeholder="Pseudo (3-20 caractères)" autocomplete="username">
+        <input type="password" id="reg-pass" placeholder="Mot de passe (6+ caractères)" autocomplete="new-password">
+        <label class="file-label" for="reg-avatar">
+            <span id="file-label-text">📷 Photo de profil (optionnel)</span>
+            <input type="file" id="reg-avatar" accept="image/jpeg,image/png,image/webp" onchange="Auth.previewAvatar(this)">
+        </label>
+        <img id="avatar-preview" style="display:none;" alt="Aperçu">
+        <div id="reg-error" class="form-error"></div>
+        <button class="btn" onclick="Auth.register()">CRÉER LE COMPTE</button>
+    </div>
+
     <button class="btn btn-red" onclick="UI.show('layer-menu')">RETOUR</button>
 </div>
 
-<!-- ══════════════════════════════════════════════ -->
-<!--  ÉCRAN DE JEU                                 -->
-<!-- ══════════════════════════════════════════════ -->
-<div id="layer-game" style="display:none; position:relative; width:100%; height:100%;">
+<!-- ══════════════════ JEU ══════════════════ -->
+<div id="layer-game" style="display:none;">
     <canvas id="gameCanvas"></canvas>
-
-    <!-- HUD principal -->
     <div id="hud">
         <div id="score-container">SCORE: <span id="ui-score">0</span></div>
-        <div id="level-hud">
-            <span id="ui-level-name">TUTORIAL</span>
-            <span id="ui-level-desc"></span>
-        </div>
-        <div id="ui-tier"></div>
-        <div id="next-level-bar">
-            <div id="next-level-fill"></div>
-        </div>
-        <div id="next-level-label"></div>
-    </div>
-
-    <!-- Bouton pause -->
-    <button id="btn-pause" onclick="Game.togglePause()">⏸</button>
-
-    <!-- Annonce de niveau -->
-    <div id="level-announce"></div>
-
-    <!-- Menu PAUSE -->
-    <div id="pause-menu" style="display:none;">
-        <h2>EN PAUSE</h2>
-        <p id="pause-score-info"></p>
-        <button class="btn"         onclick="Game.togglePause()">REPRENDRE</button>
-        <button class="btn btn-red" onclick="Game.quit()">QUITTER LA PARTIE</button>
+        <div id="level-display">SÉCURITÉ</div>
     </div>
 </div>
 
-<!-- ══════════════════════════════════════════════ -->
-<!--  ÉCRAN DE MORT / GAME OVER                    -->
-<!-- ══════════════════════════════════════════════ -->
-<div id="layer-death" class="screen" style="display:none;">
-    <h2 class="death-title">GAME OVER</h2>
-    <div id="death-stats"></div>
-    <button class="btn"          onclick="Game.start()">REJOUER</button>
-    <button class="btn btn-blue" onclick="UI.show('layer-menu')">MENU</button>
+<!-- ══════════════════ GAME OVER ══════════════════ -->
+<div id="layer-gameover" class="screen" style="display:none;">
+    <h2>GAME OVER</h2>
+    <div id="gameover-score"></div>
+    <div id="gameover-credits"></div>
+    <div id="gameover-hs"></div>
+    <button class="btn" onclick="Game.start()">REJOUER</button>
+    <button class="btn btn-red" onclick="UI.show('layer-menu')">MENU</button>
 </div>
 
-<!-- ══════════════════════════════════════════════ -->
-<!--  CONFIRM QUIT                                 -->
-<!-- ══════════════════════════════════════════════ -->
-<div id="layer-confirm" class="screen" style="display:none;">
-    <h2>QUITTER ?</h2>
-    <p>Voulez-vous vraiment fermer le jeu ?</p>
-    <button class="btn btn-red"  onclick="window.close()">OUI, QUITTER</button>
-    <button class="btn btn-blue" onclick="UI.show('layer-menu')">ANNULER</button>
-</div>
-
-<!-- ══════════════════════════════════════════════ -->
-<!--  SCRIPTS                                      -->
-<!-- ══════════════════════════════════════════════ -->
 <script src="levels.js"></script>
-<script src="stats_manager.js"></script>
 <script>
-// ════════════════════════════════════════════════
-//  JSONBIN — Leaderboard en ligne
-// ════════════════════════════════════════════════
-const JSONBin = {
-    BIN_ID : '6999b9bf43b1c97be9912a86',
-    API_KEY: '$2a$10$VQikcmBcOVfMdM1mZU9K/ONWBS7YEiY9g51GFsT5tWakQ8Qw7w2Du',
-    BASE   : 'https://api.jsonbin.io/v3/b',
 
-    headers() {
-        return {
-            'Content-Type': 'application/json',
-            'X-Master-Key': this.API_KEY
-        };
-    },
+// ══════════════════════════════════════════════════════════════════
+//  API CLIENT
+// ══════════════════════════════════════════════════════════════════
+const API = {
+  BASE: '/api',
 
-    // Récupère tous les scores
-    async getScores() {
-        try {
-            const res  = await fetch(`${this.BASE}/${this.BIN_ID}/latest`, { headers: this.headers() });
-            const data = await res.json();
-            return data.record.scores || [];
-        } catch(e) {
-            console.warn('JSONBin fetch error:', e);
-            return [];
-        }
-    },
+  _headers(multipart = false) {
+    const h = {};
+    const token = Auth.token;
+    if (token) h['Authorization'] = 'Bearer ' + token;
+    if (!multipart) h['Content-Type'] = 'application/json';
+    return h;
+  },
 
-    // Ajoute un score et garde le top 100
-    async pushScore(entry) {
-        try {
-            const scores = await this.getScores();
-            const i = scores.findIndex(s => s.user === entry.user); if (i === -1) scores.push(entry); else if (entry.score > scores[i].score) scores[i] = entry;
-            scores.sort((a, b) => b.score - a.score);
-            const top = scores.slice(0, 100);
-            await fetch(`${this.BASE}/${this.BIN_ID}`, {
-                method : 'PUT',
-                headers: this.headers(),
-                body   : JSON.stringify({ scores: top })
-            });
-        } catch(e) {
-            console.warn('JSONBin push error:', e);
-        }
-    }
+  async post(path, body, multipart = false) {
+    const resp = await fetch(this.BASE + path, {
+      method: 'POST',
+      headers: this._headers(multipart),
+      body: multipart ? body : JSON.stringify(body)
+    });
+    return resp.json();
+  },
+
+  async get(path) {
+    const resp = await fetch(this.BASE + path, { headers: this._headers() });
+    return resp.json();
+  }
 };
 
-// ════════════════════════════════════════════════
-//  AUTH — Connexion & Inscription séparées
-// ════════════════════════════════════════════════
-const DEV_USERS = ["dev", "admin", "root", "devmode"];
-
+// ══════════════════════════════════════════════════════════════════
+//  AUTH
+// ══════════════════════════════════════════════════════════════════
 const Auth = {
-    currentUser: null,
-    accounts: JSON.parse(localStorage.getItem('neon_accounts') || '{}'),
+  token: localStorage.getItem('nd_token') || null,
+  user: JSON.parse(localStorage.getItem('nd_user') || 'null'),
 
-    saveAccounts() {
-        localStorage.setItem('neon_accounts', JSON.stringify(this.accounts));
-    },
+  switchTab(tab) {
+    const isLogin = tab === 'login';
+    document.getElementById('form-login').style.display = isLogin ? 'flex' : 'none';
+    document.getElementById('form-register').style.display = isLogin ? 'none' : 'flex';
+    document.getElementById('tab-login').classList.toggle('tab-active', isLogin);
+    document.getElementById('tab-register').classList.toggle('tab-active', !isLogin);
+    document.getElementById('login-error').innerText = '';
+    document.getElementById('reg-error').innerText = '';
+  },
 
-    _validate() {
-        const user = document.getElementById('auth-user').value.trim();
-        const pass = document.getElementById('auth-pass').value.trim();
-        const msg  = document.getElementById('auth-msg');
-        msg.style.color = '#ff3838';
-        if (user.length < 3) { msg.innerText = "Pseudo trop court (min. 3 car.)"; return null; }
-        if (pass.length < 4) { msg.innerText = "Mot de passe trop court (min. 4 car.)"; return null; }
-        return { user, pass };
-    },
+  previewAvatar(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const preview = document.getElementById('avatar-preview');
+    document.getElementById('file-label-text').innerText = '✅ ' + file.name;
+    preview.src = URL.createObjectURL(file);
+    preview.style.display = 'block';
+  },
 
-    login() {
-        const v = this._validate(); if (!v) return;
-        const { user, pass } = v;
-        const msg = document.getElementById('auth-msg');
-        if (!this.accounts[user]) {
-            msg.innerText = "Compte introuvable. Inscrivez-vous d'abord.";
-            return;
-        }
-        if (this.accounts[user] !== pass) {
-            msg.innerText = "Mot de passe incorrect.";
-            return;
-        }
-        this._connectUser(user);
-    },
+  async login() {
+    const user = document.getElementById('login-user').value.trim();
+    const pass = document.getElementById('login-pass').value;
+    const errEl = document.getElementById('login-error');
+    errEl.innerText = '';
 
-    register() {
-        const v = this._validate(); if (!v) return;
-        const { user, pass } = v;
-        const msg = document.getElementById('auth-msg');
-        if (this.accounts[user]) {
-            msg.innerText = "Ce pseudo est déjà pris.";
-            return;
-        }
-        this.accounts[user] = pass;
-        this.saveAccounts();
-        msg.style.color = '#00ff88';
-        msg.innerText = "Compte créé ! Connexion...";
-        setTimeout(() => this._connectUser(user), 800);
-    },
+    if (!user || !pass) { errEl.innerText = 'Remplis tous les champs.'; return; }
 
-    // Ancienne méthode originale conservée
-    sign() {
-        const user = document.getElementById('auth-user').value.trim();
-        if (user.length < 3) return alert("Pseudo trop court");
-        this._connectUser(user);
-    },
+    const data = await API.post('/auth/login', { username: user, password: pass });
+    if (data.error) { errEl.innerText = data.error; return; }
 
-    _connectUser(user) {
-        this.currentUser = user;
-        document.getElementById('user-tag').innerText = "Connecté: " + user;
-        StatsManager.data.username = user;
-        StatsManager.save();
+    this._saveSession(data);
+    UI.show('layer-menu');
+  },
 
-        // Accès dev tools si compte dev/admin
-        if (DEV_USERS.includes(user.toLowerCase())) {
-            document.getElementById('btn-devtools') && 
-                (document.getElementById('btn-devtools').style.display = 'block');
-        }
-        UI.show('layer-menu');
-    },
+  async register() {
+    const username = document.getElementById('reg-user').value.trim();
+    const password = document.getElementById('reg-pass').value;
+    const avatarFile = document.getElementById('reg-avatar').files[0];
+    const errEl = document.getElementById('reg-error');
+    errEl.innerText = '';
 
-    logout() {
-        this.currentUser = null;
-        document.getElementById('user-tag').innerText = "Non connecté";
+    if (!username || !password) { errEl.innerText = 'Remplis tous les champs.'; return; }
+
+    const fd = new FormData();
+    fd.append('username', username);
+    fd.append('password', password);
+    if (avatarFile) fd.append('profilePicture', avatarFile);
+
+    const data = await API.post('/auth/register', fd, true);
+    if (data.error) { errEl.innerText = data.error; return; }
+
+    this._saveSession(data);
+    UI.show('layer-menu');
+  },
+
+  _saveSession(data) {
+    this.token = data.token;
+    this.user = data.user;
+    localStorage.setItem('nd_token', data.token);
+    localStorage.setItem('nd_user', JSON.stringify(data.user));
+    this._updateUI();
+  },
+
+  logout() {
+    this.token = null;
+    this.user = null;
+    localStorage.removeItem('nd_token');
+    localStorage.removeItem('nd_user');
+    this._updateUI();
+    UI.show('layer-menu');
+  },
+
+  // Rafraîchir les données utilisateur depuis le serveur
+  async refreshUser() {
+    if (!this.token) return;
+    const data = await API.get('/auth/me');
+    if (data.error) { this.logout(); return; }
+    this.user = data;
+    localStorage.setItem('nd_user', JSON.stringify(data));
+    this._updateUI();
+  },
+
+  _updateUI() {
+    const u = this.user;
+    const tag = document.getElementById('user-tag-name');
+    const tagAvatar = document.getElementById('user-tag-avatar');
+    const menuHs = document.getElementById('menu-highscore');
+
+    if (u) {
+      tag.innerText = u.displayName;
+      if (u.profilePicture) {
+        tagAvatar.style.backgroundImage = `url(${u.profilePicture})`;
+        tagAvatar.style.display = 'block';
+      } else {
+        tagAvatar.style.display = 'none';
+      }
+      menuHs.innerText = `MEILLEUR SCORE : ${u.highScore} pts`;
+    } else {
+      tag.innerText = 'Non connecté';
+      tagAvatar.style.display = 'none';
+      menuHs.innerText = '';
     }
+  }
 };
 
-// ════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════
 //  UI
-// ════════════════════════════════════════════════
+// ══════════════════════════════════════════════════════════════════
 const UI = {
-    show(id) {
-        document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
-        const el = document.getElementById(id);
-        if (el) el.style.display = 'flex';
+  show(id) {
+    document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
+    document.getElementById(id).style.display = 'flex';
 
-        if (id === 'layer-shop')  this.renderShop();
-        if (id === 'layer-lead')  this.renderLead();
-        if (id === 'layer-stats') this.renderStats();
-        if (id === 'layer-menu')  this.renderMenu();
-        if (id === 'layer-devtools') DevTools.refresh();
-        if (id === 'layer-auth') {
-            document.getElementById('auth-msg').innerText = '';
-        }
-    },
+    if (id === 'layer-shop')    this.renderShop();
+    if (id === 'layer-lead')    this.renderLead();
+    if (id === 'layer-profile') this.renderProfile();
+    if (id === 'layer-auth')    Auth.switchTab('login');
+    if (id === 'layer-menu')    Auth._updateUI();
+  },
 
-    renderMenu() {
-        document.getElementById('hs-val').innerText = StatsManager.data.highScore;
-        // Afficher btn devtools si user dev
-        const devBtn = document.getElementById('btn-devtools');
-        if (devBtn) {
-            devBtn.style.display = Auth.currentUser && DEV_USERS.includes(Auth.currentUser.toLowerCase())
-                ? 'block' : 'none';
-        }
-    },
+  async renderShop() {
+    const list = document.getElementById('skin-list');
+    const credEl = document.getElementById('shop-credits');
+    list.innerHTML = '<p style="color:#888">Chargement...</p>';
 
-    renderShop() {
-        const list = document.getElementById('skin-list');
-        list.innerHTML = "";
-        const skins = [
-            { name: "Neon Blue",  color: "#00f3ff", price: 0     },
-            { name: "Emerald",    color: "#00ff88", price: 500    },
-            { name: "Ruby",       color: "#ff3838", price: 1500   },
-            { name: "Gold",       color: "#ffcc00", price: 3000   },
-            { name: "Violet",     color: "#cc00ff", price: 5000   },
-            { name: "White",      color: "#ffffff", price: 8000   },
-            { name: "Inferno",    color: "#ff4400", price: 12000  },
-            { name: "Ghost",      color: "#aaaaaa", price: 20000  }
-        ];
-        document.getElementById('shop-credits').innerText = StatsManager.data.credits;
-        const unlocked = StatsManager.data.unlockedSkins || ["#00f3ff"];
+    const catalog = await API.get('/shop/catalog');
 
-        skins.forEach(s => {
-            const btn = document.createElement('button');
-            btn.className = "btn-skin";
-            btn.style.borderColor = s.color;
-            btn.style.color = s.color;
-
-            const owned    = unlocked.includes(s.color);
-            const equipped = StatsManager.data.equippedSkin === s.color;
-            const label    = equipped ? "ÉQUIPÉ" : owned ? "ÉQUIPER" : (s.price === 0 ? "GRATUIT" : s.price + " cr");
-
-            btn.innerHTML = `<span style="font-size:18px;display:block;margin-bottom:4px">■</span>${s.name}<br><small>${label}</small>`;
-
-            btn.onclick = () => {
-                if (owned) {
-                    Game.player.color = s.color;
-                    StatsManager.data.equippedSkin = s.color;
-                    StatsManager.save();
-                    this.renderShop();
-                } else if (StatsManager.data.credits >= s.price) {
-                    StatsManager.data.credits -= s.price;
-                    if (!StatsManager.data.unlockedSkins) StatsManager.data.unlockedSkins = ["#00f3ff"];
-                    StatsManager.data.unlockedSkins.push(s.color);
-                    Game.player.color = s.color;
-                    StatsManager.data.equippedSkin = s.color;
-                    StatsManager.save();
-                    alert("Skin déverrouillé et équipé !");
-                    this.renderShop();
-                } else {
-                    alert("Pas assez de crédits !");
-                }
-            };
-            list.appendChild(btn);
-        });
-    },
-
-    async renderLead() {
-        const content = document.getElementById('leaderboard-content');
-        content.innerHTML = '<p style="color:#ffffff44;font-size:11px;letter-spacing:3px;text-align:center;margin-top:20px">⟳ CONNEXION AU RÉSEAU...</p>';
-
-        const scores = await JSONBin.getScores();
-
-        if (!scores.length) {
-            content.innerHTML = '<p style="color:#ffffff33;font-size:11px;letter-spacing:2px;text-align:center;margin-top:20px">// AUCUN SCORE ENREGISTRÉ</p>';
-            return;
-        }
-
-        content.innerHTML = scores.slice(0, 10).map((s, i) => {
-            const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i+1}.`;
-            const color = i === 0 ? '#ffcc00' : i === 1 ? '#c0c0c0' : i === 2 ? '#cd7f32' : '#ffffff66';
-            return `<div style="display:flex;gap:14px;padding:10px 4px;border-bottom:1px solid #ffffff10;font-size:12px;align-items:center">
-                <span style="color:${color};width:28px;font-family:'Orbitron',sans-serif;font-size:13px">${medal}</span>
-                <span style="flex:1;color:var(--neon);letter-spacing:1px">${s.user || 'ANONYME'}</span>
-                <span style="color:#fff;font-family:'Orbitron',sans-serif;font-weight:700">${s.score.toLocaleString()} pts</span>
-                <span style="color:#ffffff33;font-size:9px;letter-spacing:1px">${s.level || ''}</span>
-            </div>`;
-        }).join('');
-    },
-
-    renderStats() {
-        const d = StatsManager.data;
-        document.getElementById('stats-content').innerHTML = `
-            <div class="stat-row"><span>Pseudo</span><span>${d.username}</span></div>
-            <div class="stat-row"><span>Meilleur score</span><span>${d.highScore} pts</span></div>
-            <div class="stat-row"><span>Crédits</span><span>${d.credits}</span></div>
-            <div class="stat-row"><span>Parties jouées</span><span>${d.gamesPlayed || 0}</span></div>
-            <div class="stat-row"><span>Morts totales</span><span>${d.deathCount}</span></div>
-            <div class="stat-row"><span>Temps de jeu</span><span>${StatsManager.getFormattedTime()}</span></div>
-            <div class="stat-row"><span>Meilleur niveau atteint</span><span>${d.bestLevel || 'TUTORIAL'}</span></div>
-            <div class="stat-row"><span>Skins débloqués</span><span>${(d.unlockedSkins||[]).length} / 8</span></div>
-        `;
-    },
-
-    confirmQuit() {
-        this.show('layer-confirm');
+    if (!Auth.user) {
+      credEl.innerText = '—';
+    } else {
+      await Auth.refreshUser();
+      credEl.innerText = Auth.user.credits;
     }
-};
 
-// ════════════════════════════════════════════════
-//  DEV TOOLS — accès : cliquer 5x sur le titre
-// ════════════════════════════════════════════════
-const DevTools = {
-    godMode: false,
-    _clicks: 0,
-    _clickTimer: null,
+    if (catalog.error) { list.innerHTML = '<p class="form-error">' + catalog.error + '</p>'; return; }
 
-    titleClick() {
-        this._clicks++;
-        const hint = document.getElementById('dev-hint');
-        hint.style.display = 'block';
-        hint.innerText = `CLIQUEZ ENCORE... (${this._clicks}/5)`;
+    list.innerHTML = '';
+    catalog.forEach(s => {
+      const card = document.createElement('div');
+      card.className = 'skin-card' + (s.unlocked ? ' skin-unlocked' : '');
+      card.style.setProperty('--skin-color', s.color);
 
-        clearTimeout(this._clickTimer);
-        this._clickTimer = setTimeout(() => {
-            this._clicks = 0;
-            hint.style.display = 'none';
-        }, 2000);
+      const isEquipped = Game.player.color === s.color;
 
-        if (this._clicks >= 5) {
-            this._clicks = 0;
-            hint.style.display = 'none';
-            const btn = document.getElementById('btn-devtools');
-            if (btn.style.display === 'none' || btn.style.display === '') {
-                btn.style.display = 'block';
-                btn.style.opacity = '0';
-                setTimeout(() => { btn.style.transition = 'opacity 0.5s'; btn.style.opacity = '1'; }, 50);
-            } else {
-                btn.style.display = 'none';
-            }
-        }
-    },
+      card.innerHTML = `
+        <div class="skin-preview" style="background:${s.color};box-shadow:0 0 20px ${s.color}"></div>
+        <div class="skin-name">${s.name}</div>
+        <div class="skin-price">${s.price === 0 ? 'GRATUIT' : s.price + ' crédits'}</div>
+        <button class="btn-skin-action ${s.unlocked ? 'btn-equip' : 'btn-buy'}" 
+                data-id="${s.id}" data-color="${s.color}" data-price="${s.price}" 
+                data-unlocked="${s.unlocked}">
+          ${s.unlocked ? (isEquipped ? '✅ ÉQUIPÉ' : 'ÉQUIPER') : '🔒 ACHETER'}
+        </button>`;
 
-    refresh() {
-        document.getElementById('dev-credits').value = StatsManager.data.credits;
-        document.getElementById('dev-hs').value      = StatsManager.data.highScore;
-        document.getElementById('dev-score').value   = 0;
-        document.getElementById('btn-god').innerText = this.godMode ? 'ON ✓' : 'OFF';
-        document.getElementById('dev-info').innerHTML = `
-            <div class="dev-info-block">
-                Username : ${StatsManager.data.username}<br>
-                Morts    : ${StatsManager.data.deathCount}<br>
-                Temps    : ${StatsManager.getFormattedTime()}<br>
-                Parties  : ${StatsManager.data.gamesPlayed || 0}
-            </div>`;
-    },
-
-    setCredits() {
-        const v = parseInt(document.getElementById('dev-credits').value);
-        if (!isNaN(v)) { StatsManager.data.credits = v; StatsManager.save(); alert("Crédits mis à jour !"); }
-    },
-
-    setHS() {
-        const v = parseInt(document.getElementById('dev-hs').value);
-        if (!isNaN(v)) { StatsManager.data.highScore = v; StatsManager.save(); alert("High score mis à jour !"); }
-    },
-
-    setScore() {
-        const v = parseInt(document.getElementById('dev-score').value);
-        if (!isNaN(v) && Game.running) { Game.score = v; alert("Score en jeu modifié !"); }
-        else if (!Game.running) alert("Lance une partie d'abord !");
-    },
-
-    unlockAll() {
-        const skins = ["#00f3ff","#00ff88","#ff3838","#ffcc00","#cc00ff","#ffffff","#ff4400","#aaaaaa"];
-        StatsManager.data.unlockedSkins = skins;
-        StatsManager.save();
-        alert("Tous les skins débloqués !");
-    },
-
-    toggleGod() {
-        this.godMode = !this.godMode;
-        document.getElementById('btn-god').innerText = this.godMode ? 'ON ✓' : 'OFF';
-    },
-
-    reset() {
-        if (confirm("Vraiment tout réinitialiser ?")) {
-            StatsManager.reset();
-            this.godMode = false;
-            this.refresh();
-            alert("Données réinitialisées.");
-        }
-    }
-};
-
-// ════════════════════════════════════════════════
-//  MOTEUR DE JEU
-// ════════════════════════════════════════════════
-const Game = {
-    canvas: document.getElementById('gameCanvas'),
-    ctx: null,
-    running: false,
-    paused: false,
-    score: 0,
-    player: { x: 0, y: 0, color: '#00f3ff' },
-    enemies: [],
-    currentLevelName: '',
-    burstTimer: 0,
-    glitchTimer: 0,
-    timeTimer: 0,
-    bgParticles: [],
-
-    init() {
-        this.ctx = this.canvas.getContext('2d');
-        this.resize();
-        StatsManager.init();
-
-        // Restaurer skin équipé
-        if (StatsManager.data.equippedSkin) {
-            this.player.color = StatsManager.data.equippedSkin;
-        }
-
-        // Init particules de fond
-        for (let i = 0; i < 80; i++) {
-            this.bgParticles.push({
-                x: Math.random() * window.innerWidth,
-                y: Math.random() * window.innerHeight,
-                size: Math.random() * 1.5 + 0.3,
-                speed: Math.random() * 0.4 + 0.1,
-                opacity: Math.random() * 0.5 + 0.1
-            });
-        }
-
-        window.addEventListener('resize', () => this.resize());
-
-        // Touches clavier : ESC = pause, P = pause
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' || e.key === 'p' || e.key === 'P') {
-                if (this.running) this.togglePause();
-            }
-        });
-
-        // Contrôle tactile
-        this.canvas.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-            this.player.x = e.touches[0].clientX - 15;
-        }, { passive: false });
-
-        UI.renderMenu();
-    },
-
-    resize() {
-        this.canvas.width  = window.innerWidth;
-        this.canvas.height = window.innerHeight;
-    },
-
-    start() {
-        this.running = true;
-        this.paused  = false;
-        this.score   = 0;
-        this.enemies = [];
-        this.burstTimer = 0;
-        this.glitchTimer = 0;
-        this.timeTimer  = 0;
-        this.currentLevelName = '';
-
-        this.player.x = this.canvas.width / 2 - 15;
-        this.player.y = this.canvas.height - 80;
-
-        // Masquer tous les écrans
-        document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
-        document.getElementById('layer-game').style.display = 'block';
-        document.getElementById('pause-menu').style.display = 'none';
-
-        this.loop();
-    },
-
-    stop() {
-        if (!this.running) return;
-        this.running = false;
-        this.paused  = false;
-
-        // Crédits gagnés
-        StatsManager.data.credits += Math.floor(this.score / 10);
-
-        // High score
-        const isNew = this.score > StatsManager.data.highScore;
-        if (isNew) StatsManager.data.highScore = this.score;
-
-        // Meilleur niveau
-        const lvl = LevelSystem.getCurrentLevel(this.score);
-        if (!StatsManager.data.bestLevel || this.score > (StatsManager.data.highScore - 1)) {
-            StatsManager.data.bestLevel = lvl.name;
-        }
-
-        StatsManager.recordDeath();
-
-        // Sauvegarder dans JSONBin en ligne
-        const lvlName = LevelSystem.getCurrentLevel(this.score).name;
-        JSONBin.pushScore({
-            user : Auth.currentUser || StatsManager.data.username || 'ANONYME',
-            score: this.score,
-            level: lvlName,
-            date : new Date().toLocaleDateString('fr-FR')
-        });
-
-        // Afficher écran de mort
-        document.getElementById('layer-game').style.display = 'none';
-        document.getElementById('layer-death').style.display = 'flex';
-        document.getElementById('death-stats').innerHTML = `
-            <div class="stat-row"><span>Score</span><span>${this.score} pts</span></div>
-            <div class="stat-row"><span>Niveau atteint</span><span>${lvl.name}</span></div>
-            <div class="stat-row"><span>Crédits gagnés</span><span>+${Math.floor(this.score/10)}</span></div>
-            ${isNew ? '<p class="new-record">🏆 NOUVEAU RECORD !</p>' : ''}
-        `;
-    },
-
-    quit() {
-        this.running = false;
-        this.paused  = false;
-        StatsManager.data.credits += Math.floor(this.score / 10);
-        if (this.score > StatsManager.data.highScore) StatsManager.data.highScore = this.score;
-        StatsManager.save();
-        document.getElementById('layer-game').style.display = 'none';
-        document.getElementById('pause-menu').style.display = 'none';
-        UI.show('layer-menu');
-    },
-
-    togglePause() {
-        if (!this.running && !this.paused) return;
-        this.paused = !this.paused;
-        const pm = document.getElementById('pause-menu');
-        pm.style.display = this.paused ? 'flex' : 'none';
-        document.getElementById('btn-pause').innerText = this.paused ? '▶' : '⏸';
-        document.getElementById('pause-score-info').innerText = `Score actuel : ${this.score} pts`;
-        if (!this.paused) this.loop();
-    },
-
-    loop() {
-        if (!this.running || this.paused) return;
-        this.update();
-        this.draw();
-        requestAnimationFrame(() => this.loop());
-    },
-
-    update() {
-        const lvl = LevelSystem.getCurrentLevel(this.score);
-
-        // ── Changement de niveau
-        if (lvl.name !== this.currentLevelName) {
-            this.currentLevelName = lvl.name;
-            document.getElementById('ui-level-name').innerText = lvl.name;
-            document.getElementById('ui-level-name').style.color = lvl.color || '#00f3ff';
-            document.getElementById('ui-level-desc').innerText = lvl.description || '';
-            document.getElementById('ui-tier').innerText = LevelSystem.getTierName(this.score);
-            this._announceLevel(lvl.name, lvl.color, lvl.description);
-            if (this.score > 0) StatsManager.data.bestLevel = lvl.name;
-        }
-
-        // ── Barre de progression
-        const next = LevelSystem.getNextLevel(this.score);
-        if (next) {
-            const pct = Math.min(100, ((this.score - lvl.scoreReq) / (next.scoreReq - lvl.scoreReq)) * 100);
-            document.getElementById('next-level-fill').style.width = pct + '%';
-            document.getElementById('next-level-fill').style.background = lvl.color || '#00f3ff';
-            document.getElementById('next-level-label').innerText = `→ ${next.name} dans ${next.scoreReq - this.score} pts`;
+      card.querySelector('.btn-skin-action').addEventListener('click', async (e) => {
+        const { id, color, unlocked } = e.target.dataset;
+        if (unlocked === 'true') {
+          Game.player.color = color;
+          this.renderShop(); // rafraîchir pour montrer équipé
         } else {
-            document.getElementById('next-level-fill').style.width = '100%';
-            document.getElementById('next-level-label').innerText = '∞ MAX NIVEAU';
+          await this.buySkin(id);
         }
+      });
 
-        // ── Spawn standard
-        if (Math.random() < lvl.rate) this._spawnEnemy(lvl);
+      list.appendChild(card);
+    });
+  },
 
-        // ── Mode Burst (volée de 5)
-        if (lvl.burst) {
-            this.burstTimer++;
-            if (this.burstTimer >= 90) {
-                this.burstTimer = 0;
-                for (let i = 0; i < 5; i++) {
-                    setTimeout(() => { if (this.running && !this.paused) this._spawnEnemy(lvl); }, i * 80);
-                }
-            }
-        }
+  async buySkin(skinId) {
+    if (!Auth.token) { alert('Connecte-toi pour acheter des skins.'); return; }
 
-        // ── Mode Glitch (flash + apparition en cercle)
-        if (lvl.glitch) {
-            this.glitchTimer++;
-            if (this.glitchTimer >= 160) {
-                this.glitchTimer = 0;
-                this.canvas.style.filter = `hue-rotate(${Math.random()*360}deg) brightness(2)`;
-                setTimeout(() => { this.canvas.style.filter = ''; }, 120);
-                for (let a = 0; a < 6; a++) {
-                    const angle = (a / 6) * Math.PI * 2;
-                    const e = this._createEnemy(lvl);
-                    e.x  = this.canvas.width / 2 + Math.cos(angle) * 250;
-                    e.y  = -30;
-                    e.vx = Math.cos(angle) * 2;
-                    this.enemies.push(e);
-                }
-            }
-        }
+    const data = await API.post('/shop/buy', { skinId });
+    if (data.error) { alert(data.error); return; }
 
-        // ── Timer temps de jeu (chaque ~60 frames ≈ 1s)
-        this.timeTimer++;
-        if (this.timeTimer >= 60) { this.timeTimer = 0; StatsManager.incrementTime(); }
+    // Mettre à jour user local
+    Auth.user.credits = data.newCredits;
+    Auth.user.unlockedSkins = data.unlockedSkins;
+    localStorage.setItem('nd_user', JSON.stringify(Auth.user));
 
-        // ── Déplacement & collision ennemis
-        for (let i = this.enemies.length - 1; i >= 0; i--) {
-            const e = this.enemies[i];
+    alert(data.message);
+    this.renderShop();
+  },
 
-            if (e.tracker) {
-                const dx = (this.player.x + 15) - (e.x + 12);
-                const dy = (this.player.y + 15) - (e.y + 12);
-                const d  = Math.hypot(dx, dy) || 1;
-                e.x += (dx / d) * e.trackSpeed;
-                e.y += (dy / d) * e.trackSpeed;
-            } else {
-                if (e.zigzag) e.x += Math.sin(e.y * 0.05 + e.phase) * 3;
-                e.x += e.vx || 0;
-                e.y += e.speed;
-            }
+  async renderLead() {
+    const el = document.getElementById('leaderboard-content');
+    el.innerHTML = '<p style="color:#888">Chargement...</p>';
 
-            // Collision (sauf god mode)
-            if (!DevTools.godMode) {
-                if (Math.hypot(this.player.x + 15 - (e.x + 12), this.player.y + 15 - (e.y + 12)) < 26) {
-                    this.stop(); return;
-                }
-            }
-
-            // Sortie d'écran
-            if (e.y > this.canvas.height + 60 || e.x < -100 || e.x > this.canvas.width + 100) {
-                this.enemies.splice(i, 1);
-                this.score += 10;
-            }
-        }
-
-        // ── Contrôle souris
-        window.onmousemove = (ev) => { this.player.x = ev.clientX - 15; };
-
-        // ── Score display
-        document.getElementById('ui-score').innerText = this.score;
-
-        // ── Particules de fond
-        const W = this.canvas.width, H = this.canvas.height;
-        this.bgParticles.forEach(p => { p.y += p.speed; if (p.y > H) { p.y = 0; p.x = Math.random() * W; } });
-    },
-
-    _createEnemy(lvl) {
-        return {
-            x: Math.random() * this.canvas.width,
-            y: -50,
-            speed: lvl.speed + (Math.random() * 2 - 1),
-            tracker: lvl.tracker && Math.random() < 0.4,
-            trackSpeed: lvl.speed * 0.35,
-            zigzag: lvl.zigzag && Math.random() < 0.5,
-            phase: Math.random() * Math.PI * 2,
-            color: lvl.color || '#ff3838',
-            vx: 0,
-            size: 20 + Math.random() * 10
-        };
-    },
-
-    _spawnEnemy(lvl) {
-        this.enemies.push(this._createEnemy(lvl));
-    },
-
-    _announceLevel(name, color, desc) {
-        const el = document.getElementById('level-announce');
-        el.style.color   = color || '#00f3ff';
-        el.style.opacity = '1';
-        el.style.transform = 'scale(1.2)';
-        el.innerHTML = name + (desc ? `<div class="announce-sub">${desc}</div>` : '');
-        clearTimeout(this._announceTO);
-        this._announceTO = setTimeout(() => {
-            el.style.opacity   = '0';
-            el.style.transform = 'scale(1)';
-        }, 2200);
-    },
-
-    draw() {
-        const lvl = LevelSystem.getCurrentLevel(this.score);
-        const C   = this.ctx;
-
-        // Fond
-        C.fillStyle = lvl.bgColor || '#050505';
-        C.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-        // Particules de fond
-        C.shadowBlur = 0;
-        this.bgParticles.forEach(p => {
-            C.fillStyle = (lvl.color || '#00f3ff') + '18';
-            C.beginPath();
-            C.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-            C.fill();
-        });
-
-        // Joueur
-        C.shadowBlur  = 20;
-        C.shadowColor = this.player.color;
-        C.fillStyle   = this.player.color;
-        C.fillRect(this.player.x, this.player.y, 30, 30);
-        C.fillStyle = '#ffffff55';
-        C.fillRect(this.player.x + 6, this.player.y + 6, 10, 10);
-
-        // God mode indicator
-        if (DevTools.godMode) {
-            C.strokeStyle = '#ffcc00';
-            C.lineWidth   = 2;
-            C.shadowColor = '#ffcc00';
-            C.shadowBlur  = 10;
-            C.strokeRect(this.player.x - 4, this.player.y - 4, 38, 38);
-        }
-
-        // Ennemis
-        this.enemies.forEach(e => {
-            const c = e.color || '#ff3838';
-            C.shadowBlur  = 14;
-            C.shadowColor = c;
-            C.fillStyle   = c;
-            C.fillRect(e.x, e.y, e.size, e.size);
-            // Contour tracker
-            if (e.tracker) {
-                C.strokeStyle = '#ffffff88';
-                C.lineWidth   = 1;
-                C.strokeRect(e.x - 3, e.y - 3, e.size + 6, e.size + 6);
-            }
-        });
-
-        C.shadowBlur = 0;
+    const data = await API.get('/scores/leaderboard');
+    if (data.error || !Array.isArray(data)) {
+      el.innerHTML = '<p class="form-error">Impossible de charger le classement.</p>';
+      return;
     }
+    if (data.length === 0) {
+      el.innerHTML = '<p style="color:#555">Aucun score enregistré. Sois le premier !</p>';
+      return;
+    }
+
+    el.innerHTML = data.map(entry => `
+      <div class="lead-row">
+        <span class="lead-rank">${entry.rank}</span>
+        <div class="lead-avatar" style="background-image:url(${entry.avatar || ''})">
+          ${!entry.avatar ? entry.displayName[0].toUpperCase() : ''}
+        </div>
+        <div class="lead-info">
+          <div class="lead-name">${entry.displayName}</div>
+          <div class="lead-level">${entry.level}</div>
+        </div>
+        <div class="lead-score">${entry.score} pts</div>
+      </div>
+    `).join('');
+  },
+
+  renderProfile() {
+    const connected = document.getElementById('profile-connected');
+    const guest = document.getElementById('profile-guest');
+    const u = Auth.user;
+
+    if (u) {
+      connected.style.display = 'flex';
+      guest.style.display = 'none';
+
+      const avatar = document.getElementById('profile-avatar');
+      if (u.profilePicture) {
+        avatar.src = u.profilePicture;
+        avatar.style.display = 'block';
+      } else {
+        avatar.style.display = 'none';
+      }
+
+      document.getElementById('profile-username').innerText = u.displayName;
+      document.getElementById('profile-credits').innerText = u.credits;
+      document.getElementById('profile-hs').innerText = u.highScore;
+      document.getElementById('profile-level').innerText = u.highScoreLevel || 'SÉCURITÉ';
+    } else {
+      connected.style.display = 'none';
+      guest.style.display = 'flex';
+    }
+  }
+};
+
+// ══════════════════════════════════════════════════════════════════
+//  MOTEUR DE JEU
+// ══════════════════════════════════════════════════════════════════
+const Game = {
+  canvas: document.getElementById('gameCanvas'),
+  ctx: null,
+  running: false,
+  score: 0,
+  currentLevel: null,
+  player: { x: 0, y: 0, size: 30, color: '#00f3ff' },
+  enemies: [],
+  animFrame: null,
+
+  init() {
+    this.ctx = this.canvas.getContext('2d');
+    this.resize();
+    window.addEventListener('resize', () => this.resize());
+    Auth._updateUI();
+  },
+
+  resize() {
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+  },
+
+  start() {
+    if (this.animFrame) cancelAnimationFrame(this.animFrame);
+    this.running = true;
+    this.score = 0;
+    this.enemies = [];
+    this.player.x = this.canvas.width / 2 - 15;
+    this.player.y = this.canvas.height - 80;
+
+    document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
+    document.getElementById('layer-game').style.display = 'block';
+
+    window.onmousemove = (e) => { this.player.x = e.clientX - 15; };
+    this.loop();
+  },
+
+  async stop() {
+    this.running = false;
+    cancelAnimationFrame(this.animFrame);
+    window.onmousemove = null;
+
+    const finalScore = this.score;
+    const finalLevel = this.currentLevel?.name || 'SÉCURITÉ';
+
+    // Envoyer le score au serveur si connecté
+    let creditsEarned = 0;
+    let isNewHs = false;
+
+    if (Auth.token) {
+      const res = await API.post('/scores/submit', { score: finalScore, level: finalLevel });
+      if (!res.error) {
+        creditsEarned = res.creditsEarned;
+        isNewHs = res.isNewHighScore;
+        Auth.user.credits = res.newCredits;
+        Auth.user.highScore = res.highScore;
+        localStorage.setItem('nd_user', JSON.stringify(Auth.user));
+      }
+    }
+
+    // Afficher Game Over
+    document.getElementById('layer-game').style.display = 'none';
+    document.getElementById('gameover-score').innerHTML =
+      `<span class="go-label">SCORE</span><span class="go-value">${finalScore} pts</span>`;
+    document.getElementById('gameover-credits').innerHTML =
+      creditsEarned > 0
+        ? `<span class="go-label">CRÉDITS GAGNÉS</span><span class="go-value" style="color:#ffd700">+${creditsEarned}</span>`
+        : '';
+    document.getElementById('gameover-hs').innerHTML =
+      isNewHs ? `<div class="new-hs">🏆 NOUVEAU RECORD !</div>` : '';
+
+    document.getElementById('layer-gameover').style.display = 'flex';
+  },
+
+  loop() {
+    if (!this.running) return;
+    this.update();
+    this.draw();
+    this.animFrame = requestAnimationFrame(() => this.loop());
+  },
+
+  update() {
+    const lvl = LevelSystem.getCurrentLevel(this.score);
+    this.currentLevel = lvl;
+    document.getElementById('level-display').innerText = lvl.name;
+
+    if (Math.random() < lvl.rate) {
+      const isTracker = lvl.tracker && Math.random() < 0.3;
+      this.enemies.push({
+        x: Math.random() * this.canvas.width,
+        y: -50,
+        speed: lvl.speed,
+        tracker: isTracker,
+        color: isTracker ? '#ff00ff' : '#ff3838'
+      });
+    }
+
+    for (let i = this.enemies.length - 1; i >= 0; i--) {
+      const e = this.enemies[i];
+      // Comportement tracker : légère attraction vers le joueur
+      if (e.tracker) {
+        const dx = this.player.x - e.x;
+        e.x += dx * 0.01;
+      }
+      e.y += e.speed;
+
+      // Collision (hitbox légèrement réduite pour fair-play)
+      if (Math.hypot(this.player.x + 15 - (e.x + 12), this.player.y + 15 - (e.y + 12)) < 22) {
+        this.stop();
+        return;
+      }
+      if (e.y > this.canvas.height) {
+        this.enemies.splice(i, 1);
+        this.score += 10;
+      }
+    }
+
+    document.getElementById('ui-score').innerText = this.score;
+  },
+
+  draw() {
+    const ctx = this.ctx;
+    ctx.fillStyle = '#050505';
+    ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+    // Grille de fond subtile
+    ctx.strokeStyle = 'rgba(0,243,255,0.03)';
+    ctx.lineWidth = 1;
+    for (let x = 0; x < this.canvas.width; x += 60) {
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, this.canvas.height); ctx.stroke();
+    }
+
+    // Joueur
+    ctx.shadowBlur = 20;
+    ctx.shadowColor = this.player.color;
+    ctx.fillStyle = this.player.color;
+    ctx.fillRect(this.player.x, this.player.y, 30, 30);
+
+    // Ennemis
+    this.enemies.forEach(e => {
+      ctx.shadowColor = e.color;
+      ctx.shadowBlur = 15;
+      ctx.fillStyle = e.color;
+      ctx.fillRect(e.x, e.y, 25, 25);
+    });
+
+    ctx.shadowBlur = 0;
+  }
 };
 
 window.onload = () => Game.init();
