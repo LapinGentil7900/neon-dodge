@@ -1,8 +1,8 @@
 const LevelSystem = {
     levels: [
-        // ═══════════════════════════════════════════
-        //  TIER 1 — DÉBUTANT (0 → 2000)
-        // ═══════════════════════════════════════════
+        // ══════════════════════════════════════
+        //  TIER 1 — DÉBUTANT  (0 → 2000)
+        // ══════════════════════════════════════
         {
             name: "TUTORIAL",
             color: "#aaffaa",
@@ -12,6 +12,7 @@ const LevelSystem = {
             tracker: false,
             zigzag: false,
             burst: false,
+            glitch: false,
             scoreReq: 0,
             description: "Apprends à esquiver..."
         },
@@ -24,6 +25,7 @@ const LevelSystem = {
             tracker: false,
             zigzag: false,
             burst: false,
+            glitch: false,
             scoreReq: 500,
             description: "Zone sécurisée. Pour l'instant."
         },
@@ -36,13 +38,14 @@ const LevelSystem = {
             tracker: false,
             zigzag: false,
             burst: false,
+            glitch: false,
             scoreReq: 1000,
             description: "Le réseau s'anime."
         },
 
-        // ═══════════════════════════════════════════
-        //  TIER 2 — INTERMÉDIAIRE (2000 → 6000)
-        // ═══════════════════════════════════════════
+        // ══════════════════════════════════════
+        //  TIER 2 — INTERMÉDIAIRE  (2000 → 6000)
+        // ══════════════════════════════════════
         {
             name: "FRONTIÈRE",
             color: "#00aaff",
@@ -52,6 +55,7 @@ const LevelSystem = {
             tracker: false,
             zigzag: false,
             burst: false,
+            glitch: false,
             scoreReq: 2000,
             description: "Tu entres dans la zone grise."
         },
@@ -64,6 +68,7 @@ const LevelSystem = {
             tracker: false,
             zigzag: true,
             burst: false,
+            glitch: false,
             scoreReq: 3000,
             description: "Les ennemis zigzaguent !"
         },
@@ -76,6 +81,7 @@ const LevelSystem = {
             tracker: true,
             zigzag: false,
             burst: false,
+            glitch: false,
             scoreReq: 4000,
             description: "Ils te traquent maintenant."
         },
@@ -88,8 +94,9 @@ const LevelSystem = {
             tracker: true,
             zigzag: true,
             burst: false,
+            glitch: false,
             scoreReq: 5000,
-            description: "Traqueurs ET zigzag. Bonne chance."
+            description: "Traqueurs ET zigzag."
         },
         {
             name: "ZONE ROUGE",
@@ -100,13 +107,14 @@ const LevelSystem = {
             tracker: true,
             zigzag: false,
             burst: false,
+            glitch: false,
             scoreReq: 6000,
             description: "Danger critique."
         },
 
-        // ═══════════════════════════════════════════
-        //  TIER 3 — AVANCÉ (7000 → 15000)
-        // ═══════════════════════════════════════════
+        // ══════════════════════════════════════
+        //  TIER 3 — AVANCÉ  (7000 → 15000)
+        // ══════════════════════════════════════
         {
             name: "PANIQUE",
             color: "#ff0066",
@@ -116,6 +124,7 @@ const LevelSystem = {
             tracker: true,
             zigzag: true,
             burst: false,
+            glitch: false,
             scoreReq: 7000,
             description: "Tout s'accélère."
         },
@@ -128,6 +137,7 @@ const LevelSystem = {
             tracker: false,
             zigzag: false,
             burst: true,
+            glitch: false,
             scoreReq: 8000,
             description: "Rafales d'ennemis !"
         },
@@ -140,6 +150,7 @@ const LevelSystem = {
             tracker: true,
             zigzag: false,
             burst: true,
+            glitch: false,
             scoreReq: 9000,
             description: "Traqueurs en rafale."
         },
@@ -165,6 +176,7 @@ const LevelSystem = {
             tracker: true,
             zigzag: true,
             burst: false,
+            glitch: false,
             scoreReq: 11000,
             description: "Guerre totale sur le réseau."
         },
@@ -177,6 +189,7 @@ const LevelSystem = {
             tracker: false,
             zigzag: false,
             burst: true,
+            glitch: false,
             scoreReq: 12000,
             description: "Un déluge de projectiles."
         },
@@ -189,13 +202,14 @@ const LevelSystem = {
             tracker: true,
             zigzag: true,
             burst: true,
+            glitch: false,
             scoreReq: 13000,
             description: "Tout à la fois. Survive."
         },
 
-        // ═══════════════════════════════════════════
-        //  TIER 4 — EXPERT (15000 → 30000)
-        // ═══════════════════════════════════════════
+        // ══════════════════════════════════════
+        //  TIER 4 — EXPERT  (15000 → 30000)
+        // ══════════════════════════════════════
         {
             name: "ABÎME",
             color: "#6600ff",
@@ -205,6 +219,7 @@ const LevelSystem = {
             tracker: true,
             zigzag: true,
             burst: true,
+            glitch: false,
             scoreReq: 15000,
             description: "Tu regardes dans l'abîme."
         },
@@ -217,6 +232,7 @@ const LevelSystem = {
             tracker: true,
             zigzag: false,
             burst: true,
+            glitch: false,
             scoreReq: 17000,
             description: "Condamné à mort numérique."
         },
@@ -255,6 +271,7 @@ const LevelSystem = {
             tracker: true,
             zigzag: true,
             burst: true,
+            glitch: false,
             scoreReq: 24000,
             description: "L'effacement total approche."
         },
@@ -272,9 +289,9 @@ const LevelSystem = {
             description: "Fin de ligne."
         },
 
-        // ═══════════════════════════════════════════
-        //  TIER 5 — LÉGENDAIRE (30000+)
-        // ═══════════════════════════════════════════
+        // ══════════════════════════════════════
+        //  TIER 5 — LÉGENDAIRE  (30000+)
+        // ══════════════════════════════════════
         {
             name: "SINGULARITÉ",
             color: "#ff8800",
@@ -325,10 +342,10 @@ const LevelSystem = {
     },
 
     getTierName(score) {
-        if (score < 2000) return "DÉBUTANT";
-        if (score < 7000) return "INTERMÉDIAIRE";
-        if (score < 15000) return "AVANCÉ";
-        if (score < 30000) return "EXPERT";
-        return "LÉGENDAIRE";
+        if (score < 2000)  return "★ DÉBUTANT";
+        if (score < 7000)  return "★★ INTERMÉDIAIRE";
+        if (score < 15000) return "★★★ AVANCÉ";
+        if (score < 30000) return "★★★★ EXPERT";
+        return "★★★★★ LÉGENDAIRE";
     }
 };
