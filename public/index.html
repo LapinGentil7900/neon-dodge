@@ -14,8 +14,9 @@
 <!-- ══════════════════════════════════════════════ -->
 <div id="layer-menu" class="screen">
     <div id="user-tag">Non connecté</div>
-    <h1 class="neon-title">NEON DODGE</h1>
+    <h1 class="neon-title" id="main-title" onclick="DevTools.titleClick()">NEON DODGE</h1>
     <p id="menu-highscore">MEILLEUR SCORE : <span id="hs-val">0</span></p>
+    <p id="dev-hint" style="display:none; font-size:9px; color:#ffffff33; letter-spacing:2px; margin:0;">CLIQUEZ ENCORE...</p>
 
     <div class="menu-grid">
         <button class="btn"          onclick="Game.start()">JOUER</button>
@@ -24,6 +25,7 @@
         <button class="btn btn-blue" onclick="UI.show('layer-auth')">COMPTE</button>
         <button class="btn btn-blue" onclick="UI.show('layer-stats')">STATISTIQUES</button>
         <button class="btn btn-red"  onclick="UI.confirmQuit()">QUITTER</button>
+        <button class="btn" id="btn-devtools" style="display:none; border-color:#ffcc00; color:#ffcc00; grid-column:1/-1;" onclick="UI.show('layer-devtools')">⚙ DEV TOOLS</button>
     </div>
 </div>
 
@@ -366,10 +368,38 @@ const UI = {
 };
 
 // ════════════════════════════════════════════════
-//  DEV TOOLS (accès réservé aux comptes dev/admin)
+//  DEV TOOLS — accès : cliquer 5x sur le titre
 // ════════════════════════════════════════════════
 const DevTools = {
     godMode: false,
+    _clicks: 0,
+    _clickTimer: null,
+
+    titleClick() {
+        this._clicks++;
+        const hint = document.getElementById('dev-hint');
+        hint.style.display = 'block';
+        hint.innerText = `CLIQUEZ ENCORE... (${this._clicks}/5)`;
+
+        clearTimeout(this._clickTimer);
+        this._clickTimer = setTimeout(() => {
+            this._clicks = 0;
+            hint.style.display = 'none';
+        }, 2000);
+
+        if (this._clicks >= 5) {
+            this._clicks = 0;
+            hint.style.display = 'none';
+            const btn = document.getElementById('btn-devtools');
+            if (btn.style.display === 'none' || btn.style.display === '') {
+                btn.style.display = 'block';
+                btn.style.opacity = '0';
+                setTimeout(() => { btn.style.transition = 'opacity 0.5s'; btn.style.opacity = '1'; }, 50);
+            } else {
+                btn.style.display = 'none';
+            }
+        }
+    },
 
     refresh() {
         document.getElementById('dev-credits').value = StatsManager.data.credits;
