@@ -1,57 +1,53 @@
 const StatsManager = {
     data: {
         totalTimePlayed: 0,
-        deathCount: 0,
-        credits: 0,
-        highScore: 0,
-        username: "Pilote",
-        equippedSkin: "#00f3ff",
-        unlockedSkins: ["#00f3ff"],
-        gamesPlayed: 0,
-        bestLevel: "TUTORIAL"
+        deathCount:      0,
+        gamesPlayed:     0,
+        credits:         0,
+        highScore:       0,
+        username:        'Pilote',
+        bestLevel:       'TUTORIAL',
+        unlockedSkins:   ['#00f3ff'],
+        equippedSkin:    '#00f3ff'
     },
 
     init() {
         const saved = localStorage.getItem('neon_stats_v17');
-        if (saved) this.data = { ...this.data, ...JSON.parse(saved) };
+        if (saved) {
+            try { this.data = { ...this.data, ...JSON.parse(saved) }; }
+            catch(e) { console.warn('StatsManager: données corrompues, reset.'); }
+        }
     },
 
-    save() {
-        localStorage.setItem('neon_stats_v17', JSON.stringify(this.data));
-    },
+    save() { localStorage.setItem('neon_stats_v17', JSON.stringify(this.data)); },
 
-    // Appelé chaque seconde de jeu
     incrementTime() {
         this.data.totalTimePlayed++;
         if (this.data.totalTimePlayed % 5 === 0) this.save();
     },
 
-    recordDeath() {
-        this.data.deathCount++;
-        this.data.gamesPlayed++;
-        this.save();
+    recordDeath() { this.data.deathCount++; this.save(); },
+
+    getFormattedTime() {
+        const t = this.data.totalTimePlayed;
+        const h = Math.floor(t / 3600);
+        const m = Math.floor((t % 3600) / 60);
+        const s = t % 60;
+        return `${h}h ${m}m ${s}s`;
     },
 
     reset() {
-        const user = this.data.username;
         this.data = {
             totalTimePlayed: 0,
-            deathCount: 0,
-            credits: 0,
-            highScore: 0,
-            username: user,
-            equippedSkin: "#00f3ff",
-            unlockedSkins: ["#00f3ff"],
-            gamesPlayed: 0,
-            bestLevel: "TUTORIAL"
+            deathCount:      0,
+            gamesPlayed:     0,
+            credits:         0,
+            highScore:       0,
+            username:        'Pilote',
+            bestLevel:       'TUTORIAL',
+            unlockedSkins:   ['#00f3ff'],
+            equippedSkin:    '#00f3ff'
         };
-        this.save();
-    },
-
-    getFormattedTime() {
-        const h = Math.floor(this.data.totalTimePlayed / 3600);
-        const m = Math.floor((this.data.totalTimePlayed % 3600) / 60);
-        const s = this.data.totalTimePlayed % 60;
-        return `${h}h ${m}m ${s}s`;
+        localStorage.removeItem('neon_stats_v17');
     }
 };
