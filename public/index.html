@@ -172,6 +172,51 @@
 <script src="stats_manager.js"></script>
 <script>
 // ════════════════════════════════════════════════
+//  JSONBIN — Leaderboard en ligne
+// ════════════════════════════════════════════════
+const JSONBin = {
+    BIN_ID : '6999b9bf43b1c97be9912a86',
+    API_KEY: '$2a$10$VQikcmBcOVfMdM1mZU9K/ONWBS7YEiY9g51GFsT5tWakQ8Qw7w2Du',
+    BASE   : 'https://api.jsonbin.io/v3/b',
+
+    headers() {
+        return {
+            'Content-Type': 'application/json',
+            'X-Master-Key': this.API_KEY
+        };
+    },
+
+    // Récupère tous les scores
+    async getScores() {
+        try {
+            const res  = await fetch(`${this.BASE}/${this.BIN_ID}/latest`, { headers: this.headers() });
+            const data = await res.json();
+            return data.record.scores || [];
+        } catch(e) {
+            console.warn('JSONBin fetch error:', e);
+            return [];
+        }
+    },
+
+    // Ajoute un score et garde le top 100
+    async pushScore(entry) {
+        try {
+            const scores = await this.getScores();
+            scores.push(entry);
+            scores.sort((a, b) => b.score - a.score);
+            const top = scores.slice(0, 100);
+            await fetch(`${this.BASE}/${this.BIN_ID}`, {
+                method : 'PUT',
+                headers: this.headers(),
+                body   : JSON.stringify({ scores: top })
+            });
+        } catch(e) {
+            console.warn('JSONBin push error:', e);
+        }
+    }
+};
+
+// ════════════════════════════════════════════════
 //  AUTH — Connexion & Inscription séparées
 // ════════════════════════════════════════════════
 const DEV_USERS = ["dev", "admin", "root", "devmode"];
@@ -331,21 +376,27 @@ const UI = {
         });
     },
 
-    renderLead() {
+    async renderLead() {
         const content = document.getElementById('leaderboard-content');
-        // Classement local (plusieurs comptes possibles)
-        const scores = JSON.parse(localStorage.getItem('neon_scores') || '[]');
+        content.innerHTML = '<p style="color:#ffffff44;font-size:11px;letter-spacing:3px;text-align:center;margin-top:20px">⟳ CONNEXION AU RÉSEAU...</p>';
+
+        const scores = await JSONBin.getScores();
+
         if (!scores.length) {
-            scores.push({ user: Auth.currentUser || 'Joueur', score: StatsManager.data.highScore });
+            content.innerHTML = '<p style="color:#ffffff33;font-size:11px;letter-spacing:2px;text-align:center;margin-top:20px">// AUCUN SCORE ENREGISTRÉ</p>';
+            return;
         }
-        scores.sort((a, b) => b.score - a.score);
-        content.innerHTML = scores.slice(0, 10).map((s, i) =>
-            `<div class="lead-row">
-                <span class="lead-rank">${i+1}.</span>
-                <span class="lead-user">${s.user}</span>
-                <span class="lead-score">${s.score} pts</span>
-            </div>`
-        ).join('');
+
+        content.innerHTML = scores.slice(0, 10).map((s, i) => {
+            const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i+1}.`;
+            const color = i === 0 ? '#ffcc00' : i === 1 ? '#c0c0c0' : i === 2 ? '#cd7f32' : '#ffffff66';
+            return `<div style="display:flex;gap:14px;padding:10px 4px;border-bottom:1px solid #ffffff10;font-size:12px;align-items:center">
+                <span style="color:${color};width:28px;font-family:'Orbitron',sans-serif;font-size:13px">${medal}</span>
+                <span style="flex:1;color:var(--neon);letter-spacing:1px">${s.user || 'ANONYME'}</span>
+                <span style="color:#fff;font-family:'Orbitron',sans-serif;font-weight:700">${s.score.toLocaleString()} pts</span>
+                <span style="color:#ffffff33;font-size:9px;letter-spacing:1px">${s.level || ''}</span>
+            </div>`;
+        }).join('');
     },
 
     renderStats() {
@@ -555,11 +606,14 @@ const Game = {
 
         StatsManager.recordDeath();
 
-        // Sauvegarder dans le classement local
-        const scores = JSON.parse(localStorage.getItem('neon_scores') || '[]');
-        scores.push({ user: Auth.currentUser || StatsManager.data.username, score: this.score });
-        scores.sort((a, b) => b.score - a.score);
-        localStorage.setItem('neon_scores', JSON.stringify(scores.slice(0, 50)));
+        // Sauvegarder dans JSONBin en ligne
+        const lvlName = LevelSystem.getCurrentLevel(this.score).name;
+        JSONBin.pushScore({
+            user : Auth.currentUser || StatsManager.data.username || 'ANONYME',
+            score: this.score,
+            level: lvlName,
+            date : new Date().toLocaleDateString('fr-FR')
+        });
 
         // Afficher écran de mort
         document.getElementById('layer-game').style.display = 'none';
