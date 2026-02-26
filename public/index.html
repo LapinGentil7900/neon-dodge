@@ -9,6 +9,9 @@
 </head>
 <body>
 
+<!-- ══════════════════ PARTICULES DE FOND MENU ══════════════════ -->
+<canvas id="bgCanvas"></canvas>
+
 <!-- ══════════════════ MENU PRINCIPAL ══════════════════ -->
 <div id="layer-menu" class="screen">
     <div id="user-tag" onclick="UI.show('layer-profile')">
@@ -16,94 +19,143 @@
         <span id="user-tag-name">Non connecté</span>
     </div>
 
-    <h1 class="neon-title" id="main-title" onclick="DevTools.titleClick()">NEON DODGE</h1>
-    <p id="menu-highscore">MEILLEUR SCORE : <span id="hs-val">0</span></p>
-    <p id="dev-hint" style="display:none; font-size:9px; color:#ffffff33; letter-spacing:2px; margin:0;">CLIQUEZ ENCORE...</p>
+    <div class="menu-logo">
+        <h1 class="neon-title" id="main-title" onclick="DevTools.titleClick()">NEON</h1>
+        <h1 class="neon-title neon-title-2">DODGE</h1>
+        <div class="title-sub">PRO NETWORK v2.0</div>
+    </div>
+
+    <p id="dev-hint">CLIQUEZ ENCORE... <span id="dev-hint-count">0</span>/5</p>
+
+    <div id="menu-hs-block">
+        <div class="hs-label">MEILLEUR SCORE</div>
+        <div class="hs-value" id="hs-val">0</div>
+    </div>
 
     <div class="menu-grid">
-        <button class="btn"          onclick="Game.start()">JOUER</button>
-        <button class="btn btn-blue" onclick="UI.show('layer-shop')">BOUTIQUE</button>
-        <button class="btn btn-blue" onclick="UI.show('layer-lead')">CLASSEMENT</button>
-        <button class="btn btn-blue" onclick="UI.show('layer-profile')">COMPTE</button>
-        <button class="btn btn-blue" onclick="UI.show('layer-stats')">STATISTIQUES</button>
-        <button class="btn btn-red"  onclick="UI.confirmQuit()">QUITTER</button>
+        <button class="btn btn-play" onclick="Game.start()">
+            <span class="btn-icon">▶</span> JOUER
+        </button>
+        <button class="btn btn-blue" onclick="UI.show('layer-shop')">
+            <span class="btn-icon">◈</span> BOUTIQUE
+        </button>
+        <button class="btn btn-blue" onclick="UI.show('layer-lead')">
+            <span class="btn-icon">◉</span> CLASSEMENT
+        </button>
+        <button class="btn btn-blue" onclick="UI.show('layer-profile')">
+            <span class="btn-icon">◎</span> COMPTE
+        </button>
+        <button class="btn btn-blue" onclick="UI.show('layer-stats')">
+            <span class="btn-icon">◈</span> STATS
+        </button>
+        <button class="btn btn-red" onclick="UI.confirmQuit()">
+            <span class="btn-icon">✕</span> QUITTER
+        </button>
     </div>
 </div>
 
 <!-- ══════════════════ BOUTIQUE ══════════════════ -->
 <div id="layer-shop" class="screen" style="display:none;">
-    <h2>BOUTIQUE DE SKINS</h2>
-    <p class="credits-display">CRÉDITS : <span id="shop-credits">0</span></p>
+    <div class="screen-header">
+        <h2 class="screen-title">◈ BOUTIQUE</h2>
+        <div class="credits-badge">
+            <span class="credits-icon">◆</span>
+            <span id="shop-credits">0</span> crédits
+        </div>
+    </div>
     <div id="skin-list" class="skin-grid"></div>
-    <button class="btn btn-red" onclick="UI.show('layer-menu')">RETOUR</button>
+    <button class="btn btn-red back-btn" onclick="UI.show('layer-menu')">← RETOUR</button>
 </div>
 
 <!-- ══════════════════ CLASSEMENT ══════════════════ -->
 <div id="layer-lead" class="screen" style="display:none;">
-    <h2>TOP JOUEURS</h2>
+    <h2 class="screen-title">◉ TOP JOUEURS</h2>
     <div id="leaderboard-content" class="leaderboard-list"></div>
-    <button class="btn btn-red" onclick="UI.show('layer-menu')">RETOUR</button>
+    <button class="btn btn-red back-btn" onclick="UI.show('layer-menu')">← RETOUR</button>
 </div>
 
-<!-- ══════════════════ COMPTE / TERMINAL OS ══════════════════ -->
+<!-- ══════════════════ PROFIL ══════════════════ -->
 <div id="layer-profile" class="screen" style="display:none;">
-    <div id="profile-connected" style="display:none; flex-direction:column; align-items:center; gap:16px;">
+    <div id="profile-connected" style="display:none; flex-direction:column; align-items:center; gap:20px;">
         <div id="profile-avatar-wrap">
             <img id="profile-avatar" src="" alt="Avatar" style="display:none;">
             <div id="profile-avatar-fallback">?</div>
+            <div class="avatar-ring"></div>
         </div>
-        <h2 id="profile-username">-</h2>
+        <h2 id="profile-username" class="profile-name">-</h2>
         <div class="profile-stats">
-            <div class="stat-box"><div class="stat-val" id="profile-credits">0</div><div class="stat-lbl">CRÉDITS</div></div>
-            <div class="stat-box"><div class="stat-val" id="profile-hs">0</div><div class="stat-lbl">HIGH SCORE</div></div>
-            <div class="stat-box"><div class="stat-val" id="profile-level">-</div><div class="stat-lbl">NIVEAU MAX</div></div>
+            <div class="stat-box">
+                <div class="stat-val" id="profile-credits">0</div>
+                <div class="stat-lbl">CRÉDITS</div>
+            </div>
+            <div class="stat-box stat-box-hs">
+                <div class="stat-val" id="profile-hs">0</div>
+                <div class="stat-lbl">HIGH SCORE</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-val stat-val-sm" id="profile-level">-</div>
+                <div class="stat-lbl">NIVEAU MAX</div>
+            </div>
         </div>
         <button class="btn btn-red" onclick="Auth.logout()">DÉCONNEXION</button>
-        <button class="btn" onclick="UI.show('layer-menu')">RETOUR</button>
+        <button class="btn back-btn" onclick="UI.show('layer-menu')">← RETOUR</button>
     </div>
     <div id="profile-guest" style="display:none; flex-direction:column; align-items:center; gap:16px;">
+        <div class="guest-icon">◎</div>
         <h2>TERMINAL OS</h2>
-        <p style="color:#888; font-size:12px; text-align:center; max-width:300px;">Connecte-toi pour sauvegarder tes scores, accéder à la boutique et figurer au classement.</p>
-        <button class="btn" onclick="UI.show('layer-auth')">CONNEXION</button>
-        <button class="btn" onclick="UI.show('layer-menu')">RETOUR</button>
+        <p class="guest-desc">Connecte-toi pour sauvegarder tes scores, acheter des skins et figurer au classement mondial.</p>
+        <button class="btn btn-play" onclick="UI.show('layer-auth')">CONNEXION</button>
+        <button class="btn back-btn" onclick="UI.show('layer-menu')">← RETOUR</button>
     </div>
 </div>
 
 <!-- ══════════════════ AUTH ══════════════════ -->
 <div id="layer-auth" class="screen" style="display:none;">
-    <h2>ACCÈS RÉSEAU</h2>
+    <h2 class="screen-title">ACCÈS RÉSEAU</h2>
     <div class="auth-tabs">
         <button id="tab-login"    class="tab-btn tab-active" onclick="Auth.switchTab('login')">CONNEXION</button>
         <button id="tab-register" class="tab-btn"            onclick="Auth.switchTab('register')">INSCRIPTION</button>
     </div>
 
-    <div id="form-login" style="display:flex; flex-direction:column; align-items:center; gap:10px; width:min(360px,90vw);">
-        <input type="text"     id="login-user" placeholder="Pseudo" autocomplete="username">
-        <input type="password" id="login-pass" placeholder="Mot de passe" autocomplete="current-password">
+    <div id="form-login" class="auth-form">
+        <div class="input-wrap">
+            <span class="input-icon">◎</span>
+            <input type="text" id="login-user" placeholder="Pseudo" autocomplete="username">
+        </div>
+        <div class="input-wrap">
+            <span class="input-icon">◆</span>
+            <input type="password" id="login-pass" placeholder="Mot de passe" autocomplete="current-password">
+        </div>
         <div id="login-error" class="form-error"></div>
-        <button class="btn" onclick="Auth.login()">CONNEXION</button>
+        <button class="btn btn-play" onclick="Auth.login()">SE CONNECTER</button>
     </div>
 
-    <div id="form-register" style="display:none; flex-direction:column; align-items:center; gap:10px; width:min(360px,90vw);">
-        <input type="text"     id="reg-user" placeholder="Pseudo (3-20 caractères)" autocomplete="username">
-        <input type="password" id="reg-pass" placeholder="Mot de passe (6+ caractères)" autocomplete="new-password">
+    <div id="form-register" class="auth-form" style="display:none;">
+        <div class="input-wrap">
+            <span class="input-icon">◎</span>
+            <input type="text" id="reg-user" placeholder="Pseudo (3-20 caractères)" autocomplete="username">
+        </div>
+        <div class="input-wrap">
+            <span class="input-icon">◆</span>
+            <input type="password" id="reg-pass" placeholder="Mot de passe (6+ caractères)" autocomplete="new-password">
+        </div>
         <label class="file-label" for="reg-avatar">
-            <span id="file-label-text">📷 Photo de profil (optionnel, max 2 Mo)</span>
+            <span id="file-label-text">📷 Photo de profil (optionnel · max 2 Mo)</span>
             <input type="file" id="reg-avatar" accept="image/jpeg,image/png,image/webp" onchange="Auth.previewAvatar(this)">
         </label>
-        <img id="avatar-preview" style="display:none; width:70px; height:70px; border-radius:50%; object-fit:cover; border:2px solid var(--neon);" alt="Aperçu">
+        <img id="avatar-preview" class="avatar-preview-img" style="display:none;" alt="Aperçu">
         <div id="reg-error" class="form-error"></div>
-        <button class="btn" onclick="Auth.register()">CRÉER LE COMPTE</button>
+        <button class="btn btn-play" onclick="Auth.register()">CRÉER LE COMPTE</button>
     </div>
 
-    <button class="btn btn-red" onclick="UI.show('layer-menu')">RETOUR</button>
+    <button class="btn btn-red back-btn" onclick="UI.show('layer-menu')">← RETOUR</button>
 </div>
 
 <!-- ══════════════════ STATISTIQUES ══════════════════ -->
 <div id="layer-stats" class="screen" style="display:none;">
-    <h2>STATISTIQUES</h2>
-    <div id="stats-content"></div>
-    <button class="btn btn-red" onclick="UI.show('layer-menu')">RETOUR</button>
+    <h2 class="screen-title">◈ STATISTIQUES</h2>
+    <div id="stats-content" class="stats-grid"></div>
+    <button class="btn btn-red back-btn" onclick="UI.show('layer-menu')">← RETOUR</button>
 </div>
 
 <!-- ══════════════════ JEU ══════════════════ -->
@@ -111,7 +163,7 @@
     <canvas id="gameCanvas"></canvas>
 
     <div id="hud">
-        <div id="score-container">SCORE: <span id="ui-score">0</span></div>
+        <div id="score-container">SCORE <span id="ui-score">0</span></div>
         <div id="level-hud">
             <span id="ui-level-name">TUTORIAL</span>
             <span id="ui-level-desc"></span>
@@ -125,30 +177,40 @@
     <div id="level-announce"></div>
 
     <div id="pause-menu" style="display:none;">
-        <h2>EN PAUSE</h2>
-        <p id="pause-score-info"></p>
-        <button class="btn"         onclick="Game.togglePause()">REPRENDRE</button>
-        <button class="btn btn-red" onclick="Game.quit()">QUITTER LA PARTIE</button>
+        <div class="pause-inner">
+            <h2 class="pause-title">⏸ PAUSE</h2>
+            <p id="pause-score-info"></p>
+            <button class="btn btn-play" onclick="Game.togglePause()">▶ REPRENDRE</button>
+            <button class="btn btn-red"  onclick="Game.quit()">✕ QUITTER</button>
+        </div>
     </div>
 </div>
 
 <!-- ══════════════════ GAME OVER ══════════════════ -->
 <div id="layer-death" class="screen" style="display:none;">
-    <h2 class="death-title">GAME OVER</h2>
-    <div id="death-stats"></div>
-    <button class="btn"          onclick="Game.start()">REJOUER</button>
-    <button class="btn btn-blue" onclick="UI.show('layer-menu')">MENU</button>
+    <div class="death-container">
+        <div class="death-glitch" id="death-glitch-text">GAME OVER</div>
+        <h2 class="death-title">GAME OVER</h2>
+        <div id="death-stats" class="death-stats-wrap"></div>
+        <div class="death-actions">
+            <button class="btn btn-play" onclick="Game.start()">↺ REJOUER</button>
+            <button class="btn btn-blue" onclick="UI.show('layer-menu')">⌂ MENU</button>
+        </div>
+    </div>
 </div>
 
 <!-- ══════════════════ CONFIRM QUIT ══════════════════ -->
 <div id="layer-confirm" class="screen" style="display:none;">
     <h2>QUITTER ?</h2>
-    <p>Voulez-vous vraiment fermer le jeu ?</p>
+    <p style="color:#888; font-size:12px;">Ta progression locale sera conservée.</p>
     <button class="btn btn-red"  onclick="window.close()">OUI, QUITTER</button>
     <button class="btn btn-blue" onclick="UI.show('layer-menu')">ANNULER</button>
 </div>
 
-<!-- ══════════════════ DEV TOOLS — SIDEBAR ══════════════════ -->
+<!-- ══════════════════ LEVEL ANNOUNCE ══════════════════ -->
+<div id="level-announce-overlay" style="display:none;"></div>
+
+<!-- ══════════════════ DEV TOOLS SIDEBAR ══════════════════ -->
 <div id="devtools-overlay" onclick="DevTools.closeSidebar()"></div>
 <div id="devtools-sidebar">
     <div class="devtools-header">
@@ -188,10 +250,63 @@
     </div>
 </div>
 
-<!-- ══════════════════ SCRIPTS ══════════════════ -->
 <script src="levels.js"></script>
 <script src="stats_manager.js"></script>
 <script>
+
+// ════════════════════════════════════════════════════════════════
+//  BACKGROUND CANVAS ANIMÉ (menu uniquement)
+// ════════════════════════════════════════════════════════════════
+const BgCanvas = {
+    canvas: document.getElementById('bgCanvas'),
+    ctx: null,
+    particles: [],
+    animFrame: null,
+
+    init() {
+        this.ctx = this.canvas.getContext('2d');
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+        for (let i = 0; i < 120; i++) {
+            this.particles.push({
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight,
+                size: Math.random() * 1.5 + 0.2,
+                speed: Math.random() * 0.5 + 0.1,
+                opacity: Math.random() * 0.6 + 0.1,
+                color: Math.random() > 0.7 ? '#ff3838' : '#00f3ff'
+            });
+        }
+        this.loop();
+    },
+
+    resize() {
+        this.canvas.width  = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+    },
+
+    loop() {
+        const C = this.ctx;
+        C.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.particles.forEach(p => {
+            p.y += p.speed;
+            if (p.y > this.canvas.height) { p.y = 0; p.x = Math.random() * this.canvas.width; }
+            C.globalAlpha = p.opacity;
+            C.fillStyle   = p.color;
+            C.shadowBlur  = 6;
+            C.shadowColor = p.color;
+            C.beginPath();
+            C.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            C.fill();
+        });
+        C.globalAlpha = 1;
+        C.shadowBlur  = 0;
+        this.animFrame = requestAnimationFrame(() => this.loop());
+    },
+
+    show() { this.canvas.style.display = 'block'; },
+    hide() { this.canvas.style.display = 'none'; }
+};
 
 // ════════════════════════════════════════════════════════════════
 //  API CLIENT
@@ -223,18 +338,23 @@ const API = {
 };
 
 // ════════════════════════════════════════════════════════════════
-//  CATALOGUE SKINS (miroir du serveur)
+//  CATALOGUE SKINS
 // ════════════════════════════════════════════════════════════════
 const SKINS_CATALOG = [
-    { id: 'neon_blue', name: 'Neon Blue', color: '#00f3ff', price: 0     },
-    { id: 'emerald',   name: 'Emerald',   color: '#00ff88', price: 500   },
-    { id: 'ruby',      name: 'Ruby',      color: '#ff3838', price: 1500  },
-    { id: 'gold',      name: 'Gold',      color: '#ffcc00', price: 3000  },
-    { id: 'violet',    name: 'Violet',    color: '#cc00ff', price: 5000  },
-    { id: 'white',     name: 'White',     color: '#ffffff', price: 8000  },
-    { id: 'inferno',   name: 'Inferno',   color: '#ff4400', price: 12000 },
-    { id: 'ghost',     name: 'Ghost',     color: '#aaaaaa', price: 20000 }
+    { id: 'neon_blue', name: 'Neon Blue', color: '#00f3ff', price: 0,     tier: 'FREE'      },
+    { id: 'emerald',   name: 'Emerald',   color: '#00ff88', price: 500,   tier: 'COMMUN'    },
+    { id: 'ruby',      name: 'Ruby',      color: '#ff3838', price: 1500,  tier: 'RARE'      },
+    { id: 'gold',      name: 'Gold',      color: '#ffcc00', price: 3000,  tier: 'ÉPIQUE'    },
+    { id: 'violet',    name: 'Violet',    color: '#cc00ff', price: 5000,  tier: 'ÉPIQUE'    },
+    { id: 'white',     name: 'White',     color: '#ffffff', price: 8000,  tier: 'LÉGENDAIRE'},
+    { id: 'inferno',   name: 'Inferno',   color: '#ff4400', price: 12000, tier: 'LÉGENDAIRE'},
+    { id: 'ghost',     name: 'Ghost',     color: '#aaaaaa', price: 20000, tier: 'MYTHIQUE'  }
 ];
+
+const TIER_COLORS = {
+    'FREE': '#888', 'COMMUN': '#00ff88', 'RARE': '#0088ff',
+    'ÉPIQUE': '#cc00ff', 'LÉGENDAIRE': '#ffcc00', 'MYTHIQUE': '#ff4400'
+};
 
 // ════════════════════════════════════════════════════════════════
 //  AUTH
@@ -270,8 +390,10 @@ const Auth = {
         const errEl = document.getElementById('login-error');
         errEl.innerText = '';
         if (!user || !pass) { errEl.innerText = 'Remplis tous les champs.'; return; }
-
+        const btn = document.querySelector('#form-login .btn-play');
+        btn.innerText = '⟳ CONNEXION...'; btn.disabled = true;
         const data = await API.post('/auth/login', { username: user, password: pass });
+        btn.innerText = 'SE CONNECTER'; btn.disabled = false;
         if (data.error) { errEl.innerText = data.error; return; }
         this._saveSession(data);
         UI.show('layer-menu');
@@ -284,13 +406,14 @@ const Auth = {
         const errEl      = document.getElementById('reg-error');
         errEl.innerText = '';
         if (!username || !password) { errEl.innerText = 'Remplis tous les champs.'; return; }
-
+        const btn = document.querySelector('#form-register .btn-play');
+        btn.innerText = '⟳ CRÉATION...'; btn.disabled = true;
         const fd = new FormData();
         fd.append('username', username);
         fd.append('password', password);
         if (avatarFile) fd.append('profilePicture', avatarFile);
-
         const data = await API.post('/auth/register', fd, true);
+        btn.innerText = 'CRÉER LE COMPTE'; btn.disabled = false;
         if (data.error) { errEl.innerText = data.error; return; }
         this._saveSession(data);
         UI.show('layer-menu');
@@ -301,24 +424,16 @@ const Auth = {
         this.user  = data.user;
         localStorage.setItem('nd_token', data.token);
         localStorage.setItem('nd_user', JSON.stringify(data.user));
-        // Restaurer le skin selon les skins débloqués
-        const owned = data.user.unlockedSkins || [];
-        const lastSkin = SKINS_CATALOG.filter(s => owned.includes(s.id)).pop();
         const equipped = StatsManager.data.equippedSkin;
+        const owned    = data.user.unlockedSkins || [];
         const equippedSkin = SKINS_CATALOG.find(s => s.color === equipped && owned.includes(s.id));
         if (equippedSkin) Game.player.color = equippedSkin.color;
-        else if (lastSkin) Game.player.color = lastSkin.color;
-
-        // Accès devtools si compte dev
-        if (DEV_USERS.includes(data.user.displayName?.toLowerCase())) {
-            DevTools.openSidebar();
-        }
+        if (DEV_USERS.includes(data.user.displayName?.toLowerCase())) DevTools.openSidebar();
         this._updateUI();
     },
 
     logout() {
-        this.token = null;
-        this.user  = null;
+        this.token = null; this.user = null;
         localStorage.removeItem('nd_token');
         localStorage.removeItem('nd_user');
         this._updateUI();
@@ -339,18 +454,17 @@ const Auth = {
         const tagName   = document.getElementById('user-tag-name');
         const tagAvatar = document.getElementById('user-tag-avatar');
         const hsEl      = document.getElementById('hs-val');
-
         if (u) {
             tagName.innerText = u.displayName;
             if (u.profilePicture) {
                 tagAvatar.style.backgroundImage = `url(${u.profilePicture})`;
                 tagAvatar.style.display = 'block';
             } else { tagAvatar.style.display = 'none'; }
-            if (hsEl) hsEl.innerText = u.highScore;
+            if (hsEl) hsEl.innerText = u.highScore.toLocaleString();
         } else {
             tagName.innerText = 'Non connecté';
             tagAvatar.style.display = 'none';
-            if (hsEl) hsEl.innerText = StatsManager.data.highScore;
+            if (hsEl) hsEl.innerText = StatsManager.data.highScore.toLocaleString();
         }
     }
 };
@@ -362,59 +476,61 @@ const UI = {
     show(id) {
         document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
         const el = document.getElementById(id);
-        if (el) el.style.display = 'flex';
-
+        if (el) { el.style.display = 'flex'; el.classList.add('screen-enter'); setTimeout(() => el.classList.remove('screen-enter'), 400); }
+        if (id === 'layer-menu')    { BgCanvas.show(); this.renderMenu(); }
+        else BgCanvas.hide();
         if (id === 'layer-shop')    this.renderShop();
         if (id === 'layer-lead')    this.renderLead();
         if (id === 'layer-stats')   this.renderStats();
         if (id === 'layer-profile') this.renderProfile();
-        if (id === 'layer-menu')    this.renderMenu();
         if (id === 'layer-auth')    Auth.switchTab('login');
     },
 
-    renderMenu() {
-        Auth._updateUI();
-    },
+    renderMenu() { Auth._updateUI(); },
 
     async renderShop() {
         const list   = document.getElementById('skin-list');
         const credEl = document.getElementById('shop-credits');
-        list.innerHTML = '<p style="color:#888;font-size:11px;">Chargement...</p>';
-
+        list.innerHTML = '<div class="loading-text">⟳ Chargement...</div>';
         let unlockedIds = ['neon_blue'];
         if (Auth.token) {
             await Auth.refreshUser();
-            credEl.innerText = Auth.user?.credits ?? 0;
+            credEl.innerText = (Auth.user?.credits ?? 0).toLocaleString();
             unlockedIds = Auth.user?.unlockedSkins ?? ['neon_blue'];
         } else {
             const localColors = StatsManager.data.unlockedSkins || ['#00f3ff'];
             unlockedIds = SKINS_CATALOG.filter(s => localColors.includes(s.color)).map(s => s.id);
-            credEl.innerText = StatsManager.data.credits;
+            credEl.innerText = StatsManager.data.credits.toLocaleString();
         }
-
         list.innerHTML = '';
-        SKINS_CATALOG.forEach(s => {
+        SKINS_CATALOG.forEach((s, idx) => {
             const owned    = unlockedIds.includes(s.id);
             const equipped = Game.player.color === s.color;
             const card = document.createElement('div');
-            card.className = 'skin-card' + (owned ? ' skin-unlocked' : '');
+            card.className = 'skin-card' + (owned ? ' skin-unlocked' : '') + (equipped ? ' skin-equipped' : '');
             card.style.setProperty('--skin-color', s.color);
-            const label    = equipped ? '✅ ÉQUIPÉ' : owned ? 'ÉQUIPER' : (s.price === 0 ? 'GRATUIT' : s.price + ' cr');
-            const btnClass = owned ? 'btn-equip' : 'btn-buy';
+            card.style.animationDelay = (idx * 0.05) + 's';
+            const tierColor = TIER_COLORS[s.tier] || '#888';
             card.innerHTML = `
-                <div class="skin-preview" style="background:${s.color};box-shadow:0 0 18px ${s.color}66;"></div>
+                <div class="skin-tier" style="color:${tierColor}">${s.tier}</div>
+                <div class="skin-preview-wrap">
+                    <div class="skin-preview" style="background:${s.color};box-shadow:0 0 25px ${s.color}88;"></div>
+                    ${equipped ? '<div class="skin-equipped-badge">✓</div>' : ''}
+                </div>
                 <div class="skin-name">${s.name}</div>
-                <div class="skin-price">${s.price === 0 ? 'GRATUIT' : s.price + ' crédits'}</div>
-                <button class="btn-skin-action ${btnClass}">${label}</button>`;
+                <div class="skin-price" style="color:${owned ? '#00ff88' : '#ffcc00'}">
+                    ${owned ? '✓ DÉBLOQUÉ' : (s.price === 0 ? 'GRATUIT' : '◆ ' + s.price.toLocaleString())}
+                </div>
+                <button class="btn-skin-action ${owned ? 'btn-equip' : 'btn-buy'}" ${equipped ? 'disabled' : ''}>
+                    ${equipped ? '✅ ÉQUIPÉ' : owned ? 'ÉQUIPER' : 'ACHETER'}
+                </button>`;
             card.querySelector('.btn-skin-action').addEventListener('click', async () => {
                 if (owned) {
                     Game.player.color = s.color;
                     StatsManager.data.equippedSkin = s.color;
                     StatsManager.save();
                     this.renderShop();
-                } else {
-                    await this._buySkin(s);
-                }
+                } else { await this._buySkin(s); }
             });
             list.appendChild(card);
         });
@@ -429,39 +545,36 @@ const UI = {
                 Game.player.color = s.color;
                 StatsManager.data.equippedSkin = s.color;
                 StatsManager.save();
-                alert('Skin déverrouillé et équipé !');
+                this._toast('Skin déverrouillé !', 'success');
                 this.renderShop();
-            } else { alert('Pas assez de crédits !'); }
+            } else { this._toast('Pas assez de crédits !', 'error'); }
             return;
         }
         const data = await API.post('/shop/buy', { skinId: s.id });
-        if (data.error) { alert(data.error); return; }
+        if (data.error) { this._toast(data.error, 'error'); return; }
         Auth.user.credits       = data.newCredits;
         Auth.user.unlockedSkins = data.unlockedSkins;
         localStorage.setItem('nd_user', JSON.stringify(Auth.user));
         Game.player.color = s.color;
         StatsManager.data.equippedSkin = s.color;
         StatsManager.save();
-        alert(data.message);
+        this._toast(data.message, 'success');
         this.renderShop();
     },
 
     async renderLead() {
         const content = document.getElementById('leaderboard-content');
-        content.innerHTML = '<p style="color:#ffffff44;font-size:11px;letter-spacing:3px;text-align:center">⟳ CONNEXION AU RÉSEAU...</p>';
-
+        content.innerHTML = '<div class="loading-text">⟳ CONNEXION AU RÉSEAU...</div>';
         const data = await API.get('/scores/leaderboard');
         if (data.error || !Array.isArray(data)) {
-            content.innerHTML = '<p class="form-error">Impossible de charger le classement.</p>';
-            return;
+            content.innerHTML = '<p class="form-error">Impossible de charger le classement.</p>'; return;
         }
         if (!data.length) {
-            content.innerHTML = '<p style="color:#ffffff33;font-size:11px;letter-spacing:2px;text-align:center">// AUCUN SCORE ENREGISTRÉ</p>';
-            return;
+            content.innerHTML = '<div class="empty-lead">// AUCUN SCORE ENREGISTRÉ<br>Sois le premier !</div>'; return;
         }
         content.innerHTML = data.map(e => `
-            <div class="lead-row">
-                <span class="lead-rank">${e.rank <= 3 ? ['🥇','🥈','🥉'][e.rank-1] : e.rank}</span>
+            <div class="lead-row" style="animation-delay:${e.rank * 0.05}s">
+                <span class="lead-rank ${e.rank <= 3 ? 'lead-rank-top' : ''}">${e.rank <= 3 ? ['🥇','🥈','🥉'][e.rank-1] : e.rank}</span>
                 <div class="lead-avatar" style="${e.avatar ? 'background-image:url('+e.avatar+')' : ''}">
                     ${!e.avatar ? e.displayName[0].toUpperCase() : ''}
                 </div>
@@ -469,7 +582,7 @@ const UI = {
                     <div class="lead-name">${e.displayName}</div>
                     <div class="lead-level">${e.level}</div>
                 </div>
-                <div class="lead-score">${e.score.toLocaleString()} pts</div>
+                <div class="lead-score">${e.score.toLocaleString()} <span style="font-size:9px;opacity:0.5">pts</span></div>
             </div>`).join('');
     },
 
@@ -478,19 +591,22 @@ const UI = {
         const u  = Auth.user;
         const hs = u ? u.highScore : d.highScore;
         const cr = u ? u.credits   : d.credits;
-        const skinCount = u
-            ? (u.unlockedSkins?.length ?? 1)
-            : (d.unlockedSkins?.length ?? 1);
-        document.getElementById('stats-content').innerHTML = `
-            <div class="stat-row"><span>Pseudo</span><span>${u ? u.displayName : d.username}</span></div>
-            <div class="stat-row"><span>Meilleur score</span><span>${hs} pts</span></div>
-            <div class="stat-row"><span>Crédits</span><span>${cr}</span></div>
-            <div class="stat-row"><span>Parties jouées</span><span>${d.gamesPlayed || 0}</span></div>
-            <div class="stat-row"><span>Morts totales</span><span>${d.deathCount}</span></div>
-            <div class="stat-row"><span>Temps de jeu</span><span>${StatsManager.getFormattedTime()}</span></div>
-            <div class="stat-row"><span>Meilleur niveau</span><span>${d.bestLevel || 'TUTORIAL'}</span></div>
-            <div class="stat-row"><span>Skins débloqués</span><span>${skinCount} / ${SKINS_CATALOG.length}</span></div>
-        `;
+        const skinCount = u ? (u.unlockedSkins?.length ?? 1) : (d.unlockedSkins?.length ?? 1);
+        const rows = [
+            { label: 'Joueur',          value: u ? u.displayName : d.username },
+            { label: 'Meilleur score',  value: hs.toLocaleString() + ' pts' },
+            { label: 'Crédits',         value: '◆ ' + cr.toLocaleString() },
+            { label: 'Parties jouées',  value: d.gamesPlayed || 0 },
+            { label: 'Morts totales',   value: d.deathCount },
+            { label: 'Temps de jeu',    value: StatsManager.getFormattedTime() },
+            { label: 'Meilleur niveau', value: d.bestLevel || 'TUTORIAL' },
+            { label: 'Skins débloqués', value: skinCount + ' / ' + SKINS_CATALOG.length }
+        ];
+        document.getElementById('stats-content').innerHTML = rows.map(r => `
+            <div class="stat-row">
+                <span class="stat-row-label">${r.label}</span>
+                <span class="stat-row-value">${r.value}</span>
+            </div>`).join('');
     },
 
     renderProfile() {
@@ -498,56 +614,48 @@ const UI = {
         const guest     = document.getElementById('profile-guest');
         const u = Auth.user;
         if (u) {
-            connected.style.display = 'flex';
-            guest.style.display     = 'none';
+            connected.style.display = 'flex'; guest.style.display = 'none';
             const avatar   = document.getElementById('profile-avatar');
             const fallback = document.getElementById('profile-avatar-fallback');
             if (u.profilePicture) {
-                avatar.src = u.profilePicture;
-                avatar.style.display   = 'block';
-                fallback.style.display = 'none';
+                avatar.src = u.profilePicture; avatar.style.display = 'block'; fallback.style.display = 'none';
             } else {
-                avatar.style.display   = 'none';
-                fallback.style.display = 'flex';
+                avatar.style.display = 'none'; fallback.style.display = 'flex';
                 fallback.innerText = u.displayName[0].toUpperCase();
             }
             document.getElementById('profile-username').innerText = u.displayName;
-            document.getElementById('profile-credits').innerText  = u.credits;
-            document.getElementById('profile-hs').innerText       = u.highScore;
+            document.getElementById('profile-credits').innerText  = u.credits.toLocaleString();
+            document.getElementById('profile-hs').innerText       = u.highScore.toLocaleString();
             document.getElementById('profile-level').innerText    = u.highScoreLevel || 'TUTORIAL';
-        } else {
-            connected.style.display = 'none';
-            guest.style.display     = 'flex';
-        }
+        } else { connected.style.display = 'none'; guest.style.display = 'flex'; }
     },
 
-    confirmQuit() { this.show('layer-confirm'); }
+    confirmQuit() { this.show('layer-confirm'); },
+
+    _toast(msg, type = 'success') {
+        const t = document.createElement('div');
+        t.className = 'toast toast-' + type;
+        t.innerText = msg;
+        document.body.appendChild(t);
+        setTimeout(() => t.classList.add('toast-show'), 10);
+        setTimeout(() => { t.classList.remove('toast-show'); setTimeout(() => t.remove(), 400); }, 3000);
+    }
 };
 
 // ════════════════════════════════════════════════════════════════
-//  DEV TOOLS — Sidebar latérale
-//  Accès : 5 clics sur le titre OU login avec compte dev/admin
+//  DEV TOOLS SIDEBAR
 // ════════════════════════════════════════════════════════════════
 const DevTools = {
-    godMode: false,
-    _clicks: 0,
-    _clickTimer: null,
+    godMode: false, _clicks: 0, _clickTimer: null,
 
     titleClick() {
         this._clicks++;
         const hint = document.getElementById('dev-hint');
         hint.style.display = 'block';
-        hint.innerText = `CLIQUEZ ENCORE... (${this._clicks}/5)`;
+        document.getElementById('dev-hint-count').innerText = this._clicks;
         clearTimeout(this._clickTimer);
-        this._clickTimer = setTimeout(() => {
-            this._clicks = 0;
-            hint.style.display = 'none';
-        }, 2000);
-        if (this._clicks >= 5) {
-            this._clicks = 0;
-            hint.style.display = 'none';
-            this.openSidebar();
-        }
+        this._clickTimer = setTimeout(() => { this._clicks = 0; hint.style.display = 'none'; }, 2000);
+        if (this._clicks >= 5) { this._clicks = 0; hint.style.display = 'none'; this.openSidebar(); }
     },
 
     openSidebar() {
@@ -562,8 +670,7 @@ const DevTools = {
     },
 
     refresh() {
-        const d = StatsManager.data;
-        const u = Auth.user;
+        const d = StatsManager.data, u = Auth.user;
         document.getElementById('dev-credits').value = u ? u.credits : d.credits;
         document.getElementById('dev-hs').value      = u ? u.highScore : d.highScore;
         document.getElementById('dev-score').value   = Game.running ? Game.score : 0;
@@ -581,44 +688,33 @@ const DevTools = {
         if (isNaN(v)) return;
         StatsManager.data.credits = v; StatsManager.save();
         if (Auth.user) { Auth.user.credits = v; localStorage.setItem('nd_user', JSON.stringify(Auth.user)); }
-        alert('Crédits mis à jour !'); this.refresh();
+        UI._toast('Crédits mis à jour !', 'success'); this.refresh();
     },
-
     setHS() {
         const v = parseInt(document.getElementById('dev-hs').value);
         if (isNaN(v)) return;
         StatsManager.data.highScore = v; StatsManager.save();
         if (Auth.user) { Auth.user.highScore = v; localStorage.setItem('nd_user', JSON.stringify(Auth.user)); }
-        alert('High score mis à jour !'); this.refresh();
+        UI._toast('High score mis à jour !', 'success'); this.refresh();
     },
-
     setScore() {
         const v = parseInt(document.getElementById('dev-score').value);
-        if (!isNaN(v) && Game.running) { Game.score = v; alert('Score en jeu modifié !'); }
-        else if (!Game.running) alert("Lance une partie d'abord !");
+        if (!isNaN(v) && Game.running) { Game.score = v; UI._toast('Score modifié !', 'success'); }
+        else if (!Game.running) UI._toast("Lance une partie d'abord !", 'error');
     },
-
     unlockAll() {
-        const allColors = SKINS_CATALOG.map(s => s.color);
-        const allIds    = SKINS_CATALOG.map(s => s.id);
-        StatsManager.data.unlockedSkins = allColors; StatsManager.save();
-        if (Auth.user) { Auth.user.unlockedSkins = allIds; localStorage.setItem('nd_user', JSON.stringify(Auth.user)); }
-        alert('Tous les skins débloqués !');
+        StatsManager.data.unlockedSkins = SKINS_CATALOG.map(s => s.color); StatsManager.save();
+        if (Auth.user) { Auth.user.unlockedSkins = SKINS_CATALOG.map(s => s.id); localStorage.setItem('nd_user', JSON.stringify(Auth.user)); }
+        UI._toast('Tous les skins débloqués !', 'success');
     },
-
     toggleGod() {
         this.godMode = !this.godMode;
         document.getElementById('btn-god').innerText = this.godMode ? 'MODE GOD : ON ✓' : 'MODE GOD : OFF';
     },
-
     reset() {
         if (!confirm('Vraiment tout réinitialiser ?')) return;
-        StatsManager.reset();
-        this.godMode = false;
-        Auth.logout();
-        this.refresh();
-        alert('Données réinitialisées.');
-        this.closeSidebar();
+        StatsManager.reset(); this.godMode = false; Auth.logout();
+        this.refresh(); UI._toast('Données réinitialisées.', 'success'); this.closeSidebar();
     }
 };
 
@@ -627,26 +723,17 @@ const DevTools = {
 // ════════════════════════════════════════════════════════════════
 const Game = {
     canvas: document.getElementById('gameCanvas'),
-    ctx: null,
-    running: false,
-    paused: false,
-    score: 0,
+    ctx: null, running: false, paused: false, score: 0,
     player: { x: 0, y: 0, color: '#00f3ff' },
-    enemies: [],
-    currentLevelName: '',
-    burstTimer: 0,
-    glitchTimer: 0,
-    timeTimer: 0,
-    bgParticles: [],
-    animFrame: null,
+    enemies: [], trails: [],
+    currentLevelName: '', burstTimer: 0, glitchTimer: 0, timeTimer: 0,
+    bgParticles: [], animFrame: null,
 
     init() {
         this.ctx = this.canvas.getContext('2d');
         this.resize();
         StatsManager.init();
-
         if (StatsManager.data.equippedSkin) this.player.color = StatsManager.data.equippedSkin;
-
         for (let i = 0; i < 80; i++) {
             this.bgParticles.push({
                 x: Math.random() * window.innerWidth,
@@ -655,17 +742,15 @@ const Game = {
                 speed: Math.random() * 0.4 + 0.1
             });
         }
-
         window.addEventListener('resize', () => this.resize());
         window.addEventListener('keydown', (e) => {
             if ((e.key === 'Escape' || e.key === 'p' || e.key === 'P') && this.running) this.togglePause();
         });
         this.canvas.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-            this.player.x = e.touches[0].clientX - 15;
+            e.preventDefault(); this.player.x = e.touches[0].clientX - 15;
         }, { passive: false });
-
         Auth._updateUI();
+        BgCanvas.init();
     },
 
     resize() { this.canvas.width = window.innerWidth; this.canvas.height = window.innerHeight; },
@@ -673,18 +758,17 @@ const Game = {
     start() {
         if (this.animFrame) cancelAnimationFrame(this.animFrame);
         this.running = true; this.paused = false; this.score = 0;
-        this.enemies = []; this.burstTimer = 0; this.glitchTimer = 0;
-        this.timeTimer = 0; this.currentLevelName = '';
+        this.enemies = []; this.trails = [];
+        this.burstTimer = 0; this.glitchTimer = 0; this.timeTimer = 0;
+        this.currentLevelName = '';
         this.player.x = this.canvas.width / 2 - 15;
         this.player.y = this.canvas.height - 80;
-
         document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
         document.getElementById('layer-game').style.display = 'block';
         document.getElementById('pause-menu').style.display = 'none';
-
+        BgCanvas.hide();
         StatsManager.data.gamesPlayed = (StatsManager.data.gamesPlayed || 0) + 1;
         StatsManager.save();
-
         window.onmousemove = (ev) => { this.player.x = ev.clientX - 15; };
         this.loop();
     },
@@ -696,10 +780,9 @@ const Game = {
         if (this.animFrame) cancelAnimationFrame(this.animFrame);
 
         const finalScore = this.score;
-        const lvl        = LevelSystem.getCurrentLevel(finalScore);
-        const lvlName    = lvl.name;
+        const lvl = LevelSystem.getCurrentLevel(finalScore);
+        const lvlName = lvl.name;
 
-        // Stats locales
         StatsManager.data.deathCount++;
         const isNewLocal = finalScore > StatsManager.data.highScore;
         if (isNewLocal) { StatsManager.data.highScore = finalScore; StatsManager.data.bestLevel = lvlName; }
@@ -711,26 +794,50 @@ const Game = {
         if (Auth.token) {
             const res = await API.post('/scores/submit', { score: finalScore, level: lvlName });
             if (!res.error) {
-                creditsEarned = res.creditsEarned;
-                isNewHs = res.isNewHighScore;
-                Auth.user.credits   = res.newCredits;
-                Auth.user.highScore = res.highScore;
+                creditsEarned = res.creditsEarned; isNewHs = res.isNewHighScore;
+                Auth.user.credits = res.newCredits; Auth.user.highScore = res.highScore;
                 if (isNewHs) Auth.user.highScoreLevel = lvlName;
                 localStorage.setItem('nd_user', JSON.stringify(Auth.user));
             }
         } else {
-            StatsManager.data.credits += creditsEarned;
-            StatsManager.save();
+            StatsManager.data.credits += creditsEarned; StatsManager.save();
         }
 
+        // Affichage Game Over amélioré
         document.getElementById('layer-game').style.display  = 'none';
         document.getElementById('layer-death').style.display = 'flex';
+        BgCanvas.show();
+
+        const tier = LevelSystem.getTierName(finalScore);
         document.getElementById('death-stats').innerHTML = `
-            <div class="stat-row"><span>Score</span><span>${finalScore} pts</span></div>
-            <div class="stat-row"><span>Niveau atteint</span><span>${lvlName}</span></div>
-            <div class="stat-row"><span>Crédits gagnés</span><span>+${creditsEarned}</span></div>
-            ${isNewHs ? '<p class="new-record">🏆 NOUVEAU RECORD !</p>' : ''}
+            <div class="death-score">${finalScore.toLocaleString()}</div>
+            <div class="death-score-label">POINTS</div>
+            <div class="death-info-grid">
+                <div class="death-info-item">
+                    <div class="death-info-val" style="color:${lvl.color}">${lvlName}</div>
+                    <div class="death-info-lbl">NIVEAU ATTEINT</div>
+                </div>
+                <div class="death-info-item">
+                    <div class="death-info-val" style="color:#ffcc00">+${creditsEarned.toLocaleString()}</div>
+                    <div class="death-info-lbl">CRÉDITS</div>
+                </div>
+                <div class="death-info-item">
+                    <div class="death-info-val">${tier}</div>
+                    <div class="death-info-lbl">TIER</div>
+                </div>
+            </div>
+            ${isNewHs ? '<div class="new-record">🏆 NOUVEAU RECORD !</div>' : ''}
+            ${!Auth.token ? '<div class="death-login-hint">Connecte-toi pour sauvegarder ton score !</div>' : ''}
         `;
+
+        // Animation glitch sur le titre GAME OVER
+        const glitch = document.getElementById('death-glitch-text');
+        let count = 0;
+        const glitchInterval = setInterval(() => {
+            glitch.style.transform = `translate(${(Math.random()-0.5)*6}px, ${(Math.random()-0.5)*6}px)`;
+            glitch.style.opacity = Math.random() > 0.3 ? '0.5' : '0';
+            if (++count > 12) { clearInterval(glitchInterval); glitch.style.transform = ''; glitch.style.opacity = '0.15'; }
+        }, 80);
     },
 
     quit() {
@@ -742,8 +849,8 @@ const Game = {
         this.running = false; this.paused = false;
         if (this.animFrame) cancelAnimationFrame(this.animFrame);
         window.onmousemove = null;
-        document.getElementById('layer-game').style.display  = 'none';
-        document.getElementById('pause-menu').style.display  = 'none';
+        document.getElementById('layer-game').style.display = 'none';
+        document.getElementById('pause-menu').style.display = 'none';
         UI.show('layer-menu');
     },
 
@@ -752,7 +859,7 @@ const Game = {
         this.paused = !this.paused;
         document.getElementById('pause-menu').style.display = this.paused ? 'flex' : 'none';
         document.getElementById('btn-pause').innerText = this.paused ? '▶' : '⏸';
-        document.getElementById('pause-score-info').innerText = `Score actuel : ${this.score} pts`;
+        document.getElementById('pause-score-info').innerText = `Score : ${this.score.toLocaleString()} pts`;
         if (!this.paused) this.loop();
     },
 
@@ -764,13 +871,12 @@ const Game = {
 
     update() {
         const lvl = LevelSystem.getCurrentLevel(this.score);
-
         if (lvl.name !== this.currentLevelName) {
             this.currentLevelName = lvl.name;
-            document.getElementById('ui-level-name').innerText       = lvl.name;
-            document.getElementById('ui-level-name').style.color     = lvl.color || '#00f3ff';
-            document.getElementById('ui-level-desc').innerText       = lvl.description || '';
-            document.getElementById('ui-tier').innerText             = LevelSystem.getTierName(this.score);
+            document.getElementById('ui-level-name').innerText   = lvl.name;
+            document.getElementById('ui-level-name').style.color = lvl.color || '#00f3ff';
+            document.getElementById('ui-level-desc').innerText   = lvl.description || '';
+            document.getElementById('ui-tier').innerText         = LevelSystem.getTierName(this.score);
             this._announceLevel(lvl.name, lvl.color, lvl.description);
             if (this.score > 0) StatsManager.data.bestLevel = lvl.name;
         }
@@ -780,7 +886,7 @@ const Game = {
             const pct = Math.min(100, ((this.score - lvl.scoreReq) / (next.scoreReq - lvl.scoreReq)) * 100);
             document.getElementById('next-level-fill').style.width      = pct + '%';
             document.getElementById('next-level-fill').style.background = lvl.color || '#00f3ff';
-            document.getElementById('next-level-label').innerText = `→ ${next.name} dans ${next.scoreReq - this.score} pts`;
+            document.getElementById('next-level-label').innerText = `→ ${next.name} dans ${(next.scoreReq - this.score).toLocaleString()} pts`;
         } else {
             document.getElementById('next-level-fill').style.width = '100%';
             document.getElementById('next-level-label').innerText  = '∞ MAX NIVEAU';
@@ -792,9 +898,7 @@ const Game = {
             this.burstTimer++;
             if (this.burstTimer >= 90) {
                 this.burstTimer = 0;
-                for (let i = 0; i < 5; i++) {
-                    setTimeout(() => { if (this.running && !this.paused) this._spawnEnemy(lvl); }, i * 80);
-                }
+                for (let i = 0; i < 5; i++) setTimeout(() => { if (this.running && !this.paused) this._spawnEnemy(lvl); }, i * 80);
             }
         }
 
@@ -807,10 +911,8 @@ const Game = {
                 for (let a = 0; a < 6; a++) {
                     const angle = (a / 6) * Math.PI * 2;
                     const e = this._createEnemy(lvl);
-                    e.x  = this.canvas.width / 2 + Math.cos(angle) * 250;
-                    e.y  = -30;
-                    e.vx = Math.cos(angle) * 2;
-                    this.enemies.push(e);
+                    e.x = this.canvas.width / 2 + Math.cos(angle) * 250; e.y = -30;
+                    e.vx = Math.cos(angle) * 2; this.enemies.push(e);
                 }
             }
         }
@@ -821,45 +923,42 @@ const Game = {
         const W = this.canvas.width, H = this.canvas.height;
         this.bgParticles.forEach(p => { p.y += p.speed; if (p.y > H) { p.y = 0; p.x = Math.random() * W; } });
 
+        // Traînées du joueur
+        this.trails.push({ x: this.player.x + 15, y: this.player.y + 15, alpha: 0.4, color: this.player.color });
+        if (this.trails.length > 8) this.trails.shift();
+        this.trails.forEach(t => { t.alpha -= 0.04; });
+
         for (let i = this.enemies.length - 1; i >= 0; i--) {
             const e = this.enemies[i];
             if (e.tracker) {
                 const dx = (this.player.x + 15) - (e.x + 12);
                 const dy = (this.player.y + 15) - (e.y + 12);
                 const d  = Math.hypot(dx, dy) || 1;
-                e.x += (dx / d) * e.trackSpeed;
-                e.y += (dy / d) * e.trackSpeed;
+                e.x += (dx / d) * e.trackSpeed; e.y += (dy / d) * e.trackSpeed;
             } else {
                 if (e.zigzag) e.x += Math.sin(e.y * 0.05 + e.phase) * 3;
-                e.x += e.vx || 0;
-                e.y += e.speed;
+                e.x += e.vx || 0; e.y += e.speed;
             }
-
             if (!DevTools.godMode) {
-                if (Math.hypot(this.player.x + 15 - (e.x + 12), this.player.y + 15 - (e.y + 12)) < 26) {
+                if (Math.hypot(this.player.x + 15 - (e.x + 12), this.player.y + 15 - (e.y + 12)) < 24) {
                     this.stop(); return;
                 }
             }
-
-            if (e.y > this.canvas.height + 60 || e.x < -100 || e.x > this.canvas.width + 100) {
-                this.enemies.splice(i, 1);
-                this.score += 10;
-            }
+            if (e.y > H + 60 || e.x < -100 || e.x > W + 100) { this.enemies.splice(i, 1); this.score += 10; }
         }
-        document.getElementById('ui-score').innerText = this.score;
+        document.getElementById('ui-score').innerText = this.score.toLocaleString();
     },
 
     _createEnemy(lvl) {
         return {
             x: Math.random() * this.canvas.width, y: -50,
-            speed:      lvl.speed + (Math.random() * 2 - 1),
-            tracker:    lvl.tracker && Math.random() < 0.4,
+            speed: lvl.speed + (Math.random() * 2 - 1),
+            tracker: lvl.tracker && Math.random() < 0.4,
             trackSpeed: lvl.speed * 0.35,
-            zigzag:     lvl.zigzag && Math.random() < 0.5,
-            phase:      Math.random() * Math.PI * 2,
-            color:      lvl.color || '#ff3838',
-            vx: 0,
-            size: 20 + Math.random() * 10
+            zigzag: lvl.zigzag && Math.random() < 0.5,
+            phase: Math.random() * Math.PI * 2,
+            color: lvl.color || '#ff3838', vx: 0,
+            size: 18 + Math.random() * 10
         };
     },
 
@@ -867,46 +966,54 @@ const Game = {
 
     _announceLevel(name, color, desc) {
         const el = document.getElementById('level-announce');
-        el.style.color = color || '#00f3ff';
-        el.style.opacity = '1';
-        el.style.transform = 'scale(1.2)';
+        el.style.color = color || '#00f3ff'; el.style.opacity = '1'; el.style.transform = 'scale(1.15)';
         el.innerHTML = name + (desc ? `<div class="announce-sub">${desc}</div>` : '');
         clearTimeout(this._announceTO);
-        this._announceTO = setTimeout(() => {
-            el.style.opacity = '0'; el.style.transform = 'scale(1)';
-        }, 2200);
+        this._announceTO = setTimeout(() => { el.style.opacity = '0'; el.style.transform = 'scale(1)'; }, 2200);
     },
 
     draw() {
         const lvl = LevelSystem.getCurrentLevel(this.score);
         const C   = this.ctx;
-
         C.fillStyle = lvl.bgColor || '#050505';
         C.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
+        // Particules de fond
         C.shadowBlur = 0;
         this.bgParticles.forEach(p => {
             C.fillStyle = (lvl.color || '#00f3ff') + '18';
             C.beginPath(); C.arc(p.x, p.y, p.size, 0, Math.PI * 2); C.fill();
         });
 
-        C.shadowBlur = 20; C.shadowColor = this.player.color; C.fillStyle = this.player.color;
+        // Traînées joueur
+        this.trails.forEach(t => {
+            if (t.alpha <= 0) return;
+            C.globalAlpha = t.alpha;
+            C.fillStyle   = t.color;
+            C.shadowBlur  = 8; C.shadowColor = t.color;
+            C.fillRect(t.x - 4, t.y - 4, 8, 8);
+        });
+        C.globalAlpha = 1;
+
+        // Joueur
+        C.shadowBlur = 25; C.shadowColor = this.player.color; C.fillStyle = this.player.color;
         C.fillRect(this.player.x, this.player.y, 30, 30);
-        C.fillStyle = '#ffffff55';
+        C.fillStyle = '#ffffff66';
         C.fillRect(this.player.x + 6, this.player.y + 6, 10, 10);
 
         if (DevTools.godMode) {
             C.strokeStyle = '#ffcc00'; C.lineWidth = 2;
-            C.shadowColor = '#ffcc00'; C.shadowBlur = 10;
-            C.strokeRect(this.player.x - 4, this.player.y - 4, 38, 38);
+            C.shadowColor = '#ffcc00'; C.shadowBlur = 15;
+            C.strokeRect(this.player.x - 5, this.player.y - 5, 40, 40);
         }
 
+        // Ennemis
         this.enemies.forEach(e => {
             const c = e.color || '#ff3838';
-            C.shadowBlur = 14; C.shadowColor = c; C.fillStyle = c;
+            C.shadowBlur = 16; C.shadowColor = c; C.fillStyle = c;
             C.fillRect(e.x, e.y, e.size, e.size);
             if (e.tracker) {
-                C.strokeStyle = '#ffffff88'; C.lineWidth = 1;
+                C.strokeStyle = '#ffffff66'; C.lineWidth = 1;
                 C.strokeRect(e.x - 3, e.y - 3, e.size + 6, e.size + 6);
             }
         });
