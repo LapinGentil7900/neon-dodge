@@ -9,48 +9,31 @@
 </head>
 <body>
 
-<!-- ══════════════════ PARTICULES DE FOND MENU ══════════════════ -->
 <canvas id="bgCanvas"></canvas>
 
-<!-- ══════════════════ MENU PRINCIPAL ══════════════════ -->
+<!-- ══════════════════ MENU ══════════════════ -->
 <div id="layer-menu" class="screen">
     <div id="user-tag" onclick="UI.show('layer-profile')">
         <div id="user-tag-avatar"></div>
         <span id="user-tag-name">Non connecté</span>
     </div>
-
     <div class="menu-logo">
         <h1 class="neon-title" id="main-title" onclick="DevTools.titleClick()">NEON</h1>
         <h1 class="neon-title neon-title-2">DODGE</h1>
         <div class="title-sub">PRO NETWORK v2.0</div>
     </div>
-
     <p id="dev-hint">CLIQUEZ ENCORE... <span id="dev-hint-count">0</span>/5</p>
-
     <div id="menu-hs-block">
         <div class="hs-label">MEILLEUR SCORE</div>
         <div class="hs-value" id="hs-val">0</div>
     </div>
-
     <div class="menu-grid">
-        <button class="btn btn-play" onclick="Game.start()">
-            <span class="btn-icon">▶</span> JOUER
-        </button>
-        <button class="btn btn-blue" onclick="UI.show('layer-shop')">
-            <span class="btn-icon">◈</span> BOUTIQUE
-        </button>
-        <button class="btn btn-blue" onclick="UI.show('layer-lead')">
-            <span class="btn-icon">◉</span> CLASSEMENT
-        </button>
-        <button class="btn btn-blue" onclick="UI.show('layer-profile')">
-            <span class="btn-icon">◎</span> COMPTE
-        </button>
-        <button class="btn btn-blue" onclick="UI.show('layer-stats')">
-            <span class="btn-icon">◈</span> STATS
-        </button>
-        <button class="btn btn-red" onclick="UI.confirmQuit()">
-            <span class="btn-icon">✕</span> QUITTER
-        </button>
+        <button class="btn btn-play" onclick="Game.start()"><span class="btn-icon">▶</span> JOUER</button>
+        <button class="btn btn-blue" onclick="UI.show('layer-shop')"><span class="btn-icon">◈</span> BOUTIQUE</button>
+        <button class="btn btn-blue" onclick="UI.show('layer-lead')"><span class="btn-icon">◉</span> CLASSEMENT</button>
+        <button class="btn btn-blue" onclick="UI.show('layer-profile')"><span class="btn-icon">◎</span> COMPTE</button>
+        <button class="btn btn-blue" onclick="UI.show('layer-stats')"><span class="btn-icon">◈</span> STATS</button>
+        <button class="btn btn-red"  onclick="UI.confirmQuit()"><span class="btn-icon">✕</span> QUITTER</button>
     </div>
 </div>
 
@@ -58,10 +41,7 @@
 <div id="layer-shop" class="screen" style="display:none;">
     <div class="screen-header">
         <h2 class="screen-title">◈ BOUTIQUE</h2>
-        <div class="credits-badge">
-            <span class="credits-icon">◆</span>
-            <span id="shop-credits">0</span> crédits
-        </div>
+        <div class="credits-badge"><span>◆</span><span id="shop-credits">0</span> crédits</div>
     </div>
     <div id="skin-list" class="skin-grid"></div>
     <button class="btn btn-red back-btn" onclick="UI.show('layer-menu')">← RETOUR</button>
@@ -78,24 +58,16 @@
 <div id="layer-profile" class="screen" style="display:none;">
     <div id="profile-connected" style="display:none; flex-direction:column; align-items:center; gap:20px;">
         <div id="profile-avatar-wrap">
-            <img id="profile-avatar" src="" alt="Avatar" style="display:none;">
+            <img id="profile-avatar" src="" alt="" style="display:none;">
             <div id="profile-avatar-fallback">?</div>
             <div class="avatar-ring"></div>
         </div>
         <h2 id="profile-username" class="profile-name">-</h2>
+        <div id="profile-role-badge"></div>
         <div class="profile-stats">
-            <div class="stat-box">
-                <div class="stat-val" id="profile-credits">0</div>
-                <div class="stat-lbl">CRÉDITS</div>
-            </div>
-            <div class="stat-box stat-box-hs">
-                <div class="stat-val" id="profile-hs">0</div>
-                <div class="stat-lbl">HIGH SCORE</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-val stat-val-sm" id="profile-level">-</div>
-                <div class="stat-lbl">NIVEAU MAX</div>
-            </div>
+            <div class="stat-box"><div class="stat-val" id="profile-credits">0</div><div class="stat-lbl">CRÉDITS</div></div>
+            <div class="stat-box stat-box-hs"><div class="stat-val" id="profile-hs">0</div><div class="stat-lbl">HIGH SCORE</div></div>
+            <div class="stat-box"><div class="stat-val stat-val-sm" id="profile-level">-</div><div class="stat-lbl">NIVEAU MAX</div></div>
         </div>
         <button class="btn btn-red" onclick="Auth.logout()">DÉCONNEXION</button>
         <button class="btn back-btn" onclick="UI.show('layer-menu')">← RETOUR</button>
@@ -103,7 +75,7 @@
     <div id="profile-guest" style="display:none; flex-direction:column; align-items:center; gap:16px;">
         <div class="guest-icon">◎</div>
         <h2>TERMINAL OS</h2>
-        <p class="guest-desc">Connecte-toi pour sauvegarder tes scores, acheter des skins et figurer au classement mondial.</p>
+        <p class="guest-desc">Connecte-toi pour sauvegarder tes scores, acheter des skins et figurer au classement.</p>
         <button class="btn btn-play" onclick="UI.show('layer-auth')">CONNEXION</button>
         <button class="btn back-btn" onclick="UI.show('layer-menu')">← RETOUR</button>
     </div>
@@ -116,42 +88,27 @@
         <button id="tab-login"    class="tab-btn tab-active" onclick="Auth.switchTab('login')">CONNEXION</button>
         <button id="tab-register" class="tab-btn"            onclick="Auth.switchTab('register')">INSCRIPTION</button>
     </div>
-
     <div id="form-login" class="auth-form">
-        <div class="input-wrap">
-            <span class="input-icon">◎</span>
-            <input type="text" id="login-user" placeholder="Pseudo" autocomplete="username">
-        </div>
-        <div class="input-wrap">
-            <span class="input-icon">◆</span>
-            <input type="password" id="login-pass" placeholder="Mot de passe" autocomplete="current-password">
-        </div>
+        <div class="input-wrap"><span class="input-icon">◎</span><input type="text" id="login-user" placeholder="Pseudo" autocomplete="username"></div>
+        <div class="input-wrap"><span class="input-icon">◆</span><input type="password" id="login-pass" placeholder="Mot de passe" autocomplete="current-password"></div>
         <div id="login-error" class="form-error"></div>
         <button class="btn btn-play" onclick="Auth.login()">SE CONNECTER</button>
     </div>
-
     <div id="form-register" class="auth-form" style="display:none;">
-        <div class="input-wrap">
-            <span class="input-icon">◎</span>
-            <input type="text" id="reg-user" placeholder="Pseudo (3-20 caractères)" autocomplete="username">
-        </div>
-        <div class="input-wrap">
-            <span class="input-icon">◆</span>
-            <input type="password" id="reg-pass" placeholder="Mot de passe (6+ caractères)" autocomplete="new-password">
-        </div>
+        <div class="input-wrap"><span class="input-icon">◎</span><input type="text" id="reg-user" placeholder="Pseudo (3-20 caractères)" autocomplete="username"></div>
+        <div class="input-wrap"><span class="input-icon">◆</span><input type="password" id="reg-pass" placeholder="Mot de passe (6+ caractères)" autocomplete="new-password"></div>
         <label class="file-label" for="reg-avatar">
             <span id="file-label-text">📷 Photo de profil (optionnel · max 2 Mo)</span>
             <input type="file" id="reg-avatar" accept="image/jpeg,image/png,image/webp" onchange="Auth.previewAvatar(this)">
         </label>
-        <img id="avatar-preview" class="avatar-preview-img" style="display:none;" alt="Aperçu">
+        <img id="avatar-preview" class="avatar-preview-img" style="display:none;" alt="">
         <div id="reg-error" class="form-error"></div>
         <button class="btn btn-play" onclick="Auth.register()">CRÉER LE COMPTE</button>
     </div>
-
     <button class="btn btn-red back-btn" onclick="UI.show('layer-menu')">← RETOUR</button>
 </div>
 
-<!-- ══════════════════ STATISTIQUES ══════════════════ -->
+<!-- ══════════════════ STATS ══════════════════ -->
 <div id="layer-stats" class="screen" style="display:none;">
     <h2 class="screen-title">◈ STATISTIQUES</h2>
     <div id="stats-content" class="stats-grid"></div>
@@ -161,7 +118,6 @@
 <!-- ══════════════════ JEU ══════════════════ -->
 <div id="layer-game" style="display:none; position:relative; width:100%; height:100%;">
     <canvas id="gameCanvas"></canvas>
-
     <div id="hud">
         <div id="score-container">SCORE <span id="ui-score">0</span></div>
         <div id="level-hud">
@@ -172,10 +128,8 @@
         <div id="next-level-bar"><div id="next-level-fill"></div></div>
         <div id="next-level-label"></div>
     </div>
-
     <button id="btn-pause" onclick="Game.togglePause()">⏸</button>
     <div id="level-announce"></div>
-
     <div id="pause-menu" style="display:none;">
         <div class="pause-inner">
             <h2 class="pause-title">⏸ PAUSE</h2>
@@ -199,35 +153,50 @@
     </div>
 </div>
 
-<!-- ══════════════════ CONFIRM QUIT ══════════════════ -->
+<!-- ══════════════════ CONFIRM ══════════════════ -->
 <div id="layer-confirm" class="screen" style="display:none;">
     <h2>QUITTER ?</h2>
-    <p style="color:#888; font-size:12px;">Ta progression locale sera conservée.</p>
+    <p style="color:#888;font-size:12px;">Ta progression locale sera conservée.</p>
     <button class="btn btn-red"  onclick="window.close()">OUI, QUITTER</button>
     <button class="btn btn-blue" onclick="UI.show('layer-menu')">ANNULER</button>
 </div>
 
-<!-- ══════════════════ LEVEL ANNOUNCE ══════════════════ -->
-<div id="level-announce-overlay" style="display:none;"></div>
-
-<!-- ══════════════════ DEV TOOLS SIDEBAR ══════════════════ -->
+<!-- ══════════════════ DEV TOOLS SIDEBAR (toujours présente) ══════════════════ -->
 <div id="devtools-overlay" onclick="DevTools.closeSidebar()"></div>
+
+<!-- Bouton toggle admin toujours visible -->
+<button id="admin-toggle-btn" onclick="DevTools.toggleSidebar()" style="display:none;">
+    ⚙ ADMIN
+</button>
+
 <div id="devtools-sidebar">
     <div class="devtools-header">
-        <span>⚙ DEV TOOLS</span>
+        <div>
+            <div style="font-size:13px; font-weight:700; color:#ffcc00; text-shadow:0 0 10px #ffcc00;">⚙ ADMIN PANEL</div>
+            <div id="dev-admin-name" style="font-size:9px; color:#ffcc0066; margin-top:2px;"></div>
+        </div>
         <button class="devtools-close" onclick="DevTools.closeSidebar()">✕</button>
     </div>
-    <div class="devtools-body">
+
+    <!-- TABS -->
+    <div class="dev-tabs">
+        <button class="dev-tab active" onclick="DevTools.switchTab('tools')" id="dtab-tools">OUTILS</button>
+        <button class="dev-tab" onclick="DevTools.switchTab('users')"  id="dtab-users">JOUEURS</button>
+        <button class="dev-tab" onclick="DevTools.switchTab('stats')"  id="dtab-stats">STATS</button>
+    </div>
+
+    <!-- TAB : OUTILS DEV -->
+    <div id="devpanel-tools" class="devtools-body">
         <div class="dev-section-title">INFORMATIONS</div>
         <div id="dev-info" class="dev-info-block">—</div>
 
-        <div class="dev-section-title">CRÉDITS</div>
+        <div class="dev-section-title">CRÉDITS (LOCAL)</div>
         <div class="dev-row">
             <input type="number" id="dev-credits" value="0">
             <button class="dev-btn" onclick="DevTools.setCredits()">SET</button>
         </div>
 
-        <div class="dev-section-title">HIGH SCORE</div>
+        <div class="dev-section-title">HIGH SCORE (LOCAL)</div>
         <div class="dev-row">
             <input type="number" id="dev-hs" value="0">
             <button class="dev-btn" onclick="DevTools.setHS()">SET</button>
@@ -246,7 +215,27 @@
         <button class="dev-btn dev-btn-full" id="btn-god" onclick="DevTools.toggleGod()">MODE GOD : OFF</button>
 
         <div class="dev-section-title" style="color:#ff4444;">DANGER</div>
-        <button class="dev-btn dev-btn-full dev-btn-red" onclick="DevTools.reset()">⚠ RESET COMPLET</button>
+        <button class="dev-btn dev-btn-full dev-btn-red" onclick="DevTools.reset()">⚠ RESET LOCAL</button>
+    </div>
+
+    <!-- TAB : JOUEURS -->
+    <div id="devpanel-users" class="devtools-body" style="display:none;">
+        <div style="display:flex; gap:6px; margin-bottom:8px;">
+            <input type="text" id="admin-search" placeholder="Rechercher..." style="flex:1; background:#111; border:1px solid #ffcc0033; color:#fff; padding:6px 10px; font-family:Orbitron; font-size:10px; outline:none;" oninput="DevTools.filterUsers()">
+            <button class="dev-btn" onclick="DevTools.loadUsers()">↺</button>
+        </div>
+        <div id="admin-stats-bar" class="admin-stats-bar"></div>
+        <div id="admin-user-list" class="admin-user-list">
+            <div class="loading-text">Clique ↺ pour charger</div>
+        </div>
+    </div>
+
+    <!-- TAB : STATS GLOBALES -->
+    <div id="devpanel-stats" class="devtools-body" style="display:none;">
+        <div id="admin-global-stats" class="admin-global-stats">
+            <div class="loading-text">Chargement...</div>
+        </div>
+        <button class="dev-btn dev-btn-full" onclick="DevTools.loadGlobalStats()" style="margin-top:8px;">↺ ACTUALISER</button>
     </div>
 </div>
 
@@ -255,85 +244,58 @@
 <script>
 
 // ════════════════════════════════════════════════════════════════
-//  BACKGROUND CANVAS ANIMÉ (menu uniquement)
+//  BACKGROUND CANVAS
 // ════════════════════════════════════════════════════════════════
 const BgCanvas = {
     canvas: document.getElementById('bgCanvas'),
-    ctx: null,
-    particles: [],
-    animFrame: null,
-
+    ctx: null, particles: [], animFrame: null,
     init() {
         this.ctx = this.canvas.getContext('2d');
         this.resize();
         window.addEventListener('resize', () => this.resize());
         for (let i = 0; i < 120; i++) {
-            this.particles.push({
-                x: Math.random() * window.innerWidth,
-                y: Math.random() * window.innerHeight,
-                size: Math.random() * 1.5 + 0.2,
-                speed: Math.random() * 0.5 + 0.1,
-                opacity: Math.random() * 0.6 + 0.1,
-                color: Math.random() > 0.7 ? '#ff3838' : '#00f3ff'
-            });
+            this.particles.push({ x: Math.random()*window.innerWidth, y: Math.random()*window.innerHeight, size: Math.random()*1.5+0.2, speed: Math.random()*0.5+0.1, opacity: Math.random()*0.5+0.1, color: Math.random()>0.7?'#ff3838':'#00f3ff' });
         }
         this.loop();
     },
-
-    resize() {
-        this.canvas.width  = window.innerWidth;
-        this.canvas.height = window.innerHeight;
-    },
-
+    resize() { this.canvas.width = window.innerWidth; this.canvas.height = window.innerHeight; },
     loop() {
         const C = this.ctx;
         C.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.particles.forEach(p => {
-            p.y += p.speed;
-            if (p.y > this.canvas.height) { p.y = 0; p.x = Math.random() * this.canvas.width; }
-            C.globalAlpha = p.opacity;
-            C.fillStyle   = p.color;
-            C.shadowBlur  = 6;
-            C.shadowColor = p.color;
-            C.beginPath();
-            C.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-            C.fill();
+            p.y += p.speed; if (p.y > this.canvas.height) { p.y = 0; p.x = Math.random()*this.canvas.width; }
+            C.globalAlpha = p.opacity; C.fillStyle = p.color; C.shadowBlur = 6; C.shadowColor = p.color;
+            C.beginPath(); C.arc(p.x, p.y, p.size, 0, Math.PI*2); C.fill();
         });
-        C.globalAlpha = 1;
-        C.shadowBlur  = 0;
+        C.globalAlpha = 1; C.shadowBlur = 0;
         this.animFrame = requestAnimationFrame(() => this.loop());
     },
-
     show() { this.canvas.style.display = 'block'; },
     hide() { this.canvas.style.display = 'none'; }
 };
 
 // ════════════════════════════════════════════════════════════════
-//  API CLIENT
+//  API
 // ════════════════════════════════════════════════════════════════
 const API = {
     BASE: '/api',
-    _headers(multipart = false) {
+    _headers(multipart=false) {
         const h = {};
         if (Auth.token) h['Authorization'] = 'Bearer ' + Auth.token;
         if (!multipart) h['Content-Type'] = 'application/json';
         return h;
     },
-    async post(path, body, multipart = false) {
-        try {
-            const r = await fetch(this.BASE + path, {
-                method: 'POST',
-                headers: this._headers(multipart),
-                body: multipart ? body : JSON.stringify(body)
-            });
-            return r.json();
-        } catch(e) { return { error: 'Erreur réseau.' }; }
+    async post(path, body, multipart=false) {
+        try { const r = await fetch(this.BASE+path, { method:'POST', headers:this._headers(multipart), body: multipart?body:JSON.stringify(body) }); return r.json(); }
+        catch(e) { return { error: 'Erreur réseau.' }; }
     },
     async get(path) {
-        try {
-            const r = await fetch(this.BASE + path, { headers: this._headers() });
-            return r.json();
-        } catch(e) { return { error: 'Erreur réseau.' }; }
+        try { const r = await fetch(this.BASE+path, { headers:this._headers() }); return r.json(); }
+        catch(e) { return { error: 'Erreur réseau.' }; }
+    },
+    async delete(path, body) {
+        try { const r = await fetch(this.BASE+path, { method:'DELETE', headers:this._headers(), body:JSON.stringify(body) }); return r.json(); }
+        catch(e) { return { error: 'Erreur réseau.' }; }
     }
 };
 
@@ -341,29 +303,25 @@ const API = {
 //  CATALOGUE SKINS
 // ════════════════════════════════════════════════════════════════
 const SKINS_CATALOG = [
-    { id: 'neon_blue', name: 'Neon Blue', color: '#00f3ff', price: 0,     tier: 'FREE'      },
-    { id: 'emerald',   name: 'Emerald',   color: '#00ff88', price: 500,   tier: 'COMMUN'    },
-    { id: 'ruby',      name: 'Ruby',      color: '#ff3838', price: 1500,  tier: 'RARE'      },
-    { id: 'gold',      name: 'Gold',      color: '#ffcc00', price: 3000,  tier: 'ÉPIQUE'    },
-    { id: 'violet',    name: 'Violet',    color: '#cc00ff', price: 5000,  tier: 'ÉPIQUE'    },
-    { id: 'white',     name: 'White',     color: '#ffffff', price: 8000,  tier: 'LÉGENDAIRE'},
-    { id: 'inferno',   name: 'Inferno',   color: '#ff4400', price: 12000, tier: 'LÉGENDAIRE'},
-    { id: 'ghost',     name: 'Ghost',     color: '#aaaaaa', price: 20000, tier: 'MYTHIQUE'  }
+    { id:'neon_blue', name:'Neon Blue', color:'#00f3ff', price:0,     tier:'FREE'       },
+    { id:'emerald',   name:'Emerald',   color:'#00ff88', price:500,   tier:'COMMUN'     },
+    { id:'ruby',      name:'Ruby',      color:'#ff3838', price:1500,  tier:'RARE'       },
+    { id:'gold',      name:'Gold',      color:'#ffcc00', price:3000,  tier:'ÉPIQUE'     },
+    { id:'violet',    name:'Violet',    color:'#cc00ff', price:5000,  tier:'ÉPIQUE'     },
+    { id:'white',     name:'White',     color:'#ffffff', price:8000,  tier:'LÉGENDAIRE' },
+    { id:'inferno',   name:'Inferno',   color:'#ff4400', price:12000, tier:'LÉGENDAIRE' },
+    { id:'ghost',     name:'Ghost',     color:'#aaaaaa', price:20000, tier:'MYTHIQUE'   }
 ];
-
-const TIER_COLORS = {
-    'FREE': '#888', 'COMMUN': '#00ff88', 'RARE': '#0088ff',
-    'ÉPIQUE': '#cc00ff', 'LÉGENDAIRE': '#ffcc00', 'MYTHIQUE': '#ff4400'
-};
+const TIER_COLORS = { 'FREE':'#888','COMMUN':'#00ff88','RARE':'#0088ff','ÉPIQUE':'#cc00ff','LÉGENDAIRE':'#ffcc00','MYTHIQUE':'#ff4400' };
 
 // ════════════════════════════════════════════════════════════════
 //  AUTH
 // ════════════════════════════════════════════════════════════════
-const DEV_USERS = ['dev', 'admin', 'root', 'devmode'];
-
 const Auth = {
     token: localStorage.getItem('nd_token') || null,
     user:  JSON.parse(localStorage.getItem('nd_user') || 'null'),
+
+    isAdmin() { return this.user?.role === 'admin'; },
 
     switchTab(tab) {
         const isLogin = tab === 'login';
@@ -376,93 +334,85 @@ const Auth = {
     },
 
     previewAvatar(input) {
-        const file = input.files[0];
-        if (!file) return;
+        const file = input.files[0]; if (!file) return;
         document.getElementById('file-label-text').innerText = '✅ ' + file.name;
-        const preview = document.getElementById('avatar-preview');
-        preview.src = URL.createObjectURL(file);
-        preview.style.display = 'block';
+        const p = document.getElementById('avatar-preview');
+        p.src = URL.createObjectURL(file); p.style.display = 'block';
     },
 
     async login() {
-        const user  = document.getElementById('login-user').value.trim();
-        const pass  = document.getElementById('login-pass').value;
-        const errEl = document.getElementById('login-error');
-        errEl.innerText = '';
-        if (!user || !pass) { errEl.innerText = 'Remplis tous les champs.'; return; }
+        const user = document.getElementById('login-user').value.trim();
+        const pass = document.getElementById('login-pass').value;
+        const err  = document.getElementById('login-error');
+        err.innerText = '';
+        if (!user || !pass) { err.innerText = 'Remplis tous les champs.'; return; }
         const btn = document.querySelector('#form-login .btn-play');
         btn.innerText = '⟳ CONNEXION...'; btn.disabled = true;
-        const data = await API.post('/auth/login', { username: user, password: pass });
+        const data = await API.post('/auth/login', { username:user, password:pass });
         btn.innerText = 'SE CONNECTER'; btn.disabled = false;
-        if (data.error) { errEl.innerText = data.error; return; }
-        this._saveSession(data);
-        UI.show('layer-menu');
+        if (data.error) { err.innerText = data.error; return; }
+        this._saveSession(data); UI.show('layer-menu');
     },
 
     async register() {
-        const username   = document.getElementById('reg-user').value.trim();
-        const password   = document.getElementById('reg-pass').value;
-        const avatarFile = document.getElementById('reg-avatar').files[0];
-        const errEl      = document.getElementById('reg-error');
-        errEl.innerText = '';
-        if (!username || !password) { errEl.innerText = 'Remplis tous les champs.'; return; }
+        const username = document.getElementById('reg-user').value.trim();
+        const password = document.getElementById('reg-pass').value;
+        const file     = document.getElementById('reg-avatar').files[0];
+        const err      = document.getElementById('reg-error');
+        err.innerText = '';
+        if (!username || !password) { err.innerText = 'Remplis tous les champs.'; return; }
         const btn = document.querySelector('#form-register .btn-play');
         btn.innerText = '⟳ CRÉATION...'; btn.disabled = true;
         const fd = new FormData();
-        fd.append('username', username);
-        fd.append('password', password);
-        if (avatarFile) fd.append('profilePicture', avatarFile);
+        fd.append('username', username); fd.append('password', password);
+        if (file) fd.append('profilePicture', file);
         const data = await API.post('/auth/register', fd, true);
         btn.innerText = 'CRÉER LE COMPTE'; btn.disabled = false;
-        if (data.error) { errEl.innerText = data.error; return; }
-        this._saveSession(data);
-        UI.show('layer-menu');
+        if (data.error) { err.innerText = data.error; return; }
+        this._saveSession(data); UI.show('layer-menu');
     },
 
     _saveSession(data) {
-        this.token = data.token;
-        this.user  = data.user;
+        this.token = data.token; this.user = data.user;
         localStorage.setItem('nd_token', data.token);
         localStorage.setItem('nd_user', JSON.stringify(data.user));
         const equipped = StatsManager.data.equippedSkin;
         const owned    = data.user.unlockedSkins || [];
-        const equippedSkin = SKINS_CATALOG.find(s => s.color === equipped && owned.includes(s.id));
-        if (equippedSkin) Game.player.color = equippedSkin.color;
-        if (DEV_USERS.includes(data.user.displayName?.toLowerCase())) DevTools.openSidebar();
+        const eq = SKINS_CATALOG.find(s => s.color === equipped && owned.includes(s.id));
+        if (eq) Game.player.color = eq.color;
         this._updateUI();
+        // Afficher panel admin si admin
+        if (this.isAdmin()) DevTools.showAdminPanel();
     },
 
     logout() {
         this.token = null; this.user = null;
-        localStorage.removeItem('nd_token');
-        localStorage.removeItem('nd_user');
-        this._updateUI();
-        UI.show('layer-menu');
+        localStorage.removeItem('nd_token'); localStorage.removeItem('nd_user');
+        DevTools.hideAdminPanel();
+        this._updateUI(); UI.show('layer-menu');
     },
 
     async refreshUser() {
         if (!this.token) return;
         const data = await API.get('/auth/me');
         if (data.error) { this.logout(); return; }
-        this.user = data;
-        localStorage.setItem('nd_user', JSON.stringify(data));
+        this.user = data; localStorage.setItem('nd_user', JSON.stringify(data));
         this._updateUI();
     },
 
     _updateUI() {
-        const u         = this.user;
+        const u = this.user;
         const tagName   = document.getElementById('user-tag-name');
         const tagAvatar = document.getElementById('user-tag-avatar');
         const hsEl      = document.getElementById('hs-val');
         if (u) {
-            tagName.innerText = u.displayName;
-            if (u.profilePicture) {
-                tagAvatar.style.backgroundImage = `url(${u.profilePicture})`;
-                tagAvatar.style.display = 'block';
-            } else { tagAvatar.style.display = 'none'; }
+            tagName.innerText = u.role === 'admin' ? '⚙ ' + u.displayName : u.displayName;
+            tagName.style.color = u.role === 'admin' ? '#ffcc00' : '';
+            if (u.profilePicture) { tagAvatar.style.backgroundImage = `url(${u.profilePicture})`; tagAvatar.style.display = 'block'; }
+            else tagAvatar.style.display = 'none';
             if (hsEl) hsEl.innerText = u.highScore.toLocaleString();
         } else {
-            tagName.innerText = 'Non connecté';
+            tagName.innerText = 'Non connecté'; tagName.style.color = '';
             tagAvatar.style.display = 'none';
             if (hsEl) hsEl.innerText = StatsManager.data.highScore.toLocaleString();
         }
@@ -477,8 +427,7 @@ const UI = {
         document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
         const el = document.getElementById(id);
         if (el) { el.style.display = 'flex'; el.classList.add('screen-enter'); setTimeout(() => el.classList.remove('screen-enter'), 400); }
-        if (id === 'layer-menu')    { BgCanvas.show(); this.renderMenu(); }
-        else BgCanvas.hide();
+        if (id === 'layer-menu') { BgCanvas.show(); this.renderMenu(); } else BgCanvas.hide();
         if (id === 'layer-shop')    this.renderShop();
         if (id === 'layer-lead')    this.renderLead();
         if (id === 'layer-stats')   this.renderStats();
@@ -489,7 +438,7 @@ const UI = {
     renderMenu() { Auth._updateUI(); },
 
     async renderShop() {
-        const list   = document.getElementById('skin-list');
+        const list = document.getElementById('skin-list');
         const credEl = document.getElementById('shop-credits');
         list.innerHTML = '<div class="loading-text">⟳ Chargement...</div>';
         let unlockedIds = ['neon_blue'];
@@ -498,8 +447,7 @@ const UI = {
             credEl.innerText = (Auth.user?.credits ?? 0).toLocaleString();
             unlockedIds = Auth.user?.unlockedSkins ?? ['neon_blue'];
         } else {
-            const localColors = StatsManager.data.unlockedSkins || ['#00f3ff'];
-            unlockedIds = SKINS_CATALOG.filter(s => localColors.includes(s.color)).map(s => s.id);
+            unlockedIds = SKINS_CATALOG.filter(s => (StatsManager.data.unlockedSkins||['#00f3ff']).includes(s.color)).map(s => s.id);
             credEl.innerText = StatsManager.data.credits.toLocaleString();
         }
         list.innerHTML = '';
@@ -507,30 +455,22 @@ const UI = {
             const owned    = unlockedIds.includes(s.id);
             const equipped = Game.player.color === s.color;
             const card = document.createElement('div');
-            card.className = 'skin-card' + (owned ? ' skin-unlocked' : '') + (equipped ? ' skin-equipped' : '');
+            card.className = 'skin-card' + (owned?' skin-unlocked':'') + (equipped?' skin-equipped':'');
             card.style.setProperty('--skin-color', s.color);
-            card.style.animationDelay = (idx * 0.05) + 's';
-            const tierColor = TIER_COLORS[s.tier] || '#888';
+            card.style.animationDelay = (idx*0.05)+'s';
+            const tc = TIER_COLORS[s.tier] || '#888';
             card.innerHTML = `
-                <div class="skin-tier" style="color:${tierColor}">${s.tier}</div>
+                <div class="skin-tier" style="color:${tc}">${s.tier}</div>
                 <div class="skin-preview-wrap">
                     <div class="skin-preview" style="background:${s.color};box-shadow:0 0 25px ${s.color}88;"></div>
-                    ${equipped ? '<div class="skin-equipped-badge">✓</div>' : ''}
+                    ${equipped?'<div class="skin-equipped-badge">✓</div>':''}
                 </div>
                 <div class="skin-name">${s.name}</div>
-                <div class="skin-price" style="color:${owned ? '#00ff88' : '#ffcc00'}">
-                    ${owned ? '✓ DÉBLOQUÉ' : (s.price === 0 ? 'GRATUIT' : '◆ ' + s.price.toLocaleString())}
-                </div>
-                <button class="btn-skin-action ${owned ? 'btn-equip' : 'btn-buy'}" ${equipped ? 'disabled' : ''}>
-                    ${equipped ? '✅ ÉQUIPÉ' : owned ? 'ÉQUIPER' : 'ACHETER'}
-                </button>`;
+                <div class="skin-price" style="color:${owned?'#00ff88':'#ffcc00'}">${owned?'✓ DÉBLOQUÉ':s.price===0?'GRATUIT':'◆ '+s.price.toLocaleString()}</div>
+                <button class="btn-skin-action ${owned?'btn-equip':'btn-buy'}" ${equipped?'disabled':''}>${equipped?'✅ ÉQUIPÉ':owned?'ÉQUIPER':'ACHETER'}</button>`;
             card.querySelector('.btn-skin-action').addEventListener('click', async () => {
-                if (owned) {
-                    Game.player.color = s.color;
-                    StatsManager.data.equippedSkin = s.color;
-                    StatsManager.save();
-                    this.renderShop();
-                } else { await this._buySkin(s); }
+                if (owned) { Game.player.color = s.color; StatsManager.data.equippedSkin = s.color; StatsManager.save(); this.renderShop(); }
+                else await this._buySkin(s);
             });
             list.appendChild(card);
         });
@@ -542,41 +482,30 @@ const UI = {
                 StatsManager.data.credits -= s.price;
                 if (!StatsManager.data.unlockedSkins) StatsManager.data.unlockedSkins = ['#00f3ff'];
                 StatsManager.data.unlockedSkins.push(s.color);
-                Game.player.color = s.color;
-                StatsManager.data.equippedSkin = s.color;
-                StatsManager.save();
-                this._toast('Skin déverrouillé !', 'success');
-                this.renderShop();
-            } else { this._toast('Pas assez de crédits !', 'error'); }
+                Game.player.color = s.color; StatsManager.data.equippedSkin = s.color; StatsManager.save();
+                this._toast('Skin déverrouillé !', 'success'); this.renderShop();
+            } else this._toast('Pas assez de crédits !', 'error');
             return;
         }
         const data = await API.post('/shop/buy', { skinId: s.id });
         if (data.error) { this._toast(data.error, 'error'); return; }
-        Auth.user.credits       = data.newCredits;
-        Auth.user.unlockedSkins = data.unlockedSkins;
+        Auth.user.credits = data.newCredits; Auth.user.unlockedSkins = data.unlockedSkins;
         localStorage.setItem('nd_user', JSON.stringify(Auth.user));
-        Game.player.color = s.color;
-        StatsManager.data.equippedSkin = s.color;
-        StatsManager.save();
-        this._toast(data.message, 'success');
-        this.renderShop();
+        Game.player.color = s.color; StatsManager.data.equippedSkin = s.color; StatsManager.save();
+        this._toast(data.message, 'success'); this.renderShop();
     },
 
     async renderLead() {
         const content = document.getElementById('leaderboard-content');
         content.innerHTML = '<div class="loading-text">⟳ CONNEXION AU RÉSEAU...</div>';
         const data = await API.get('/scores/leaderboard');
-        if (data.error || !Array.isArray(data)) {
-            content.innerHTML = '<p class="form-error">Impossible de charger le classement.</p>'; return;
-        }
-        if (!data.length) {
-            content.innerHTML = '<div class="empty-lead">// AUCUN SCORE ENREGISTRÉ<br>Sois le premier !</div>'; return;
-        }
+        if (data.error || !Array.isArray(data)) { content.innerHTML = '<p class="form-error">Impossible de charger.</p>'; return; }
+        if (!data.length) { content.innerHTML = '<div class="empty-lead">// AUCUN SCORE<br>Sois le premier !</div>'; return; }
         content.innerHTML = data.map(e => `
-            <div class="lead-row" style="animation-delay:${e.rank * 0.05}s">
-                <span class="lead-rank ${e.rank <= 3 ? 'lead-rank-top' : ''}">${e.rank <= 3 ? ['🥇','🥈','🥉'][e.rank-1] : e.rank}</span>
-                <div class="lead-avatar" style="${e.avatar ? 'background-image:url('+e.avatar+')' : ''}">
-                    ${!e.avatar ? e.displayName[0].toUpperCase() : ''}
+            <div class="lead-row" style="animation-delay:${e.rank*0.05}s">
+                <span class="lead-rank ${e.rank<=3?'lead-rank-top':''}">${e.rank<=3?['🥇','🥈','🥉'][e.rank-1]:e.rank}</span>
+                <div class="lead-avatar" style="${e.avatar?'background-image:url('+e.avatar+')':''}">
+                    ${!e.avatar?e.displayName[0].toUpperCase():''}
                 </div>
                 <div class="lead-info">
                     <div class="lead-name">${e.displayName}</div>
@@ -587,20 +516,17 @@ const UI = {
     },
 
     renderStats() {
-        const d  = StatsManager.data;
-        const u  = Auth.user;
-        const hs = u ? u.highScore : d.highScore;
-        const cr = u ? u.credits   : d.credits;
-        const skinCount = u ? (u.unlockedSkins?.length ?? 1) : (d.unlockedSkins?.length ?? 1);
+        const d = StatsManager.data, u = Auth.user;
         const rows = [
-            { label: 'Joueur',          value: u ? u.displayName : d.username },
-            { label: 'Meilleur score',  value: hs.toLocaleString() + ' pts' },
-            { label: 'Crédits',         value: '◆ ' + cr.toLocaleString() },
-            { label: 'Parties jouées',  value: d.gamesPlayed || 0 },
-            { label: 'Morts totales',   value: d.deathCount },
-            { label: 'Temps de jeu',    value: StatsManager.getFormattedTime() },
-            { label: 'Meilleur niveau', value: d.bestLevel || 'TUTORIAL' },
-            { label: 'Skins débloqués', value: skinCount + ' / ' + SKINS_CATALOG.length }
+            { label:'Joueur',           value: u?u.displayName:d.username },
+            { label:'Rôle',             value: u?(u.role==='admin'?'⚙ ADMIN':'JOUEUR'):'—' },
+            { label:'Meilleur score',   value: (u?u.highScore:d.highScore).toLocaleString()+' pts' },
+            { label:'Crédits',          value: '◆ '+(u?u.credits:d.credits).toLocaleString() },
+            { label:'Parties jouées',   value: d.gamesPlayed||0 },
+            { label:'Morts totales',    value: d.deathCount },
+            { label:'Temps de jeu',     value: StatsManager.getFormattedTime() },
+            { label:'Meilleur niveau',  value: d.bestLevel||'TUTORIAL' },
+            { label:'Skins débloqués',  value: (u?u.unlockedSkins?.length??1:d.unlockedSkins?.length??1)+' / '+SKINS_CATALOG.length }
         ];
         document.getElementById('stats-content').innerHTML = rows.map(r => `
             <div class="stat-row">
@@ -610,32 +536,31 @@ const UI = {
     },
 
     renderProfile() {
-        const connected = document.getElementById('profile-connected');
-        const guest     = document.getElementById('profile-guest');
+        const conn = document.getElementById('profile-connected');
+        const guest = document.getElementById('profile-guest');
         const u = Auth.user;
         if (u) {
-            connected.style.display = 'flex'; guest.style.display = 'none';
-            const avatar   = document.getElementById('profile-avatar');
-            const fallback = document.getElementById('profile-avatar-fallback');
-            if (u.profilePicture) {
-                avatar.src = u.profilePicture; avatar.style.display = 'block'; fallback.style.display = 'none';
-            } else {
-                avatar.style.display = 'none'; fallback.style.display = 'flex';
-                fallback.innerText = u.displayName[0].toUpperCase();
-            }
+            conn.style.display = 'flex'; guest.style.display = 'none';
+            const av = document.getElementById('profile-avatar');
+            const fb = document.getElementById('profile-avatar-fallback');
+            if (u.profilePicture) { av.src = u.profilePicture; av.style.display = 'block'; fb.style.display = 'none'; }
+            else { av.style.display = 'none'; fb.style.display = 'flex'; fb.innerText = u.displayName[0].toUpperCase(); }
             document.getElementById('profile-username').innerText = u.displayName;
             document.getElementById('profile-credits').innerText  = u.credits.toLocaleString();
             document.getElementById('profile-hs').innerText       = u.highScore.toLocaleString();
             document.getElementById('profile-level').innerText    = u.highScoreLevel || 'TUTORIAL';
-        } else { connected.style.display = 'none'; guest.style.display = 'flex'; }
+            const badge = document.getElementById('profile-role-badge');
+            badge.innerHTML = u.role === 'admin'
+                ? '<div class="role-badge role-admin">⚙ ADMINISTRATEUR</div>'
+                : '<div class="role-badge role-player">◎ JOUEUR</div>';
+        } else { conn.style.display = 'none'; guest.style.display = 'flex'; }
     },
 
     confirmQuit() { this.show('layer-confirm'); },
 
-    _toast(msg, type = 'success') {
+    _toast(msg, type='success') {
         const t = document.createElement('div');
-        t.className = 'toast toast-' + type;
-        t.innerText = msg;
+        t.className = 'toast toast-' + type; t.innerText = msg;
         document.body.appendChild(t);
         setTimeout(() => t.classList.add('toast-show'), 10);
         setTimeout(() => { t.classList.remove('toast-show'); setTimeout(() => t.remove(), 400); }, 3000);
@@ -643,11 +568,15 @@ const UI = {
 };
 
 // ════════════════════════════════════════════════════════════════
-//  DEV TOOLS SIDEBAR
+//  DEV TOOLS + ADMIN PANEL
 // ════════════════════════════════════════════════════════════════
-const DevTools = {
-    godMode: false, _clicks: 0, _clickTimer: null,
+const DEV_USERS = ['dev', 'admin', 'root', 'devmode'];
+let _allUsers = [];
 
+const DevTools = {
+    godMode: false, _clicks: 0, _clickTimer: null, _activeTab: 'tools',
+
+    // ── Accès ──────────────────────────────────────────────────
     titleClick() {
         this._clicks++;
         const hint = document.getElementById('dev-hint');
@@ -655,44 +584,79 @@ const DevTools = {
         document.getElementById('dev-hint-count').innerText = this._clicks;
         clearTimeout(this._clickTimer);
         this._clickTimer = setTimeout(() => { this._clicks = 0; hint.style.display = 'none'; }, 2000);
-        if (this._clicks >= 5) { this._clicks = 0; hint.style.display = 'none'; this.openSidebar(); }
+        if (this._clicks >= 5) { this._clicks = 0; hint.style.display = 'none'; this.toggleSidebar(); }
+    },
+
+    showAdminPanel() {
+        document.getElementById('admin-toggle-btn').style.display = 'flex';
+        document.getElementById('dev-admin-name').innerText = Auth.user?.displayName || '';
+        this.refresh();
+    },
+
+    hideAdminPanel() {
+        document.getElementById('admin-toggle-btn').style.display = 'none';
+        this.closeSidebar();
+    },
+
+    toggleSidebar() {
+        const sidebar = document.getElementById('devtools-sidebar');
+        if (sidebar.classList.contains('open')) this.closeSidebar();
+        else this.openSidebar();
     },
 
     openSidebar() {
         this.refresh();
         document.getElementById('devtools-sidebar').classList.add('open');
         document.getElementById('devtools-overlay').classList.add('active');
+        // Body padding pour ne pas masquer le contenu
+        document.body.classList.add('sidebar-open');
     },
 
     closeSidebar() {
         document.getElementById('devtools-sidebar').classList.remove('open');
         document.getElementById('devtools-overlay').classList.remove('active');
+        document.body.classList.remove('sidebar-open');
     },
 
+    switchTab(tab) {
+        this._activeTab = tab;
+        ['tools','users','stats'].forEach(t => {
+            document.getElementById('dtab-'+t).classList.toggle('active', t===tab);
+            document.getElementById('devpanel-'+t).style.display = t===tab ? 'flex' : 'none';
+        });
+        if (tab === 'users')  this.loadUsers();
+        if (tab === 'stats')  this.loadGlobalStats();
+    },
+
+    // ── Outils dev ─────────────────────────────────────────────
     refresh() {
         const d = StatsManager.data, u = Auth.user;
-        document.getElementById('dev-credits').value = u ? u.credits : d.credits;
-        document.getElementById('dev-hs').value      = u ? u.highScore : d.highScore;
-        document.getElementById('dev-score').value   = Game.running ? Game.score : 0;
-        document.getElementById('btn-god').innerText = this.godMode ? 'MODE GOD : ON ✓' : 'MODE GOD : OFF';
-        document.getElementById('dev-info').innerHTML =
+        const credEl = document.getElementById('dev-credits');
+        const hsEl   = document.getElementById('dev-hs');
+        const scoreEl = document.getElementById('dev-score');
+        const godEl  = document.getElementById('btn-god');
+        if (credEl)  credEl.value  = u ? u.credits : d.credits;
+        if (hsEl)    hsEl.value    = u ? u.highScore : d.highScore;
+        if (scoreEl) scoreEl.value = Game.running ? Game.score : 0;
+        if (godEl)   godEl.innerText = this.godMode ? 'MODE GOD : ON ✓' : 'MODE GOD : OFF';
+        const infoEl = document.getElementById('dev-info');
+        if (infoEl) infoEl.innerHTML =
             `User    : ${u ? u.displayName : d.username}<br>` +
+            `Rôle    : ${u ? u.role.toUpperCase() : '—'}<br>` +
             `Morts   : ${d.deathCount}<br>` +
             `Temps   : ${StatsManager.getFormattedTime()}<br>` +
-            `Parties : ${d.gamesPlayed || 0}<br>` +
+            `Parties : ${d.gamesPlayed||0}<br>` +
             `Auth    : ${Auth.token ? '✅ JWT' : '❌ local'}`;
     },
 
     setCredits() {
-        const v = parseInt(document.getElementById('dev-credits').value);
-        if (isNaN(v)) return;
+        const v = parseInt(document.getElementById('dev-credits').value); if (isNaN(v)) return;
         StatsManager.data.credits = v; StatsManager.save();
         if (Auth.user) { Auth.user.credits = v; localStorage.setItem('nd_user', JSON.stringify(Auth.user)); }
         UI._toast('Crédits mis à jour !', 'success'); this.refresh();
     },
     setHS() {
-        const v = parseInt(document.getElementById('dev-hs').value);
-        if (isNaN(v)) return;
+        const v = parseInt(document.getElementById('dev-hs').value); if (isNaN(v)) return;
         StatsManager.data.highScore = v; StatsManager.save();
         if (Auth.user) { Auth.user.highScore = v; localStorage.setItem('nd_user', JSON.stringify(Auth.user)); }
         UI._toast('High score mis à jour !', 'success'); this.refresh();
@@ -715,6 +679,129 @@ const DevTools = {
         if (!confirm('Vraiment tout réinitialiser ?')) return;
         StatsManager.reset(); this.godMode = false; Auth.logout();
         this.refresh(); UI._toast('Données réinitialisées.', 'success'); this.closeSidebar();
+    },
+
+    // ── Joueurs (admin) ────────────────────────────────────────
+    async loadUsers() {
+        const list = document.getElementById('admin-user-list');
+        list.innerHTML = '<div class="loading-text">⟳ Chargement...</div>';
+        const data = await API.get('/admin/users');
+        if (data.error) { list.innerHTML = `<div class="form-error">${data.error}</div>`; return; }
+        _allUsers = data;
+        this._renderUserStats(data);
+        this._renderUserList(data);
+    },
+
+    filterUsers() {
+        const q = document.getElementById('admin-search').value.toLowerCase();
+        const filtered = _allUsers.filter(u => u.displayName.toLowerCase().includes(q) || u.username.includes(q));
+        this._renderUserList(filtered);
+    },
+
+    _renderUserStats(users) {
+        const bar = document.getElementById('admin-stats-bar');
+        const total  = users.length;
+        const banned = users.filter(u => u.banned).length;
+        const admins = users.filter(u => u.role === 'admin').length;
+        bar.innerHTML = `
+            <div class="admin-stat-pill">${total} <span>joueurs</span></div>
+            <div class="admin-stat-pill pill-red">${banned} <span>bannis</span></div>
+            <div class="admin-stat-pill pill-gold">${admins} <span>admins</span></div>`;
+    },
+
+    _renderUserList(users) {
+        const list = document.getElementById('admin-user-list');
+        if (!users.length) { list.innerHTML = '<div class="loading-text">Aucun résultat</div>'; return; }
+        list.innerHTML = users.map(u => `
+            <div class="admin-user-card ${u.banned?'user-banned':''} ${u.role==='admin'?'user-admin':''}">
+                <div class="admin-user-header">
+                    <div class="admin-user-avatar" style="${u.avatar?'background-image:url('+u.avatar+')':''}">
+                        ${!u.avatar?u.displayName[0].toUpperCase():''}
+                    </div>
+                    <div class="admin-user-info">
+                        <div class="admin-user-name">
+                            ${u.role==='admin'?'⚙ ':''}${u.displayName}
+                            ${u.banned?'<span class="banned-tag">BANNI</span>':''}
+                        </div>
+                        <div class="admin-user-sub">◆${u.credits.toLocaleString()} · ${u.highScore.toLocaleString()} pts · ${u.highScoreLevel}</div>
+                        <div class="admin-user-sub" style="color:#333">${new Date(u.createdAt).toLocaleDateString('fr-FR')}</div>
+                    </div>
+                </div>
+                ${u.banned && u.bannedReason ? `<div class="admin-ban-reason">⚠ ${u.bannedReason}</div>` : ''}
+                <div class="admin-user-actions">
+                    ${u.banned
+                        ? `<button class="dev-btn" onclick="DevTools.unban('${u.id}')">DÉBANNIR</button>`
+                        : u.role!=='admin' ? `<button class="dev-btn dev-btn-red" onclick="DevTools.banUser('${u.id}','${u.displayName}')">BAN</button>` : ''}
+                    ${u.role!=='admin' ? `<button class="dev-btn" onclick="DevTools.kickScore('${u.id}','${u.displayName}')">KICK SCORE</button>` : ''}
+                    <button class="dev-btn" onclick="DevTools.editCredits('${u.id}','${u.displayName}',${u.credits})">CRÉDITS</button>
+                    ${u.role!=='admin'
+                        ? `<button class="dev-btn pill-gold-btn" onclick="DevTools.promoteUser('${u.id}','${u.displayName}','admin')">PROMOUVOIR</button>`
+                        : Auth.user?.id !== u.id ? `<button class="dev-btn" onclick="DevTools.promoteUser('${u.id}','${u.displayName}','player')">RÉTROGRADER</button>` : ''}
+                    ${u.role!=='admin' ? `<button class="dev-btn dev-btn-red" onclick="DevTools.deleteUser('${u.id}','${u.displayName}')">SUPPR.</button>` : ''}
+                </div>
+            </div>`).join('');
+    },
+
+    async banUser(userId, name) {
+        const reason = prompt(`Raison du ban de ${name} :`, 'Violation des règles');
+        if (reason === null) return;
+        const data = await API.post('/admin/ban', { userId, reason });
+        if (data.error) { UI._toast(data.error, 'error'); return; }
+        UI._toast(data.message, 'success'); this.loadUsers();
+    },
+
+    async unban(userId) {
+        const data = await API.post('/admin/unban', { userId });
+        if (data.error) { UI._toast(data.error, 'error'); return; }
+        UI._toast(data.message, 'success'); this.loadUsers();
+    },
+
+    async kickScore(userId, name) {
+        if (!confirm(`Remettre le score de ${name} à zéro ?`)) return;
+        const data = await API.post('/admin/kick-score', { userId });
+        if (data.error) { UI._toast(data.error, 'error'); return; }
+        UI._toast(data.message, 'success'); this.loadUsers();
+    },
+
+    async editCredits(userId, name, current) {
+        const val = prompt(`Nouveaux crédits pour ${name} (actuel: ${current}) :`, current);
+        if (val === null) return;
+        const credits = parseInt(val);
+        if (isNaN(credits) || credits < 0) { UI._toast('Valeur invalide.', 'error'); return; }
+        const data = await API.post('/admin/set-credits', { userId, credits });
+        if (data.error) { UI._toast(data.error, 'error'); return; }
+        UI._toast(data.message, 'success'); this.loadUsers();
+    },
+
+    async promoteUser(userId, name, role) {
+        const label = role === 'admin' ? `Promouvoir ${name} en ADMIN ?` : `Rétrograder ${name} en JOUEUR ?`;
+        if (!confirm(label)) return;
+        const data = await API.post('/admin/promote', { userId, role });
+        if (data.error) { UI._toast(data.error, 'error'); return; }
+        UI._toast(data.message, 'success'); this.loadUsers();
+    },
+
+    async deleteUser(userId, name) {
+        if (!confirm(`⚠ Supprimer DÉFINITIVEMENT le compte de ${name} ? Cette action est irréversible.`)) return;
+        const data = await API.delete('/admin/delete-user', { userId });
+        if (data.error) { UI._toast(data.error, 'error'); return; }
+        UI._toast(data.message, 'success'); this.loadUsers();
+    },
+
+    async loadGlobalStats() {
+        const el = document.getElementById('admin-global-stats');
+        el.innerHTML = '<div class="loading-text">⟳ Chargement...</div>';
+        const data = await API.get('/admin/stats');
+        if (data.error) { el.innerHTML = `<div class="form-error">${data.error}</div>`; return; }
+        el.innerHTML = `
+            <div class="global-stat"><div class="global-stat-val">${data.totalUsers}</div><div class="global-stat-lbl">JOUEURS TOTAL</div></div>
+            <div class="global-stat"><div class="global-stat-val" style="color:#ff4444">${data.totalBanned}</div><div class="global-stat-lbl">BANNIS</div></div>
+            <div class="global-stat"><div class="global-stat-val" style="color:#ffcc00">${data.totalAdmins}</div><div class="global-stat-lbl">ADMINS</div></div>
+            ${data.topScore ? `<div class="global-stat" style="grid-column:1/-1">
+                <div class="global-stat-val" style="color:var(--gold)">${data.topScore.score.toLocaleString()} pts</div>
+                <div class="global-stat-lbl">RECORD · ${data.topScore.name}</div>
+            </div>` : ''}
+        `;
     }
 };
 
@@ -724,9 +811,9 @@ const DevTools = {
 const Game = {
     canvas: document.getElementById('gameCanvas'),
     ctx: null, running: false, paused: false, score: 0,
-    player: { x: 0, y: 0, color: '#00f3ff' },
+    player: { x:0, y:0, color:'#00f3ff' },
     enemies: [], trails: [],
-    currentLevelName: '', burstTimer: 0, glitchTimer: 0, timeTimer: 0,
+    currentLevelName:'', burstTimer:0, glitchTimer:0, timeTimer:0,
     bgParticles: [], animFrame: null,
 
     init() {
@@ -734,21 +821,14 @@ const Game = {
         this.resize();
         StatsManager.init();
         if (StatsManager.data.equippedSkin) this.player.color = StatsManager.data.equippedSkin;
-        for (let i = 0; i < 80; i++) {
-            this.bgParticles.push({
-                x: Math.random() * window.innerWidth,
-                y: Math.random() * window.innerHeight,
-                size: Math.random() * 1.5 + 0.3,
-                speed: Math.random() * 0.4 + 0.1
-            });
-        }
+        for (let i=0; i<80; i++) this.bgParticles.push({ x:Math.random()*window.innerWidth, y:Math.random()*window.innerHeight, size:Math.random()*1.5+0.3, speed:Math.random()*0.4+0.1 });
         window.addEventListener('resize', () => this.resize());
-        window.addEventListener('keydown', (e) => {
-            if ((e.key === 'Escape' || e.key === 'p' || e.key === 'P') && this.running) this.togglePause();
-        });
-        this.canvas.addEventListener('touchmove', (e) => {
-            e.preventDefault(); this.player.x = e.touches[0].clientX - 15;
-        }, { passive: false });
+        window.addEventListener('keydown', (e) => { if ((e.key==='Escape'||e.key==='p'||e.key==='P') && this.running) this.togglePause(); });
+        this.canvas.addEventListener('touchmove', (e) => { e.preventDefault(); this.player.x = e.touches[0].clientX-15; }, { passive:false });
+        // Restaurer session
+        if (Auth.token && Auth.user) {
+            if (Auth.isAdmin()) DevTools.showAdminPanel();
+        }
         Auth._updateUI();
         BgCanvas.init();
     },
@@ -757,267 +837,142 @@ const Game = {
 
     start() {
         if (this.animFrame) cancelAnimationFrame(this.animFrame);
-        this.running = true; this.paused = false; this.score = 0;
-        this.enemies = []; this.trails = [];
-        this.burstTimer = 0; this.glitchTimer = 0; this.timeTimer = 0;
-        this.currentLevelName = '';
-        this.player.x = this.canvas.width / 2 - 15;
-        this.player.y = this.canvas.height - 80;
-        document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
+        this.running=true; this.paused=false; this.score=0;
+        this.enemies=[]; this.trails=[];
+        this.burstTimer=0; this.glitchTimer=0; this.timeTimer=0; this.currentLevelName='';
+        this.player.x = this.canvas.width/2-15; this.player.y = this.canvas.height-80;
+        document.querySelectorAll('.screen').forEach(s => s.style.display='none');
         document.getElementById('layer-game').style.display = 'block';
         document.getElementById('pause-menu').style.display = 'none';
         BgCanvas.hide();
-        StatsManager.data.gamesPlayed = (StatsManager.data.gamesPlayed || 0) + 1;
-        StatsManager.save();
-        window.onmousemove = (ev) => { this.player.x = ev.clientX - 15; };
+        StatsManager.data.gamesPlayed = (StatsManager.data.gamesPlayed||0)+1; StatsManager.save();
+        window.onmousemove = (ev) => { this.player.x = ev.clientX-15; };
         this.loop();
     },
 
     async stop() {
         if (!this.running) return;
-        this.running = false; this.paused = false;
-        window.onmousemove = null;
+        this.running=false; this.paused=false; window.onmousemove=null;
         if (this.animFrame) cancelAnimationFrame(this.animFrame);
-
-        const finalScore = this.score;
-        const lvl = LevelSystem.getCurrentLevel(finalScore);
-        const lvlName = lvl.name;
-
+        const fs = this.score, lvl = LevelSystem.getCurrentLevel(fs), lvlName = lvl.name;
         StatsManager.data.deathCount++;
-        const isNewLocal = finalScore > StatsManager.data.highScore;
-        if (isNewLocal) { StatsManager.data.highScore = finalScore; StatsManager.data.bestLevel = lvlName; }
+        const isNewLocal = fs > StatsManager.data.highScore;
+        if (isNewLocal) { StatsManager.data.highScore=fs; StatsManager.data.bestLevel=lvlName; }
         StatsManager.save();
-
-        let creditsEarned = Math.floor(finalScore / 10);
-        let isNewHs = isNewLocal;
-
+        let creditsEarned = Math.floor(fs/10), isNewHs = isNewLocal;
         if (Auth.token) {
-            const res = await API.post('/scores/submit', { score: finalScore, level: lvlName });
+            const res = await API.post('/scores/submit', { score:fs, level:lvlName });
             if (!res.error) {
-                creditsEarned = res.creditsEarned; isNewHs = res.isNewHighScore;
-                Auth.user.credits = res.newCredits; Auth.user.highScore = res.highScore;
-                if (isNewHs) Auth.user.highScoreLevel = lvlName;
+                creditsEarned=res.creditsEarned; isNewHs=res.isNewHighScore;
+                Auth.user.credits=res.newCredits; Auth.user.highScore=res.highScore;
+                if (isNewHs) Auth.user.highScoreLevel=lvlName;
                 localStorage.setItem('nd_user', JSON.stringify(Auth.user));
             }
-        } else {
-            StatsManager.data.credits += creditsEarned; StatsManager.save();
-        }
+        } else { StatsManager.data.credits+=creditsEarned; StatsManager.save(); }
 
-        // Affichage Game Over amélioré
-        document.getElementById('layer-game').style.display  = 'none';
-        document.getElementById('layer-death').style.display = 'flex';
+        document.getElementById('layer-game').style.display='none';
+        document.getElementById('layer-death').style.display='flex';
         BgCanvas.show();
-
-        const tier = LevelSystem.getTierName(finalScore);
         document.getElementById('death-stats').innerHTML = `
-            <div class="death-score">${finalScore.toLocaleString()}</div>
+            <div class="death-score">${fs.toLocaleString()}</div>
             <div class="death-score-label">POINTS</div>
             <div class="death-info-grid">
-                <div class="death-info-item">
-                    <div class="death-info-val" style="color:${lvl.color}">${lvlName}</div>
-                    <div class="death-info-lbl">NIVEAU ATTEINT</div>
-                </div>
-                <div class="death-info-item">
-                    <div class="death-info-val" style="color:#ffcc00">+${creditsEarned.toLocaleString()}</div>
-                    <div class="death-info-lbl">CRÉDITS</div>
-                </div>
-                <div class="death-info-item">
-                    <div class="death-info-val">${tier}</div>
-                    <div class="death-info-lbl">TIER</div>
-                </div>
+                <div class="death-info-item"><div class="death-info-val" style="color:${lvl.color}">${lvlName}</div><div class="death-info-lbl">NIVEAU</div></div>
+                <div class="death-info-item"><div class="death-info-val" style="color:#ffcc00">+${creditsEarned.toLocaleString()}</div><div class="death-info-lbl">CRÉDITS</div></div>
+                <div class="death-info-item"><div class="death-info-val">${LevelSystem.getTierName(fs)}</div><div class="death-info-lbl">TIER</div></div>
             </div>
-            ${isNewHs ? '<div class="new-record">🏆 NOUVEAU RECORD !</div>' : ''}
-            ${!Auth.token ? '<div class="death-login-hint">Connecte-toi pour sauvegarder ton score !</div>' : ''}
-        `;
-
-        // Animation glitch sur le titre GAME OVER
-        const glitch = document.getElementById('death-glitch-text');
-        let count = 0;
-        const glitchInterval = setInterval(() => {
-            glitch.style.transform = `translate(${(Math.random()-0.5)*6}px, ${(Math.random()-0.5)*6}px)`;
-            glitch.style.opacity = Math.random() > 0.3 ? '0.5' : '0';
-            if (++count > 12) { clearInterval(glitchInterval); glitch.style.transform = ''; glitch.style.opacity = '0.15'; }
+            ${isNewHs?'<div class="new-record">🏆 NOUVEAU RECORD !</div>':''}
+            ${!Auth.token?'<div class="death-login-hint">Connecte-toi pour sauvegarder !</div>':''}`;
+        const gl = document.getElementById('death-glitch-text');
+        let c=0; const gi = setInterval(() => {
+            gl.style.transform=`translate(${(Math.random()-.5)*6}px,${(Math.random()-.5)*6}px)`;
+            gl.style.opacity=Math.random()>.3?'0.5':'0';
+            if(++c>12){clearInterval(gi);gl.style.transform='';gl.style.opacity='0.15';}
         }, 80);
     },
 
     quit() {
-        if (this.running) {
-            StatsManager.data.credits += Math.floor(this.score / 10);
-            if (this.score > StatsManager.data.highScore) StatsManager.data.highScore = this.score;
-            StatsManager.save();
-        }
-        this.running = false; this.paused = false;
-        if (this.animFrame) cancelAnimationFrame(this.animFrame);
-        window.onmousemove = null;
-        document.getElementById('layer-game').style.display = 'none';
-        document.getElementById('pause-menu').style.display = 'none';
+        if (this.running) { StatsManager.data.credits+=Math.floor(this.score/10); if(this.score>StatsManager.data.highScore)StatsManager.data.highScore=this.score; StatsManager.save(); }
+        this.running=false; this.paused=false;
+        if(this.animFrame)cancelAnimationFrame(this.animFrame);
+        window.onmousemove=null;
+        document.getElementById('layer-game').style.display='none';
+        document.getElementById('pause-menu').style.display='none';
         UI.show('layer-menu');
     },
 
     togglePause() {
-        if (!this.running && !this.paused) return;
-        this.paused = !this.paused;
-        document.getElementById('pause-menu').style.display = this.paused ? 'flex' : 'none';
-        document.getElementById('btn-pause').innerText = this.paused ? '▶' : '⏸';
-        document.getElementById('pause-score-info').innerText = `Score : ${this.score.toLocaleString()} pts`;
-        if (!this.paused) this.loop();
+        if(!this.running&&!this.paused)return;
+        this.paused=!this.paused;
+        document.getElementById('pause-menu').style.display=this.paused?'flex':'none';
+        document.getElementById('btn-pause').innerText=this.paused?'▶':'⏸';
+        document.getElementById('pause-score-info').innerText=`Score : ${this.score.toLocaleString()} pts`;
+        if(!this.paused)this.loop();
     },
 
-    loop() {
-        if (!this.running || this.paused) return;
-        this.update(); this.draw();
-        this.animFrame = requestAnimationFrame(() => this.loop());
-    },
+    loop() { if(!this.running||this.paused)return; this.update(); this.draw(); this.animFrame=requestAnimationFrame(()=>this.loop()); },
 
     update() {
         const lvl = LevelSystem.getCurrentLevel(this.score);
-        if (lvl.name !== this.currentLevelName) {
-            this.currentLevelName = lvl.name;
-            document.getElementById('ui-level-name').innerText   = lvl.name;
-            document.getElementById('ui-level-name').style.color = lvl.color || '#00f3ff';
-            document.getElementById('ui-level-desc').innerText   = lvl.description || '';
-            document.getElementById('ui-tier').innerText         = LevelSystem.getTierName(this.score);
-            this._announceLevel(lvl.name, lvl.color, lvl.description);
-            if (this.score > 0) StatsManager.data.bestLevel = lvl.name;
+        if (lvl.name!==this.currentLevelName) {
+            this.currentLevelName=lvl.name;
+            document.getElementById('ui-level-name').innerText=lvl.name;
+            document.getElementById('ui-level-name').style.color=lvl.color||'#00f3ff';
+            document.getElementById('ui-level-desc').innerText=lvl.description||'';
+            document.getElementById('ui-tier').innerText=LevelSystem.getTierName(this.score);
+            this._announceLevel(lvl.name,lvl.color,lvl.description);
+            if(this.score>0)StatsManager.data.bestLevel=lvl.name;
         }
-
-        const next = LevelSystem.getNextLevel(this.score);
-        if (next) {
-            const pct = Math.min(100, ((this.score - lvl.scoreReq) / (next.scoreReq - lvl.scoreReq)) * 100);
-            document.getElementById('next-level-fill').style.width      = pct + '%';
-            document.getElementById('next-level-fill').style.background = lvl.color || '#00f3ff';
-            document.getElementById('next-level-label').innerText = `→ ${next.name} dans ${(next.scoreReq - this.score).toLocaleString()} pts`;
-        } else {
-            document.getElementById('next-level-fill').style.width = '100%';
-            document.getElementById('next-level-label').innerText  = '∞ MAX NIVEAU';
+        const next=LevelSystem.getNextLevel(this.score);
+        if(next){
+            const pct=Math.min(100,((this.score-lvl.scoreReq)/(next.scoreReq-lvl.scoreReq))*100);
+            document.getElementById('next-level-fill').style.width=pct+'%';
+            document.getElementById('next-level-fill').style.background=lvl.color||'#00f3ff';
+            document.getElementById('next-level-label').innerText=`→ ${next.name} dans ${(next.scoreReq-this.score).toLocaleString()} pts`;
+        } else { document.getElementById('next-level-fill').style.width='100%'; document.getElementById('next-level-label').innerText='∞ MAX NIVEAU'; }
+        if(Math.random()<lvl.rate)this._spawnEnemy(lvl);
+        if(lvl.burst){this.burstTimer++;if(this.burstTimer>=90){this.burstTimer=0;for(let i=0;i<5;i++)setTimeout(()=>{if(this.running&&!this.paused)this._spawnEnemy(lvl);},i*80);}}
+        if(lvl.glitch){this.glitchTimer++;if(this.glitchTimer>=160){this.glitchTimer=0;this.canvas.style.filter=`hue-rotate(${Math.random()*360}deg) brightness(2)`;setTimeout(()=>{this.canvas.style.filter='';},120);for(let a=0;a<6;a++){const angle=(a/6)*Math.PI*2;const e=this._createEnemy(lvl);e.x=this.canvas.width/2+Math.cos(angle)*250;e.y=-30;e.vx=Math.cos(angle)*2;this.enemies.push(e);}}}
+        this.timeTimer++;if(this.timeTimer>=60){this.timeTimer=0;StatsManager.incrementTime();}
+        const W=this.canvas.width,H=this.canvas.height;
+        this.bgParticles.forEach(p=>{p.y+=p.speed;if(p.y>H){p.y=0;p.x=Math.random()*W;}});
+        this.trails.push({x:this.player.x+15,y:this.player.y+15,alpha:0.4,color:this.player.color});
+        if(this.trails.length>8)this.trails.shift();
+        this.trails.forEach(t=>{t.alpha-=0.04;});
+        for(let i=this.enemies.length-1;i>=0;i--){
+            const e=this.enemies[i];
+            if(e.tracker){const dx=(this.player.x+15)-(e.x+12);const dy=(this.player.y+15)-(e.y+12);const d=Math.hypot(dx,dy)||1;e.x+=(dx/d)*e.trackSpeed;e.y+=(dy/d)*e.trackSpeed;}
+            else{if(e.zigzag)e.x+=Math.sin(e.y*0.05+e.phase)*3;e.x+=e.vx||0;e.y+=e.speed;}
+            if(!DevTools.godMode){if(Math.hypot(this.player.x+15-(e.x+12),this.player.y+15-(e.y+12))<24){this.stop();return;}}
+            if(e.y>H+60||e.x<-100||e.x>W+100){this.enemies.splice(i,1);this.score+=10;}
         }
-
-        if (Math.random() < lvl.rate) this._spawnEnemy(lvl);
-
-        if (lvl.burst) {
-            this.burstTimer++;
-            if (this.burstTimer >= 90) {
-                this.burstTimer = 0;
-                for (let i = 0; i < 5; i++) setTimeout(() => { if (this.running && !this.paused) this._spawnEnemy(lvl); }, i * 80);
-            }
-        }
-
-        if (lvl.glitch) {
-            this.glitchTimer++;
-            if (this.glitchTimer >= 160) {
-                this.glitchTimer = 0;
-                this.canvas.style.filter = `hue-rotate(${Math.random()*360}deg) brightness(2)`;
-                setTimeout(() => { this.canvas.style.filter = ''; }, 120);
-                for (let a = 0; a < 6; a++) {
-                    const angle = (a / 6) * Math.PI * 2;
-                    const e = this._createEnemy(lvl);
-                    e.x = this.canvas.width / 2 + Math.cos(angle) * 250; e.y = -30;
-                    e.vx = Math.cos(angle) * 2; this.enemies.push(e);
-                }
-            }
-        }
-
-        this.timeTimer++;
-        if (this.timeTimer >= 60) { this.timeTimer = 0; StatsManager.incrementTime(); }
-
-        const W = this.canvas.width, H = this.canvas.height;
-        this.bgParticles.forEach(p => { p.y += p.speed; if (p.y > H) { p.y = 0; p.x = Math.random() * W; } });
-
-        // Traînées du joueur
-        this.trails.push({ x: this.player.x + 15, y: this.player.y + 15, alpha: 0.4, color: this.player.color });
-        if (this.trails.length > 8) this.trails.shift();
-        this.trails.forEach(t => { t.alpha -= 0.04; });
-
-        for (let i = this.enemies.length - 1; i >= 0; i--) {
-            const e = this.enemies[i];
-            if (e.tracker) {
-                const dx = (this.player.x + 15) - (e.x + 12);
-                const dy = (this.player.y + 15) - (e.y + 12);
-                const d  = Math.hypot(dx, dy) || 1;
-                e.x += (dx / d) * e.trackSpeed; e.y += (dy / d) * e.trackSpeed;
-            } else {
-                if (e.zigzag) e.x += Math.sin(e.y * 0.05 + e.phase) * 3;
-                e.x += e.vx || 0; e.y += e.speed;
-            }
-            if (!DevTools.godMode) {
-                if (Math.hypot(this.player.x + 15 - (e.x + 12), this.player.y + 15 - (e.y + 12)) < 24) {
-                    this.stop(); return;
-                }
-            }
-            if (e.y > H + 60 || e.x < -100 || e.x > W + 100) { this.enemies.splice(i, 1); this.score += 10; }
-        }
-        document.getElementById('ui-score').innerText = this.score.toLocaleString();
+        document.getElementById('ui-score').innerText=this.score.toLocaleString();
     },
 
-    _createEnemy(lvl) {
-        return {
-            x: Math.random() * this.canvas.width, y: -50,
-            speed: lvl.speed + (Math.random() * 2 - 1),
-            tracker: lvl.tracker && Math.random() < 0.4,
-            trackSpeed: lvl.speed * 0.35,
-            zigzag: lvl.zigzag && Math.random() < 0.5,
-            phase: Math.random() * Math.PI * 2,
-            color: lvl.color || '#ff3838', vx: 0,
-            size: 18 + Math.random() * 10
-        };
-    },
+    _createEnemy(lvl){return{x:Math.random()*this.canvas.width,y:-50,speed:lvl.speed+(Math.random()*2-1),tracker:lvl.tracker&&Math.random()<0.4,trackSpeed:lvl.speed*0.35,zigzag:lvl.zigzag&&Math.random()<0.5,phase:Math.random()*Math.PI*2,color:lvl.color||'#ff3838',vx:0,size:18+Math.random()*10};},
+    _spawnEnemy(lvl){this.enemies.push(this._createEnemy(lvl));},
 
-    _spawnEnemy(lvl) { this.enemies.push(this._createEnemy(lvl)); },
-
-    _announceLevel(name, color, desc) {
-        const el = document.getElementById('level-announce');
-        el.style.color = color || '#00f3ff'; el.style.opacity = '1'; el.style.transform = 'scale(1.15)';
-        el.innerHTML = name + (desc ? `<div class="announce-sub">${desc}</div>` : '');
+    _announceLevel(name,color,desc){
+        const el=document.getElementById('level-announce');
+        el.style.color=color||'#00f3ff';el.style.opacity='1';el.style.transform='scale(1.15)';
+        el.innerHTML=name+(desc?`<div class="announce-sub">${desc}</div>`:'');
         clearTimeout(this._announceTO);
-        this._announceTO = setTimeout(() => { el.style.opacity = '0'; el.style.transform = 'scale(1)'; }, 2200);
+        this._announceTO=setTimeout(()=>{el.style.opacity='0';el.style.transform='scale(1)';},2200);
     },
 
-    draw() {
-        const lvl = LevelSystem.getCurrentLevel(this.score);
-        const C   = this.ctx;
-        C.fillStyle = lvl.bgColor || '#050505';
-        C.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-        // Particules de fond
-        C.shadowBlur = 0;
-        this.bgParticles.forEach(p => {
-            C.fillStyle = (lvl.color || '#00f3ff') + '18';
-            C.beginPath(); C.arc(p.x, p.y, p.size, 0, Math.PI * 2); C.fill();
-        });
-
-        // Traînées joueur
-        this.trails.forEach(t => {
-            if (t.alpha <= 0) return;
-            C.globalAlpha = t.alpha;
-            C.fillStyle   = t.color;
-            C.shadowBlur  = 8; C.shadowColor = t.color;
-            C.fillRect(t.x - 4, t.y - 4, 8, 8);
-        });
-        C.globalAlpha = 1;
-
-        // Joueur
-        C.shadowBlur = 25; C.shadowColor = this.player.color; C.fillStyle = this.player.color;
-        C.fillRect(this.player.x, this.player.y, 30, 30);
-        C.fillStyle = '#ffffff66';
-        C.fillRect(this.player.x + 6, this.player.y + 6, 10, 10);
-
-        if (DevTools.godMode) {
-            C.strokeStyle = '#ffcc00'; C.lineWidth = 2;
-            C.shadowColor = '#ffcc00'; C.shadowBlur = 15;
-            C.strokeRect(this.player.x - 5, this.player.y - 5, 40, 40);
-        }
-
-        // Ennemis
-        this.enemies.forEach(e => {
-            const c = e.color || '#ff3838';
-            C.shadowBlur = 16; C.shadowColor = c; C.fillStyle = c;
-            C.fillRect(e.x, e.y, e.size, e.size);
-            if (e.tracker) {
-                C.strokeStyle = '#ffffff66'; C.lineWidth = 1;
-                C.strokeRect(e.x - 3, e.y - 3, e.size + 6, e.size + 6);
-            }
-        });
-        C.shadowBlur = 0;
+    draw(){
+        const lvl=LevelSystem.getCurrentLevel(this.score),C=this.ctx;
+        C.fillStyle=lvl.bgColor||'#050505';C.fillRect(0,0,this.canvas.width,this.canvas.height);
+        C.shadowBlur=0;
+        this.bgParticles.forEach(p=>{C.fillStyle=(lvl.color||'#00f3ff')+'18';C.beginPath();C.arc(p.x,p.y,p.size,0,Math.PI*2);C.fill();});
+        this.trails.forEach(t=>{if(t.alpha<=0)return;C.globalAlpha=t.alpha;C.fillStyle=t.color;C.shadowBlur=8;C.shadowColor=t.color;C.fillRect(t.x-4,t.y-4,8,8);});
+        C.globalAlpha=1;
+        C.shadowBlur=25;C.shadowColor=this.player.color;C.fillStyle=this.player.color;
+        C.fillRect(this.player.x,this.player.y,30,30);
+        C.fillStyle='#ffffff66';C.fillRect(this.player.x+6,this.player.y+6,10,10);
+        if(DevTools.godMode){C.strokeStyle='#ffcc00';C.lineWidth=2;C.shadowColor='#ffcc00';C.shadowBlur=15;C.strokeRect(this.player.x-5,this.player.y-5,40,40);}
+        this.enemies.forEach(e=>{const c=e.color||'#ff3838';C.shadowBlur=16;C.shadowColor=c;C.fillStyle=c;C.fillRect(e.x,e.y,e.size,e.size);if(e.tracker){C.strokeStyle='#ffffff66';C.lineWidth=1;C.strokeRect(e.x-3,e.y-3,e.size+6,e.size+6);}});
+        C.shadowBlur=0;
     }
 };
 
