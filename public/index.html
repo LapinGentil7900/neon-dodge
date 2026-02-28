@@ -72,8 +72,7 @@
         <button class="btn back-btn" onclick="UI.show('layer-menu')">← RETOUR</button>
     </div>
     <div id="profile-guest" style="display:none;flex-direction:column;align-items:center;gap:16px;">
-        <div class="guest-icon">◎</div>
-        <h2>TERMINAL OS</h2>
+        <div class="guest-icon">◎</div><h2>TERMINAL OS</h2>
         <p class="guest-desc">Connecte-toi pour sauvegarder tes scores.</p>
         <button class="btn btn-play" onclick="UI.show('layer-auth')">CONNEXION</button>
         <button class="btn back-btn" onclick="UI.show('layer-menu')">← RETOUR</button>
@@ -94,12 +93,9 @@
         <button class="btn btn-play" onclick="Auth.login()">SE CONNECTER</button>
     </div>
     <div id="form-register" class="auth-form" style="display:none;">
-        <div class="input-wrap"><span class="input-icon">◎</span><input type="text" id="reg-user" placeholder="Pseudo (3-20 caractères)"></div>
+        <div class="input-wrap"><span class="input-icon">◎</span><input type="text" id="reg-user" placeholder="Pseudo (3-20 car.)"></div>
         <div class="input-wrap"><span class="input-icon">◆</span><input type="password" id="reg-pass" placeholder="Mot de passe (6+)"></div>
-        <label class="file-label" for="reg-avatar">
-            <span id="file-label-text">📷 Photo de profil (optionnel)</span>
-            <input type="file" id="reg-avatar" accept="image/jpeg,image/png,image/webp" onchange="Auth.previewAvatar(this)">
-        </label>
+        <label class="file-label" for="reg-avatar"><span id="file-label-text">📷 Photo de profil (optionnel)</span><input type="file" id="reg-avatar" accept="image/jpeg,image/png,image/webp" onchange="Auth.previewAvatar(this)"></label>
         <img id="avatar-preview" class="avatar-preview-img" style="display:none;" alt="">
         <div id="reg-error" class="form-error"></div>
         <button class="btn btn-play" onclick="Auth.register()">CRÉER LE COMPTE</button>
@@ -119,19 +115,15 @@
     <canvas id="gameCanvas"></canvas>
     <div id="hud">
         <div id="score-container">SCORE <span id="ui-score">0</span></div>
-        <div id="level-hud">
-            <span id="ui-level-name">TUTORIAL</span>
-            <span id="ui-level-desc"></span>
-        </div>
+        <div id="level-hud"><span id="ui-level-name">TUTORIAL</span><span id="ui-level-desc"></span></div>
         <div id="ui-tier"></div>
         <div id="next-level-bar"><div id="next-level-fill"></div></div>
         <div id="next-level-label"></div>
     </div>
-    <!-- Indicateurs de bonus actifs -->
     <div id="bonus-hud">
-        <div id="bonus-shield"  class="bonus-indicator" style="display:none;">🛡 BOUCLIER</div>
-        <div id="bonus-slow"    class="bonus-indicator" style="display:none;">⚡ SLOW</div>
-        <div id="bonus-magnet"  class="bonus-indicator" style="display:none;">🧲 AIMANT</div>
+        <div id="bonus-shield" class="bonus-indicator" style="display:none;">🛡 BOUCLIER</div>
+        <div id="bonus-slow"   class="bonus-indicator" style="display:none;">⚡ SLOW</div>
+        <div id="bonus-magnet" class="bonus-indicator" style="display:none;">🧲 AIMANT</div>
     </div>
     <button id="btn-pause" onclick="Game.togglePause()">⏸</button>
     <div id="level-announce"></div>
@@ -148,7 +140,7 @@
 <!-- ══ GAME OVER ══ -->
 <div id="layer-death" class="screen" style="display:none;">
     <div class="death-container">
-        <div class="death-glitch" id="death-glitch-text">GAME OVER</div>
+        <div class="death-glitch">GAME OVER</div>
         <h2 class="death-title">GAME OVER</h2>
         <div id="death-stats" class="death-stats-wrap"></div>
         <div class="death-actions">
@@ -165,58 +157,129 @@
     <button class="btn btn-blue" onclick="UI.show('layer-menu')">ANNULER</button>
 </div>
 
-<!-- ══ ADMIN BUTTON + SIDEBAR ══ -->
-<div id="devtools-overlay" onclick="DevTools.closeSidebar()"></div>
-<button id="admin-toggle-btn" onclick="DevTools.toggleSidebar()" style="display:none;">⚙ ADMIN</button>
+<!-- ══════════════════════════════════════════════════
+     ADMIN PANEL — bouton fixe + sidebar complète
+══════════════════════════════════════════════════ -->
+<div id="devtools-overlay" onclick="Admin.close()"></div>
+<button id="admin-toggle-btn" onclick="Admin.toggle()" style="display:none;">⚙ ADMIN</button>
 
-<div id="devtools-sidebar">
-    <div class="devtools-header">
+<div id="admin-panel">
+    <!-- HEADER -->
+    <div class="ap-header">
         <div>
-            <div style="font-size:13px;font-weight:700;color:#ffcc00;text-shadow:0 0 10px #ffcc00;">⚙ ADMIN PANEL</div>
-            <div id="dev-admin-name" style="font-size:9px;color:#ffcc0066;margin-top:2px;"></div>
+            <div class="ap-title">⚙ ADMIN PANEL</div>
+            <div id="ap-username" class="ap-sub"></div>
         </div>
-        <button class="devtools-close" onclick="DevTools.closeSidebar()">✕</button>
-    </div>
-    <div class="dev-tabs">
-        <button class="dev-tab active" onclick="DevTools.switchTab('tools')" id="dtab-tools">OUTILS</button>
-        <button class="dev-tab" onclick="DevTools.switchTab('users')" id="dtab-users">JOUEURS</button>
-        <button class="dev-tab" onclick="DevTools.switchTab('stats')" id="dtab-stats">STATS</button>
+        <button class="ap-close" onclick="Admin.close()">✕</button>
     </div>
 
-    <!-- OUTILS -->
-    <div id="devpanel-tools" class="devtools-body">
-        <div class="dev-section-title">INFOS</div>
-        <div id="dev-info" class="dev-info-block">—</div>
-        <div class="dev-section-title">CRÉDITS</div>
-        <div class="dev-row"><input type="number" id="dev-credits" value="0"><button class="dev-btn" onclick="DevTools.setCredits()">SET</button></div>
-        <div class="dev-section-title">HIGH SCORE</div>
-        <div class="dev-row"><input type="number" id="dev-hs" value="0"><button class="dev-btn" onclick="DevTools.setHS()">SET</button></div>
-        <div class="dev-section-title">SCORE EN JEU</div>
-        <div class="dev-row"><input type="number" id="dev-score" value="0"><button class="dev-btn" onclick="DevTools.setScore()">SET</button></div>
-        <div class="dev-section-title">SKINS</div>
-        <button class="dev-btn dev-btn-full" onclick="DevTools.unlockAll()">DÉBLOQUER TOUS</button>
-        <div class="dev-section-title">INVINCIBILITÉ</div>
-        <button class="dev-btn dev-btn-full" id="btn-god" onclick="DevTools.toggleGod()">MODE GOD : OFF</button>
-        <div class="dev-section-title" style="color:#ff4444;">DANGER</div>
-        <button class="dev-btn dev-btn-full dev-btn-red" onclick="DevTools.reset()">⚠ RESET LOCAL</button>
+    <!-- TABS -->
+    <div class="ap-tabs">
+        <button class="ap-tab active" onclick="Admin.tab('joueurs')"  id="aptab-joueurs">👥 JOUEURS</button>
+        <button class="ap-tab"        onclick="Admin.tab('classement')" id="aptab-classement">🏆 CLASSEMENT</button>
+        <button class="ap-tab"        onclick="Admin.tab('jeu')"      id="aptab-jeu">🎮 JEU</button>
+        <button class="ap-tab"        onclick="Admin.tab('stats')"    id="aptab-stats">📊 STATS</button>
     </div>
 
-    <!-- JOUEURS -->
-    <div id="devpanel-users" class="devtools-body" style="display:none;">
-        <div style="display:flex;gap:6px;margin-bottom:8px;">
-            <input type="text" id="admin-search" placeholder="Rechercher..." oninput="DevTools.filterUsers()">
-            <button class="dev-btn" onclick="DevTools.loadUsers()">↺</button>
+    <!-- ═══ TAB JOUEURS ═══ -->
+    <div id="ap-joueurs" class="ap-body">
+        <div class="ap-search-row">
+            <input type="text" id="ap-search" placeholder="🔍 Rechercher un joueur..." oninput="Admin.filter()">
+            <button class="ap-btn ap-btn-gold" onclick="Admin.loadUsers()">↺</button>
         </div>
-        <div id="admin-stats-bar" class="admin-stats-bar"></div>
-        <div id="admin-user-list" class="admin-user-list">
-            <div class="loading-text">Clique ↺ pour charger</div>
+        <div id="ap-user-pills" class="ap-pills"></div>
+        <div id="ap-user-list" class="ap-list">
+            <div class="ap-empty">Clique ↺ pour charger les joueurs</div>
         </div>
     </div>
 
-    <!-- STATS GLOBALES -->
-    <div id="devpanel-stats" class="devtools-body" style="display:none;">
-        <div id="admin-global-stats" class="admin-global-stats"><div class="loading-text">Clique Actualiser</div></div>
-        <button class="dev-btn dev-btn-full" onclick="DevTools.loadGlobalStats()" style="margin-top:8px;">↺ ACTUALISER</button>
+    <!-- ═══ TAB CLASSEMENT ═══ -->
+    <div id="ap-classement" class="ap-body" style="display:none;">
+        <div class="ap-section-title">CLASSEMENT ACTUEL</div>
+        <div class="ap-row">
+            <button class="ap-btn ap-btn-gold" onclick="Admin.loadLeaderboard()">↺ ACTUALISER</button>
+            <button class="ap-btn ap-btn-red" onclick="Admin.resetLeaderboard()">⚠ TOUT RESET</button>
+        </div>
+        <div id="ap-lead-list" class="ap-list">
+            <div class="ap-empty">Clique ↺ pour charger</div>
+        </div>
+    </div>
+
+    <!-- ═══ TAB JEU ═══ -->
+    <div id="ap-jeu" class="ap-body" style="display:none;">
+        <!-- Vitesse globale -->
+        <div class="ap-section-title">⚡ VITESSE GLOBALE</div>
+        <div class="ap-row">
+            <span class="ap-val-label">×<span id="ap-speed-val">1.0</span></span>
+            <input type="range" id="ap-speed" min="0.1" max="5" step="0.1" value="1" oninput="Admin.setSpeed()" class="ap-slider">
+        </div>
+        <div class="ap-row" style="gap:6px;">
+            <button class="ap-btn" onclick="Admin.speedPreset(0.3)">0.3× 🐢</button>
+            <button class="ap-btn" onclick="Admin.speedPreset(1)">1× ⚖</button>
+            <button class="ap-btn" onclick="Admin.speedPreset(2)">2× ⚡</button>
+            <button class="ap-btn ap-btn-red" onclick="Admin.speedPreset(5)">5× 💀</button>
+        </div>
+
+        <!-- Taux d'apparition -->
+        <div class="ap-section-title">👾 TAUX ENNEMIS</div>
+        <div class="ap-row">
+            <span class="ap-val-label">×<span id="ap-rate-val">1.0</span></span>
+            <input type="range" id="ap-rate" min="0" max="5" step="0.1" value="1" oninput="Admin.setRate()" class="ap-slider">
+        </div>
+        <div class="ap-row" style="gap:6px;">
+            <button class="ap-btn" onclick="Admin.ratePreset(0)">0 (STOP)</button>
+            <button class="ap-btn" onclick="Admin.ratePreset(1)">Normal</button>
+            <button class="ap-btn ap-btn-red" onclick="Admin.ratePreset(5)">FLOOD</button>
+        </div>
+
+        <!-- Spawn manuel -->
+        <div class="ap-section-title">💥 SPAWN MANUEL</div>
+        <div class="ap-row" style="gap:6px;flex-wrap:wrap;">
+            <button class="ap-btn" onclick="Admin.spawnEnemy('normal',1)">+1 Normal</button>
+            <button class="ap-btn" onclick="Admin.spawnEnemy('normal',5)">+5 Normal</button>
+            <button class="ap-btn ap-btn-red" onclick="Admin.spawnEnemy('tracker',3)">+3 Tracker</button>
+            <button class="ap-btn ap-btn-red" onclick="Admin.spawnEnemy('tracker',10)">+10 Tracker</button>
+            <button class="ap-btn" onclick="Admin.spawnEnemy('zigzag',5)">+5 Zigzag</button>
+            <button class="ap-btn ap-btn-gold" onclick="Admin.spawnCircle()">Cercle ×8</button>
+        </div>
+
+        <!-- Bonus forcés -->
+        <div class="ap-section-title">🎁 ACTIVER BONUS</div>
+        <div class="ap-row" style="gap:6px;flex-wrap:wrap;">
+            <button class="ap-btn" onclick="Admin.forceBonus('shield')">🛡 Bouclier</button>
+            <button class="ap-btn" onclick="Admin.forceBonus('slow')">⚡ Slow</button>
+            <button class="ap-btn" onclick="Admin.forceBonus('magnet')">🧲 Aimant</button>
+            <button class="ap-btn ap-btn-gold" onclick="Admin.forceBonus('all')">Tous</button>
+        </div>
+
+        <!-- Score en jeu -->
+        <div class="ap-section-title">🎯 SCORE EN JEU</div>
+        <div class="ap-row">
+            <input type="number" id="ap-score-set" value="0" class="ap-input">
+            <button class="ap-btn ap-btn-gold" onclick="Admin.setGameScore()">SET</button>
+        </div>
+
+        <!-- Game over forcé -->
+        <div class="ap-section-title">💀 CONTRÔLES</div>
+        <div class="ap-row" style="gap:6px;">
+            <button class="ap-btn ap-btn-red" onclick="Admin.forceGameOver()">GAME OVER</button>
+            <button class="ap-btn" id="ap-god-btn" onclick="Admin.toggleGod()">GOD : OFF</button>
+        </div>
+
+        <!-- Crédits locaux -->
+        <div class="ap-section-title">◆ CRÉDITS LOCAUX</div>
+        <div class="ap-row">
+            <input type="number" id="ap-credits-local" value="0" class="ap-input">
+            <button class="ap-btn ap-btn-gold" onclick="Admin.setLocalCredits()">SET</button>
+        </div>
+    </div>
+
+    <!-- ═══ TAB STATS ═══ -->
+    <div id="ap-stats" class="ap-body" style="display:none;">
+        <div id="ap-global-stats" class="ap-global-stats">
+            <div class="ap-empty">Chargement...</div>
+        </div>
+        <button class="ap-btn ap-btn-gold" onclick="Admin.loadGlobalStats()" style="width:100%;margin-top:8px;">↺ ACTUALISER</button>
     </div>
 </div>
 
@@ -224,37 +287,43 @@
 <script src="stats_manager.js"></script>
 <script>
 
-// ════════════════ BG CANVAS ════════════════
+// ════════════════════════════════════════
+//  BG CANVAS
+// ════════════════════════════════════════
 const BgCanvas = {
-    canvas: document.getElementById('bgCanvas'), ctx: null, particles: [], animFrame: null,
+    canvas:document.getElementById('bgCanvas'), ctx:null, particles:[], animFrame:null,
     init() {
-        this.ctx = this.canvas.getContext('2d'); this.resize();
-        window.addEventListener('resize', () => this.resize());
-        for (let i=0;i<120;i++) this.particles.push({x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,size:Math.random()*1.5+0.2,speed:Math.random()*0.5+0.1,opacity:Math.random()*0.5+0.1,color:Math.random()>0.7?'#ff3838':'#00f3ff'});
+        this.ctx=this.canvas.getContext('2d'); this.resize();
+        window.addEventListener('resize',()=>this.resize());
+        for(let i=0;i<120;i++) this.particles.push({x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,size:Math.random()*1.5+0.2,speed:Math.random()*0.5+0.1,opacity:Math.random()*0.5+0.1,color:Math.random()>.7?'#ff3838':'#00f3ff'});
         this.loop();
     },
-    resize() { this.canvas.width=window.innerWidth; this.canvas.height=window.innerHeight; },
-    loop() {
+    resize(){this.canvas.width=window.innerWidth;this.canvas.height=window.innerHeight;},
+    loop(){
         const C=this.ctx; C.clearRect(0,0,this.canvas.width,this.canvas.height);
         this.particles.forEach(p=>{p.y+=p.speed;if(p.y>this.canvas.height){p.y=0;p.x=Math.random()*this.canvas.width;}C.globalAlpha=p.opacity;C.fillStyle=p.color;C.shadowBlur=6;C.shadowColor=p.color;C.beginPath();C.arc(p.x,p.y,p.size,0,Math.PI*2);C.fill();});
         C.globalAlpha=1;C.shadowBlur=0;
         this.animFrame=requestAnimationFrame(()=>this.loop());
     },
-    show() { this.canvas.style.display='block'; },
-    hide() { this.canvas.style.display='none'; }
+    show(){this.canvas.style.display='block';},
+    hide(){this.canvas.style.display='none';}
 };
 
-// ════════════════ API ════════════════
+// ════════════════════════════════════════
+//  API
+// ════════════════════════════════════════
 const API = {
     BASE:'/api',
     _h(mp=false){const h={};if(Auth.token)h['Authorization']='Bearer '+Auth.token;if(!mp)h['Content-Type']='application/json';return h;},
-    async post(p,b,mp=false){try{const r=await fetch(this.BASE+p,{method:'POST',headers:this._h(mp),body:mp?b:JSON.stringify(b)});return r.json();}catch(e){return{error:'Erreur réseau'};}},
-    async get(p){try{const r=await fetch(this.BASE+p,{headers:this._h()});return r.json();}catch(e){return{error:'Erreur réseau'};}},
-    async del(p,b){try{const r=await fetch(this.BASE+p,{method:'DELETE',headers:this._h(),body:JSON.stringify(b)});return r.json();}catch(e){return{error:'Erreur réseau'};}}
+    async post(p,b,mp=false){try{const r=await fetch(this.BASE+p,{method:'POST',headers:this._h(mp),body:mp?b:JSON.stringify(b)});return r.json();}catch{return{error:'Erreur réseau'};}},
+    async get(p){try{const r=await fetch(this.BASE+p,{headers:this._h()});return r.json();}catch{return{error:'Erreur réseau'};}},
+    async del(p,b){try{const r=await fetch(this.BASE+p,{method:'DELETE',headers:this._h(),body:JSON.stringify(b)});return r.json();}catch{return{error:'Erreur réseau'};}}
 };
 
-// ════════════════ SKINS ════════════════
-const SKINS_CATALOG = [
+// ════════════════════════════════════════
+//  SKINS
+// ════════════════════════════════════════
+const SKINS = [
     {id:'neon_blue',name:'Neon Blue',color:'#00f3ff',price:0,    tier:'FREE'},
     {id:'emerald',  name:'Emerald',  color:'#00ff88',price:500,  tier:'COMMUN'},
     {id:'ruby',     name:'Ruby',     color:'#ff3838',price:1500, tier:'RARE'},
@@ -266,11 +335,13 @@ const SKINS_CATALOG = [
 ];
 const TIER_COLORS={'FREE':'#888','COMMUN':'#00ff88','RARE':'#0088ff','ÉPIQUE':'#cc00ff','LÉGENDAIRE':'#ffcc00','MYTHIQUE':'#ff4400'};
 
-// ════════════════ AUTH ════════════════
+// ════════════════════════════════════════
+//  AUTH
+// ════════════════════════════════════════
 const Auth = {
-    token: localStorage.getItem('nd_token')||null,
-    user:  JSON.parse(localStorage.getItem('nd_user')||'null'),
-    isAdmin(){ return this.user?.role==='admin'; },
+    token:localStorage.getItem('nd_token')||null,
+    user:JSON.parse(localStorage.getItem('nd_user')||'null'),
+    isAdmin(){return this.user?.role==='admin';},
     switchTab(t){
         const il=t==='login';
         document.getElementById('form-login').style.display=il?'flex':'none';
@@ -280,11 +351,7 @@ const Auth = {
         document.getElementById('login-error').innerText='';
         document.getElementById('reg-error').innerText='';
     },
-    previewAvatar(input){
-        const f=input.files[0];if(!f)return;
-        document.getElementById('file-label-text').innerText='✅ '+f.name;
-        const p=document.getElementById('avatar-preview');p.src=URL.createObjectURL(f);p.style.display='block';
-    },
+    previewAvatar(input){const f=input.files[0];if(!f)return;document.getElementById('file-label-text').innerText='✅ '+f.name;const p=document.getElementById('avatar-preview');p.src=URL.createObjectURL(f);p.style.display='block';},
     async login(){
         const u=document.getElementById('login-user').value.trim(),p=document.getElementById('login-pass').value;
         const err=document.getElementById('login-error');err.innerText='';
@@ -310,15 +377,14 @@ const Auth = {
     _save(d){
         this.token=d.token;this.user=d.user;
         localStorage.setItem('nd_token',d.token);localStorage.setItem('nd_user',JSON.stringify(d.user));
-        const eq=SKINS_CATALOG.find(s=>s.color===StatsManager.data.equippedSkin&&(d.user.unlockedSkins||[]).includes(s.id));
+        const eq=SKINS.find(s=>s.color===StatsManager.data.equippedSkin&&(d.user.unlockedSkins||[]).includes(s.id));
         if(eq)Game.player.color=eq.color;
-        this._ui();
-        if(this.isAdmin())DevTools.showAdminPanel();
+        this._ui();if(this.isAdmin())Admin.show();
     },
     logout(){
         this.token=null;this.user=null;
         localStorage.removeItem('nd_token');localStorage.removeItem('nd_user');
-        DevTools.hideAdminPanel();this._ui();UI.show('layer-menu');
+        Admin.hide();this._ui();UI.show('layer-menu');
     },
     async refresh(){
         if(!this.token)return;
@@ -329,19 +395,14 @@ const Auth = {
     _ui(){
         const u=this.user;
         const tn=document.getElementById('user-tag-name'),ta=document.getElementById('user-tag-avatar'),hs=document.getElementById('hs-val');
-        if(u){
-            tn.innerText=u.role==='admin'?'⚙ '+u.displayName:u.displayName;
-            tn.style.color=u.role==='admin'?'#ffcc00':'';
-            if(u.profilePicture){ta.style.backgroundImage=`url(${u.profilePicture})`;ta.style.display='block';}else ta.style.display='none';
-            if(hs)hs.innerText=u.highScore.toLocaleString();
-        } else {
-            tn.innerText='Non connecté';tn.style.color='';ta.style.display='none';
-            if(hs)hs.innerText=StatsManager.data.highScore.toLocaleString();
-        }
+        if(u){tn.innerText=u.role==='admin'?'⚙ '+u.displayName:u.displayName;tn.style.color=u.role==='admin'?'#ffcc00':'';if(u.profilePicture){ta.style.backgroundImage=`url(${u.profilePicture})`;ta.style.display='block';}else ta.style.display='none';if(hs)hs.innerText=u.highScore.toLocaleString();}
+        else{tn.innerText='Non connecté';tn.style.color='';ta.style.display='none';if(hs)hs.innerText=StatsManager.data.highScore.toLocaleString();}
     }
 };
 
-// ════════════════ UI ════════════════
+// ════════════════════════════════════════
+//  UI
+// ════════════════════════════════════════
 const UI = {
     show(id){
         document.querySelectorAll('.screen').forEach(s=>s.style.display='none');
@@ -359,13 +420,13 @@ const UI = {
         list.innerHTML='<div class="loading-text">⟳ Chargement...</div>';
         let uids=['neon_blue'];
         if(Auth.token){await Auth.refresh();credEl.innerText=(Auth.user?.credits??0).toLocaleString();uids=Auth.user?.unlockedSkins??['neon_blue'];}
-        else{uids=SKINS_CATALOG.filter(s=>(StatsManager.data.unlockedSkins||['#00f3ff']).includes(s.color)).map(s=>s.id);credEl.innerText=StatsManager.data.credits.toLocaleString();}
+        else{uids=SKINS.filter(s=>(StatsManager.data.unlockedSkins||['#00f3ff']).includes(s.color)).map(s=>s.id);credEl.innerText=StatsManager.data.credits.toLocaleString();}
         list.innerHTML='';
-        SKINS_CATALOG.forEach((s,i)=>{
+        SKINS.forEach((s,i)=>{
             const owned=uids.includes(s.id),eq=Game.player.color===s.color;
             const card=document.createElement('div');
             card.className='skin-card'+(owned?' skin-unlocked':'')+(eq?' skin-equipped':'');
-            card.style.setProperty('--skin-color',s.color);card.style.animationDelay=(i*0.05)+'s';
+            card.style.setProperty('--skin-color',s.color);card.style.animationDelay=(i*.05)+'s';
             const tc=TIER_COLORS[s.tier]||'#888';
             card.innerHTML=`<div class="skin-tier" style="color:${tc}">${s.tier}</div><div class="skin-preview-wrap"><div class="skin-preview" style="background:${s.color};box-shadow:0 0 25px ${s.color}88;"></div>${eq?'<div class="skin-equipped-badge">✓</div>':''}</div><div class="skin-name">${s.name}</div><div class="skin-price" style="color:${owned?'#00ff88':'#ffcc00'}">${owned?'✓ DÉBLOQUÉ':s.price===0?'GRATUIT':'◆ '+s.price.toLocaleString()}</div><button class="btn-skin-action ${owned?'btn-equip':'btn-buy'}" ${eq?'disabled':''}>${eq?'✅ ÉQUIPÉ':owned?'ÉQUIPER':'ACHETER'}</button>`;
             card.querySelector('.btn-skin-action').addEventListener('click',async()=>{
@@ -377,284 +438,404 @@ const UI = {
     },
     async _buy(s){
         if(!Auth.token){
-            if(StatsManager.data.credits>=s.price){StatsManager.data.credits-=s.price;if(!StatsManager.data.unlockedSkins)StatsManager.data.unlockedSkins=['#00f3ff'];StatsManager.data.unlockedSkins.push(s.color);Game.player.color=s.color;StatsManager.data.equippedSkin=s.color;StatsManager.save();this.toast('Skin déverrouillé !','success');this.renderShop();}
-            else this.toast('Pas assez de crédits !','error');return;
+            if(StatsManager.data.credits>=s.price){StatsManager.data.credits-=s.price;if(!StatsManager.data.unlockedSkins)StatsManager.data.unlockedSkins=['#00f3ff'];StatsManager.data.unlockedSkins.push(s.color);Game.player.color=s.color;StatsManager.data.equippedSkin=s.color;StatsManager.save();toast('Skin déverrouillé !','success');this.renderShop();}
+            else toast('Pas assez de crédits !','error');return;
         }
         const d=await API.post('/shop/buy',{skinId:s.id});
-        if(d.error){this.toast(d.error,'error');return;}
+        if(d.error){toast(d.error,'error');return;}
         Auth.user.credits=d.newCredits;Auth.user.unlockedSkins=d.unlockedSkins;localStorage.setItem('nd_user',JSON.stringify(Auth.user));
         Game.player.color=s.color;StatsManager.data.equippedSkin=s.color;StatsManager.save();
-        this.toast(d.message,'success');this.renderShop();
+        toast(d.message,'success');this.renderShop();
     },
     async renderLead(){
         const c=document.getElementById('leaderboard-content');
         c.innerHTML='<div class="loading-text">⟳ CONNEXION...</div>';
         const d=await API.get('/scores/leaderboard');
         if(d.error||!Array.isArray(d)){c.innerHTML='<p class="form-error">Impossible de charger.</p>';return;}
-        if(!d.length){c.innerHTML='<div class="empty-lead">// AUCUN SCORE<br>Sois le premier !</div>';return;}
-        c.innerHTML=d.map(e=>`<div class="lead-row" style="animation-delay:${e.rank*0.05}s"><span class="lead-rank ${e.rank<=3?'lead-rank-top':''}">${e.rank<=3?['🥇','🥈','🥉'][e.rank-1]:e.rank}</span><div class="lead-avatar" style="${e.avatar?'background-image:url('+e.avatar+')':''}">${!e.avatar?e.displayName[0].toUpperCase():''}</div><div class="lead-info"><div class="lead-name">${e.displayName}</div><div class="lead-level">${e.level}</div></div><div class="lead-score">${e.score.toLocaleString()} <span style="font-size:9px;opacity:.5">pts</span></div></div>`).join('');
+        if(!d.length){c.innerHTML='<div class="empty-lead">// AUCUN SCORE</div>';return;}
+        c.innerHTML=d.map(e=>`<div class="lead-row" style="animation-delay:${e.rank*.05}s"><span class="lead-rank ${e.rank<=3?'lead-rank-top':''}">${e.rank<=3?['🥇','🥈','🥉'][e.rank-1]:e.rank}</span><div class="lead-avatar" style="${e.avatar?'background-image:url('+e.avatar+')':''}">${!e.avatar?e.displayName[0].toUpperCase():''}</div><div class="lead-info"><div class="lead-name">${e.displayName}</div><div class="lead-level">${e.level}</div></div><div class="lead-score">${e.score.toLocaleString()} <span style="font-size:9px;opacity:.5">pts</span></div></div>`).join('');
     },
     renderStats(){
         const d=StatsManager.data,u=Auth.user;
-        const rows=[
-            {label:'Joueur',          value:u?u.displayName:d.username},
-            {label:'Rôle',            value:u?(u.role==='admin'?'⚙ ADMIN':'JOUEUR'):'—'},
-            {label:'Meilleur score',  value:(u?u.highScore:d.highScore).toLocaleString()+' pts'},
-            {label:'Crédits',         value:'◆ '+(u?u.credits:d.credits).toLocaleString()},
-            {label:'Parties jouées',  value:d.gamesPlayed||0},
-            {label:'Morts totales',   value:d.deathCount},
-            {label:'Temps de jeu',    value:StatsManager.getFormattedTime()},
-            {label:'Meilleur niveau', value:d.bestLevel||'TUTORIAL'},
-            {label:'Skins débloqués', value:(u?u.unlockedSkins?.length??1:d.unlockedSkins?.length??1)+' / '+SKINS_CATALOG.length}
-        ];
+        const rows=[{label:'Joueur',value:u?u.displayName:d.username},{label:'Rôle',value:u?(u.role==='admin'?'⚙ ADMIN':'JOUEUR'):'—'},{label:'Meilleur score',value:(u?u.highScore:d.highScore).toLocaleString()+' pts'},{label:'Crédits',value:'◆ '+(u?u.credits:d.credits).toLocaleString()},{label:'Parties jouées',value:d.gamesPlayed||0},{label:'Morts totales',value:d.deathCount},{label:'Temps de jeu',value:StatsManager.getFormattedTime()},{label:'Meilleur niveau',value:d.bestLevel||'TUTORIAL'},{label:'Skins débloqués',value:(u?u.unlockedSkins?.length??1:d.unlockedSkins?.length??1)+' / '+SKINS.length}];
         document.getElementById('stats-content').innerHTML=rows.map(r=>`<div class="stat-row"><span class="stat-row-label">${r.label}</span><span class="stat-row-value">${r.value}</span></div>`).join('');
     },
     renderProfile(){
         const conn=document.getElementById('profile-connected'),guest=document.getElementById('profile-guest'),u=Auth.user;
-        if(u){
-            conn.style.display='flex';guest.style.display='none';
-            const av=document.getElementById('profile-avatar'),fb=document.getElementById('profile-avatar-fallback');
-            if(u.profilePicture){av.src=u.profilePicture;av.style.display='block';fb.style.display='none';}
-            else{av.style.display='none';fb.style.display='flex';fb.innerText=u.displayName[0].toUpperCase();}
-            document.getElementById('profile-username').innerText=u.displayName;
-            document.getElementById('profile-credits').innerText=u.credits.toLocaleString();
-            document.getElementById('profile-hs').innerText=u.highScore.toLocaleString();
-            document.getElementById('profile-level').innerText=u.highScoreLevel||'TUTORIAL';
-            document.getElementById('profile-role-badge').innerHTML=u.role==='admin'?'<div class="role-badge role-admin">⚙ ADMINISTRATEUR</div>':'<div class="role-badge role-player">◎ JOUEUR</div>';
-        } else{conn.style.display='none';guest.style.display='flex';}
+        if(u){conn.style.display='flex';guest.style.display='none';const av=document.getElementById('profile-avatar'),fb=document.getElementById('profile-avatar-fallback');if(u.profilePicture){av.src=u.profilePicture;av.style.display='block';fb.style.display='none';}else{av.style.display='none';fb.style.display='flex';fb.innerText=u.displayName[0].toUpperCase();}document.getElementById('profile-username').innerText=u.displayName;document.getElementById('profile-credits').innerText=u.credits.toLocaleString();document.getElementById('profile-hs').innerText=u.highScore.toLocaleString();document.getElementById('profile-level').innerText=u.highScoreLevel||'TUTORIAL';document.getElementById('profile-role-badge').innerHTML=u.role==='admin'?'<div class="role-badge role-admin">⚙ ADMINISTRATEUR</div>':'<div class="role-badge role-player">◎ JOUEUR</div>';}
+        else{conn.style.display='none';guest.style.display='flex';}
     },
-    confirmQuit(){this.show('layer-confirm');},
-    toast(msg,type='success'){
-        const t=document.createElement('div');t.className='toast toast-'+type;t.innerText=msg;
-        document.body.appendChild(t);setTimeout(()=>t.classList.add('toast-show'),10);
-        setTimeout(()=>{t.classList.remove('toast-show');setTimeout(()=>t.remove(),400);},3000);
-    }
+    confirmQuit(){this.show('layer-confirm');}
 };
 
-// ════════════════ DEV TOOLS / ADMIN ════════════════
-let _allUsers=[];
+// ════════════════════════════════════════
+//  TOAST
+// ════════════════════════════════════════
+function toast(msg,type='success'){
+    const t=document.createElement('div');t.className='toast toast-'+type;t.innerText=msg;
+    document.body.appendChild(t);setTimeout(()=>t.classList.add('toast-show'),10);
+    setTimeout(()=>{t.classList.remove('toast-show');setTimeout(()=>t.remove(),400);},3000);
+}
+
+// ════════════════════════════════════════
+//  DEV TOOLS (accès clandestin)
+// ════════════════════════════════════════
 const DevTools={
-    godMode:false,_clicks:0,_ct:null,
+    _clicks:0,_ct:null,
     titleClick(){
         this._clicks++;const h=document.getElementById('dev-hint');h.style.display='block';
         document.getElementById('dev-hint-count').innerText=this._clicks;
         clearTimeout(this._ct);this._ct=setTimeout(()=>{this._clicks=0;h.style.display='none';},2000);
-        if(this._clicks>=5){this._clicks=0;h.style.display='none';this.toggleSidebar();}
-    },
-    showAdminPanel(){document.getElementById('admin-toggle-btn').style.display='flex';document.getElementById('dev-admin-name').innerText=Auth.user?.displayName||'';this.refresh();},
-    hideAdminPanel(){document.getElementById('admin-toggle-btn').style.display='none';this.closeSidebar();},
-    toggleSidebar(){const s=document.getElementById('devtools-sidebar');s.classList.contains('open')?this.closeSidebar():this.openSidebar();},
-    openSidebar(){this.refresh();document.getElementById('devtools-sidebar').classList.add('open');document.getElementById('devtools-overlay').classList.add('active');},
-    closeSidebar(){document.getElementById('devtools-sidebar').classList.remove('open');document.getElementById('devtools-overlay').classList.remove('active');},
-    switchTab(tab){
-        ['tools','users','stats'].forEach(t=>{
-            document.getElementById('dtab-'+t).classList.toggle('active',t===tab);
-            document.getElementById('devpanel-'+t).style.display=t===tab?'flex':'none';
-        });
-        if(tab==='users')this.loadUsers();
-        if(tab==='stats')this.loadGlobalStats();
-    },
-    refresh(){
-        const d=StatsManager.data,u=Auth.user;
-        const ce=document.getElementById('dev-credits'),he=document.getElementById('dev-hs'),se=document.getElementById('dev-score'),ge=document.getElementById('btn-god'),ie=document.getElementById('dev-info');
-        if(ce)ce.value=u?u.credits:d.credits;
-        if(he)he.value=u?u.highScore:d.highScore;
-        if(se)se.value=Game.running?Game.score:0;
-        if(ge)ge.innerText=this.godMode?'MODE GOD : ON ✓':'MODE GOD : OFF';
-        if(ie)ie.innerHTML=`User: ${u?u.displayName:d.username}<br>Rôle: ${u?u.role.toUpperCase():'—'}<br>Morts: ${d.deathCount}<br>Temps: ${StatsManager.getFormattedTime()}<br>Auth: ${Auth.token?'✅ JWT':'❌ local'}`;
-    },
-    setCredits(){const v=parseInt(document.getElementById('dev-credits').value);if(isNaN(v))return;StatsManager.data.credits=v;StatsManager.save();if(Auth.user){Auth.user.credits=v;localStorage.setItem('nd_user',JSON.stringify(Auth.user));}UI.toast('Crédits mis à jour !','success');this.refresh();},
-    setHS(){const v=parseInt(document.getElementById('dev-hs').value);if(isNaN(v))return;StatsManager.data.highScore=v;StatsManager.save();if(Auth.user){Auth.user.highScore=v;localStorage.setItem('nd_user',JSON.stringify(Auth.user));}UI.toast('High score mis à jour !','success');this.refresh();},
-    setScore(){const v=parseInt(document.getElementById('dev-score').value);if(!isNaN(v)&&Game.running)Game.score=v;else if(!Game.running)UI.toast("Lance une partie d'abord !","error");},
-    unlockAll(){StatsManager.data.unlockedSkins=SKINS_CATALOG.map(s=>s.color);StatsManager.save();if(Auth.user){Auth.user.unlockedSkins=SKINS_CATALOG.map(s=>s.id);localStorage.setItem('nd_user',JSON.stringify(Auth.user));}UI.toast('Tous les skins débloqués !','success');},
-    toggleGod(){this.godMode=!this.godMode;document.getElementById('btn-god').innerText=this.godMode?'MODE GOD : ON ✓':'MODE GOD : OFF';},
-    reset(){if(!confirm('Vraiment tout réinitialiser ?'))return;StatsManager.reset();this.godMode=false;Auth.logout();this.refresh();UI.toast('Données réinitialisées.','success');this.closeSidebar();},
-
-    // ── ADMIN: Joueurs ──
-    async loadUsers(){
-        const list=document.getElementById('admin-user-list');
-        list.innerHTML='<div class="loading-text">⟳ Chargement...</div>';
-        const data=await API.get('/admin/users');
-        if(data.error){list.innerHTML=`<div class="form-error">${data.error}</div>`;return;}
-        _allUsers=data;
-        this._renderUserStats(data);
-        this._renderUserList(data);
-    },
-    filterUsers(){
-        const q=document.getElementById('admin-search').value.toLowerCase();
-        this._renderUserList(_allUsers.filter(u=>u.displayName.toLowerCase().includes(q)||u.username.includes(q)));
-    },
-    _renderUserStats(users){
-        const bar=document.getElementById('admin-stats-bar');
-        bar.innerHTML=`<div class="admin-stat-pill">${users.length}<span>joueurs</span></div><div class="admin-stat-pill pill-red">${users.filter(u=>u.banned).length}<span>bannis</span></div><div class="admin-stat-pill pill-gold">${users.filter(u=>u.role==='admin').length}<span>admins</span></div>`;
-    },
-    _renderUserList(users){
-        const list=document.getElementById('admin-user-list');
-        if(!users.length){list.innerHTML='<div class="loading-text">Aucun résultat</div>';return;}
-        list.innerHTML=users.map(u=>`
-        <div class="admin-user-card ${u.banned?'user-banned':''} ${u.role==='admin'?'user-admin':''}">
-            <div class="admin-user-header">
-                <div class="admin-user-avatar" style="${u.avatar?'background-image:url('+u.avatar+')':''}">${!u.avatar?u.displayName[0].toUpperCase():''}</div>
-                <div class="admin-user-info">
-                    <div class="admin-user-name">${u.role==='admin'?'⚙ ':''}${u.displayName}${u.banned?'<span class="banned-tag">BANNI</span>':''}</div>
-                    <div class="admin-user-sub">◆${u.credits.toLocaleString()} · ${u.highScore.toLocaleString()}pts · ${u.highScoreLevel}</div>
-                    <div class="admin-user-sub" style="color:#333">${new Date(u.createdAt).toLocaleDateString('fr-FR')}</div>
-                </div>
-            </div>
-            ${u.banned&&u.bannedReason?`<div class="admin-ban-reason">⚠ ${u.bannedReason}</div>`:''}
-            <div class="admin-user-actions">
-                ${u.banned?`<button class="dev-btn" onclick="DevTools.unban('${u.id}')">DÉBANNIR</button>`:u.role!=='admin'?`<button class="dev-btn dev-btn-red" onclick="DevTools.banUser('${u.id}','${u.displayName}')">BAN</button>`:''}
-                ${u.role!=='admin'?`<button class="dev-btn" onclick="DevTools.kickScore('${u.id}','${u.displayName}')">KICK</button>`:''}
-                <button class="dev-btn" onclick="DevTools.editCredits('${u.id}','${u.displayName}',${u.credits})">CRÉDITS</button>
-                ${u.role!=='admin'?`<button class="dev-btn pill-gold-btn" onclick="DevTools.promoteUser('${u.id}','${u.displayName}','admin')">ADMIN</button>`:(Auth.user?.id!==u.id?`<button class="dev-btn" onclick="DevTools.promoteUser('${u.id}','${u.displayName}','player')">RÉTROGRADER</button>`:'')}
-                ${u.role!=='admin'?`<button class="dev-btn dev-btn-red" onclick="DevTools.deleteUser('${u.id}','${u.displayName}')">SUPPR</button>`:''}
-            </div>
-        </div>`).join('');
-    },
-    async banUser(id,name){const r=prompt(`Raison du ban de ${name}:`,'Violation des règles');if(r===null)return;const d=await API.post('/admin/ban',{userId:id,reason:r});d.error?UI.toast(d.error,'error'):(UI.toast(d.message,'success'),this.loadUsers());},
-    async unban(id){const d=await API.post('/admin/unban',{userId:id});d.error?UI.toast(d.error,'error'):(UI.toast(d.message,'success'),this.loadUsers());},
-    async kickScore(id,name){if(!confirm(`Remettre le score de ${name} à zéro ?`))return;const d=await API.post('/admin/kick-score',{userId:id});d.error?UI.toast(d.error,'error'):(UI.toast(d.message,'success'),this.loadUsers());},
-    async editCredits(id,name,cur){const v=prompt(`Crédits pour ${name} (actuel: ${cur}):`,cur);if(v===null)return;const c=parseInt(v);if(isNaN(c)||c<0){UI.toast('Valeur invalide.','error');return;}const d=await API.post('/admin/set-credits',{userId:id,credits:c});d.error?UI.toast(d.error,'error'):(UI.toast(d.message,'success'),this.loadUsers());},
-    async promoteUser(id,name,role){if(!confirm(`${role==='admin'?'Promouvoir':'Rétrograder'} ${name} ?`))return;const d=await API.post('/admin/promote',{userId:id,role});d.error?UI.toast(d.error,'error'):(UI.toast(d.message,'success'),this.loadUsers());},
-    async deleteUser(id,name){if(!confirm(`⚠ Supprimer DÉFINITIVEMENT ${name} ?`))return;const d=await API.del('/admin/delete-user',{userId:id});d.error?UI.toast(d.error,'error'):(UI.toast(d.message,'success'),this.loadUsers());},
-    async loadGlobalStats(){
-        const el=document.getElementById('admin-global-stats');
-        el.innerHTML='<div class="loading-text">⟳ Chargement...</div>';
-        const d=await API.get('/admin/stats');
-        if(d.error){el.innerHTML=`<div class="form-error">${d.error}</div>`;return;}
-        el.innerHTML=`<div class="global-stat"><div class="global-stat-val">${d.totalUsers}</div><div class="global-stat-lbl">JOUEURS</div></div><div class="global-stat"><div class="global-stat-val" style="color:#ff4444">${d.totalBanned}</div><div class="global-stat-lbl">BANNIS</div></div><div class="global-stat"><div class="global-stat-val" style="color:#ffcc00">${d.totalAdmins}</div><div class="global-stat-lbl">ADMINS</div></div>${d.topScore?`<div class="global-stat" style="grid-column:1/-1"><div class="global-stat-val" style="color:#ffd700">${d.topScore.score.toLocaleString()} pts</div><div class="global-stat-lbl">RECORD · ${d.topScore.name}</div></div>`:''}`;
+        if(this._clicks>=5){this._clicks=0;h.style.display='none';Admin.toggle();}
     }
 };
 
-// ════════════════ BONUS SYSTEM ════════════════
-const BONUS_TYPES = [
-    { type:'shield', label:'🛡', color:'#00ff88', desc:'BOUCLIER' },
-    { type:'slow',   label:'⚡', color:'#00f3ff', desc:'SLOW' },
-    { type:'magnet', label:'🧲', color:'#ff00ff', desc:'AIMANT' },
-    { type:'credits',label:'◆',  color:'#ffcc00', desc:'CRÉDITS +50' }
-];
+// ════════════════════════════════════════
+//  ADMIN PANEL
+// ════════════════════════════════════════
+let _allUsers=[];
+const Admin = {
+    _tab:'joueurs',
 
-const BonusSystem = {
-    items: [],
-    active: { shield:false, slow:false, magnet:false },
-    timers: { shield:0, slow:0, magnet:0 },
-    spawnTimer: 0,
-    SPAWN_INTERVAL: 1800, // ~30s à 60fps
+    show(){
+        document.getElementById('admin-toggle-btn').style.display='flex';
+        document.getElementById('ap-username').innerText=Auth.user?.displayName||'';
+    },
+    hide(){document.getElementById('admin-toggle-btn').style.display='none';this.close();},
 
-    reset(){ this.items=[]; this.active={shield:false,slow:false,magnet:false}; this.timers={shield:0,slow:0,magnet:0}; this.spawnTimer=0; this._updateHUD(); },
+    toggle(){const p=document.getElementById('admin-panel');p.classList.contains('open')?this.close():this.open();},
+    open(){
+        document.getElementById('admin-panel').classList.add('open');
+        document.getElementById('devtools-overlay').classList.add('active');
+        this.refreshTab();
+    },
+    close(){
+        document.getElementById('admin-panel').classList.remove('open');
+        document.getElementById('devtools-overlay').classList.remove('active');
+    },
 
-    update(playerX, playerY, score, canvas){
-        this.spawnTimer++;
-        // Spawn aléatoire entre 1800 et 2400 frames (~30-40s)
-        if(this.spawnTimer >= this.SPAWN_INTERVAL + Math.floor(Math.random()*600)){
-            this.spawnTimer=0;
-            const t=BONUS_TYPES[Math.floor(Math.random()*BONUS_TYPES.length)];
-            this.items.push({ x: 50+Math.random()*(canvas.width-100), y:-30, type:t.type, label:t.label, color:t.color, desc:t.desc, speed:2, pulse:0 });
-        }
-
-        // Update actifs
-        ['shield','slow','magnet'].forEach(k=>{
-            if(this.active[k]){
-                this.timers[k]--;
-                if(this.timers[k]<=0){ this.active[k]=false; this._updateHUD(); }
-            }
+    tab(name){
+        this._tab=name;
+        ['joueurs','classement','jeu','stats'].forEach(t=>{
+            document.getElementById('aptab-'+t).classList.toggle('active',t===name);
+            document.getElementById('ap-'+t).style.display=t===name?'flex':'none';
         });
+        this.refreshTab();
+    },
 
-        // Aimant : attire les autres bonus vers le joueur
-        if(this.active.magnet){
-            this.items.forEach(b=>{
-                const dx=(playerX+15)-b.x, dy=(playerY+15)-b.y;
-                const dist=Math.hypot(dx,dy)||1;
-                if(dist<300){ b.x+=dx/dist*4; b.y+=dy/dist*4; }
-            });
+    refreshTab(){
+        if(this._tab==='joueurs') this.loadUsers();
+        if(this._tab==='classement') this.loadLeaderboard();
+        if(this._tab==='stats') this.loadGlobalStats();
+        if(this._tab==='jeu') this._refreshJeu();
+    },
+
+    _refreshJeu(){
+        document.getElementById('ap-credits-local').value=Auth.user?Auth.user.credits:StatsManager.data.credits;
+        document.getElementById('ap-score-set').value=Game.running?Game.score:0;
+        document.getElementById('ap-god-btn').innerText='GOD : '+(Game.godMode?'ON ✓':'OFF');
+    },
+
+    // ── JOUEURS ──────────────────────────────────────
+    async loadUsers(){
+        const list=document.getElementById('ap-user-list');
+        list.innerHTML='<div class="ap-loading">⟳ Chargement...</div>';
+        const data=await API.get('/admin/users');
+        if(data.error){list.innerHTML=`<div class="ap-error">${data.error}</div>`;return;}
+        _allUsers=data;
+        this._renderPills(data);
+        this._renderUsers(data);
+    },
+
+    filter(){
+        const q=document.getElementById('ap-search').value.toLowerCase();
+        this._renderUsers(_allUsers.filter(u=>u.displayName.toLowerCase().includes(q)||u.username.includes(q)));
+    },
+
+    _renderPills(users){
+        document.getElementById('ap-user-pills').innerHTML=`
+            <div class="ap-pill">${users.length} <span>joueurs</span></div>
+            <div class="ap-pill pill-red">${users.filter(u=>u.banned).length} <span>bannis</span></div>
+            <div class="ap-pill pill-gold">${users.filter(u=>u.role==='admin').length} <span>admins</span></div>`;
+    },
+
+    _renderUsers(users){
+        const list=document.getElementById('ap-user-list');
+        if(!users.length){list.innerHTML='<div class="ap-empty">Aucun résultat</div>';return;}
+        list.innerHTML=users.map(u=>`
+        <div class="ap-user-card ${u.banned?'card-banned':''} ${u.role==='admin'?'card-admin':''}">
+            <div class="ap-user-top">
+                <div class="ap-user-av" style="${u.avatar?'background-image:url('+u.avatar+')':''}">${!u.avatar?u.displayName[0].toUpperCase():''}</div>
+                <div class="ap-user-info">
+                    <div class="ap-user-name">${u.role==='admin'?'⚙ ':''}${u.displayName} ${u.pinned?'📌':''} ${u.banned?'<span class="tag-banned">BANNI</span>':''}</div>
+                    <div class="ap-user-sub">◆${u.credits.toLocaleString()} · ${u.highScore.toLocaleString()}pts · ${u.highScoreLevel}</div>
+                    <div class="ap-user-sub" style="color:#333">${new Date(u.createdAt).toLocaleDateString('fr-FR')}</div>
+                </div>
+            </div>
+            ${u.banned&&u.bannedReason?`<div class="ap-ban-reason">⚠ ${u.bannedReason}</div>`:''}
+            <div class="ap-user-actions">
+                ${u.banned
+                    ?`<button class="ap-btn" onclick="Admin.unban('${u.id}')">DÉBANNIR</button>`
+                    :u.role!=='admin'?`<button class="ap-btn ap-btn-red" onclick="Admin.ban('${u.id}','${u.displayName}')">BAN</button>`:''
+                }
+                ${u.role!=='admin'?`<button class="ap-btn" onclick="Admin.editScore('${u.id}','${u.displayName}',${u.highScore})">SCORE</button>`:''}
+                <button class="ap-btn" onclick="Admin.editCredits('${u.id}','${u.displayName}',${u.credits})">CRÉDITS</button>
+                ${u.role!=='admin'
+                    ?`<button class="ap-btn ap-btn-gold" onclick="Admin.promote('${u.id}','${u.displayName}','admin')">↑ ADMIN</button>`
+                    :(Auth.user?.id!==u.id?`<button class="ap-btn" onclick="Admin.promote('${u.id}','${u.displayName}','player')">↓ JOUEUR</button>`:'')
+                }
+                ${u.role!=='admin'?`<button class="ap-btn ap-btn-red" onclick="Admin.deleteUser('${u.id}','${u.displayName}')">SUPPR</button>`:''}
+            </div>
+        </div>`).join('');
+    },
+
+    async ban(id,name){
+        const r=prompt(`Raison du ban de ${name}:`,'Violation des règles');if(r===null)return;
+        const d=await API.post('/admin/ban',{userId:id,reason:r});
+        d.error?toast(d.error,'error'):(toast(d.message,'success'),this.loadUsers());
+    },
+    async unban(id){const d=await API.post('/admin/unban',{userId:id});d.error?toast(d.error,'error'):(toast(d.message,'success'),this.loadUsers());},
+    async editCredits(id,name,cur){
+        const v=prompt(`Crédits de ${name} (actuel: ${cur}):`,cur);if(v===null)return;
+        const c=parseInt(v);if(isNaN(c)||c<0){toast('Valeur invalide','error');return;}
+        const d=await API.post('/admin/set-credits',{userId:id,credits:c});
+        d.error?toast(d.error,'error'):(toast(d.message,'success'),this.loadUsers());
+    },
+    async editScore(id,name,cur){
+        const v=prompt(`Score de ${name} (actuel: ${cur}):`,cur);if(v===null)return;
+        const s=parseInt(v);if(isNaN(s)||s<0){toast('Valeur invalide','error');return;}
+        const d=await API.post('/admin/set-score',{userId:id,score:s});
+        d.error?toast(d.error,'error'):(toast(d.message,'success'),this.loadUsers());
+    },
+    async promote(id,name,role){
+        if(!confirm(`${role==='admin'?'Promouvoir':'Rétrograder'} ${name} ?`))return;
+        const d=await API.post('/admin/promote',{userId:id,role});
+        d.error?toast(d.error,'error'):(toast(d.message,'success'),this.loadUsers());
+    },
+    async deleteUser(id,name){
+        if(!confirm(`⚠ Supprimer DÉFINITIVEMENT ${name} ?`))return;
+        const d=await API.del('/admin/delete-user',{userId:id});
+        d.error?toast(d.error,'error'):(toast(d.message,'success'),this.loadUsers());
+    },
+
+    // ── CLASSEMENT ───────────────────────────────────
+    async loadLeaderboard(){
+        const list=document.getElementById('ap-lead-list');
+        list.innerHTML='<div class="ap-loading">⟳ Chargement...</div>';
+        const data=await API.get('/admin/users');
+        if(data.error){list.innerHTML=`<div class="ap-error">${data.error}</div>`;return;}
+        const sorted=[...data].sort((a,b)=>{if(b.pinned&&!a.pinned)return 1;if(a.pinned&&!b.pinned)return-1;return b.highScore-a.highScore;});
+        list.innerHTML=sorted.map((u,i)=>`
+        <div class="ap-lead-row ${u.pinned?'lead-pinned':''}">
+            <span class="ap-lead-rank">${u.pinned?'📌':i+1}</span>
+            <div class="ap-user-av small" style="${u.avatar?'background-image:url('+u.avatar+')':''}">${!u.avatar?u.displayName[0].toUpperCase():''}</div>
+            <div class="ap-lead-info">
+                <div class="ap-user-name">${u.displayName}</div>
+                <div class="ap-user-sub">${u.highScoreLevel}</div>
+            </div>
+            <div class="ap-lead-score">${u.highScore.toLocaleString()}</div>
+            <div class="ap-lead-actions">
+                <button class="ap-btn ap-btn-xs" onclick="Admin.pin('${u.id}',${!u.pinned})">${u.pinned?'📌 OFF':'📌 PIN'}</button>
+                <button class="ap-btn ap-btn-xs ap-btn-red" onclick="Admin.kickScore('${u.id}','${u.displayName}')">KICK</button>
+                <button class="ap-btn ap-btn-xs ap-btn-gold" onclick="Admin.editScore('${u.id}','${u.displayName}',${u.highScore})">EDIT</button>
+            </div>
+        </div>`).join('');
+    },
+
+    async kickScore(id,name){
+        if(!confirm(`Remettre le score de ${name} à zéro ?`))return;
+        const d=await API.post('/admin/kick-score',{userId:id});
+        d.error?toast(d.error,'error'):(toast(d.message,'success'),this.loadLeaderboard());
+    },
+    async pin(id,pin){
+        const d=await API.post('/admin/pin',{userId:id,pin});
+        d.error?toast(d.error,'error'):(toast(d.message,'success'),this.loadLeaderboard());
+    },
+    async resetLeaderboard(){
+        if(!confirm('⚠ Remettre TOUS les scores à zéro ? Irréversible.'))return;
+        const d=await API.post('/admin/reset-leaderboard',{});
+        d.error?toast(d.error,'error'):(toast(d.message,'success'),this.loadLeaderboard());
+    },
+
+    // ── JEU ──────────────────────────────────────────
+    setSpeed(){
+        const v=parseFloat(document.getElementById('ap-speed').value);
+        document.getElementById('ap-speed-val').innerText=v.toFixed(1);
+        Game.speedMultiplier=v;
+    },
+    speedPreset(v){document.getElementById('ap-speed').value=v;this.setSpeed();},
+
+    setRate(){
+        const v=parseFloat(document.getElementById('ap-rate').value);
+        document.getElementById('ap-rate-val').innerText=v.toFixed(1);
+        Game.rateMultiplier=v;
+    },
+    ratePreset(v){document.getElementById('ap-rate').value=v;this.setRate();},
+
+    spawnEnemy(type,count){
+        if(!Game.running){toast('Lance une partie d\'abord !','error');return;}
+        const lvl=LevelSystem.getCurrentLevel(Game.score);
+        for(let i=0;i<count;i++){
+            const e=Game._mk(lvl);
+            if(type==='tracker'){e.tracker=true;}
+            else if(type==='zigzag'){e.zigzag=true;e.tracker=false;}
+            e.x=Math.random()*Game.canvas.width;
+            Game.enemies.push(e);
         }
+        toast(`+${count} ennemis ${type} !`,'success');
+    },
 
+    spawnCircle(){
+        if(!Game.running){toast('Lance une partie d\'abord !','error');return;}
+        const lvl=LevelSystem.getCurrentLevel(Game.score);
+        for(let a=0;a<8;a++){
+            const angle=(a/8)*Math.PI*2;
+            const e=Game._mk(lvl);
+            e.x=Game.canvas.width/2+Math.cos(angle)*300;e.y=-30;
+            e.vx=Math.cos(angle)*1.5;e.tracker=false;
+            Game.enemies.push(e);
+        }
+        toast('Cercle de 8 ennemis !','success');
+    },
+
+    forceBonus(type){
+        if(!Game.running){toast('Lance une partie d\'abord !','error');return;}
+        if(type==='all'||type==='shield'){BonusSystem.active.shield=true;BonusSystem.timers.shield=600;}
+        if(type==='all'||type==='slow'){BonusSystem.active.slow=true;BonusSystem.timers.slow=600;}
+        if(type==='all'||type==='magnet'){BonusSystem.active.magnet=true;BonusSystem.timers.magnet=600;}
+        BonusSystem._updateHUD();
+        toast(type==='all'?'Tous les bonus activés !':type+' activé !','success');
+    },
+
+    setGameScore(){
+        const v=parseInt(document.getElementById('ap-score-set').value);
+        if(isNaN(v)||v<0){toast('Valeur invalide','error');return;}
+        if(!Game.running){toast('Lance une partie d\'abord !','error');return;}
+        Game.score=v;toast('Score → '+v,'success');
+    },
+
+    forceGameOver(){
+        if(!Game.running){toast('Pas de partie en cours','error');return;}
+        Game.stop();toast('Game over forcé','success');
+    },
+
+    toggleGod(){
+        Game.godMode=!Game.godMode;
+        document.getElementById('ap-god-btn').innerText='GOD : '+(Game.godMode?'ON ✓':'OFF');
+        toast('Mode god : '+(Game.godMode?'ON':'OFF'),'success');
+    },
+
+    setLocalCredits(){
+        const v=parseInt(document.getElementById('ap-credits-local').value);
+        if(isNaN(v)||v<0){toast('Valeur invalide','error');return;}
+        StatsManager.data.credits=v;StatsManager.save();
+        if(Auth.user){Auth.user.credits=v;localStorage.setItem('nd_user',JSON.stringify(Auth.user));}
+        toast('Crédits → '+v,'success');
+    },
+
+    // ── STATS ─────────────────────────────────────────
+    async loadGlobalStats(){
+        const el=document.getElementById('ap-global-stats');
+        el.innerHTML='<div class="ap-loading">⟳ Chargement...</div>';
+        const d=await API.get('/admin/stats');
+        if(d.error){el.innerHTML=`<div class="ap-error">${d.error}</div>`;return;}
+        el.innerHTML=`
+            <div class="ap-stat-card"><div class="ap-stat-big">${d.totalUsers}</div><div class="ap-stat-lbl">JOUEURS</div></div>
+            <div class="ap-stat-card"><div class="ap-stat-big" style="color:#ff4444">${d.totalBanned}</div><div class="ap-stat-lbl">BANNIS</div></div>
+            <div class="ap-stat-card"><div class="ap-stat-big" style="color:#ffcc00">${d.totalAdmins}</div><div class="ap-stat-lbl">ADMINS</div></div>
+            <div class="ap-stat-card"><div class="ap-stat-big" style="color:#00f3ff">${d.totalUsers-d.totalBanned}</div><div class="ap-stat-lbl">ACTIFS</div></div>
+            ${d.topScore?`<div class="ap-stat-card ap-stat-full"><div class="ap-stat-big" style="color:#ffd700">${d.topScore.score.toLocaleString()} pts</div><div class="ap-stat-lbl">RECORD MONDIAL · ${d.topScore.name} · ${d.topScore.level}</div></div>`:''}
+        `;
+    }
+};
+
+// ════════════════════════════════════════
+//  BONUS SYSTEM
+// ════════════════════════════════════════
+const BonusSystem = {
+    items:[],active:{shield:false,slow:false,magnet:false},timers:{shield:0,slow:0,magnet:0},spawnTimer:0,SPAWN_INTERVAL:1800,
+    reset(){this.items=[];this.active={shield:false,slow:false,magnet:false};this.timers={shield:0,slow:0,magnet:0};this.spawnTimer=0;this._updateHUD();},
+    update(px,py,score,canvas){
+        this.spawnTimer++;
+        if(this.spawnTimer>=this.SPAWN_INTERVAL+Math.floor(Math.random()*600)){
+            this.spawnTimer=0;
+            const types=[{type:'shield',label:'🛡',color:'#00ff88'},{type:'slow',label:'⚡',color:'#00f3ff'},{type:'magnet',label:'🧲',color:'#ff00ff'},{type:'credits',label:'◆',color:'#ffcc00'}];
+            const t=types[Math.floor(Math.random()*types.length)];
+            this.items.push({x:50+Math.random()*(canvas.width-100),y:-30,...t,speed:2,pulse:0});
+        }
+        ['shield','slow','magnet'].forEach(k=>{if(this.active[k]){this.timers[k]--;if(this.timers[k]<=0){this.active[k]=false;this._updateHUD();}}});
+        if(this.active.magnet){this.items.forEach(b=>{const dx=(px+15)-b.x,dy=(py+15)-b.y,dist=Math.hypot(dx,dy)||1;if(dist<300){b.x+=dx/dist*4;b.y+=dy/dist*4;}});}
         for(let i=this.items.length-1;i>=0;i--){
-            const b=this.items[i];
-            b.y+=b.speed; b.pulse+=0.1;
-
-            // Collision joueur
-            if(Math.hypot(playerX+15-b.x, playerY+15-b.y)<28){
-                this._collect(b, score);
-                this.items.splice(i,1);
-                continue;
-            }
-            // Hors écran
-            if(b.y>canvas.height+50) this.items.splice(i,1);
+            const b=this.items[i];b.y+=b.speed;b.pulse+=.1;
+            if(Math.hypot(px+15-b.x,py+15-b.y)<28){this._collect(b);this.items.splice(i,1);continue;}
+            if(b.y>canvas.height+50)this.items.splice(i,1);
         }
     },
-
-    _collect(b, score){
-        if(b.type==='shield'){ this.active.shield=true; this.timers.shield=300; }
-        else if(b.type==='slow'){ this.active.slow=true; this.timers.slow=300; }
-        else if(b.type==='magnet'){ this.active.magnet=true; this.timers.magnet=420; }
-        else if(b.type==='credits'){
-            const earned=50;
-            StatsManager.data.credits+=earned; StatsManager.save();
-            if(Auth.user){ Auth.user.credits+=earned; localStorage.setItem('nd_user',JSON.stringify(Auth.user)); }
-        }
-        UI.toast(b.desc+(b.type==='credits'?' +50':''),'success');
-        this._updateHUD();
+    _collect(b){
+        if(b.type==='shield'){this.active.shield=true;this.timers.shield=300;}
+        else if(b.type==='slow'){this.active.slow=true;this.timers.slow=300;}
+        else if(b.type==='magnet'){this.active.magnet=true;this.timers.magnet=420;}
+        else if(b.type==='credits'){const e=50;StatsManager.data.credits+=e;StatsManager.save();if(Auth.user){Auth.user.credits+=e;localStorage.setItem('nd_user',JSON.stringify(Auth.user));}}
+        toast(b.type==='credits'?'◆ +50 crédits':b.label+' '+b.type,'success');this._updateHUD();
     },
-
     _updateHUD(){
         document.getElementById('bonus-shield').style.display=this.active.shield?'flex':'none';
         document.getElementById('bonus-slow').style.display=this.active.slow?'flex':'none';
         document.getElementById('bonus-magnet').style.display=this.active.magnet?'flex':'none';
     },
-
     draw(ctx){
         this.items.forEach(b=>{
             const glow=Math.sin(b.pulse)*8+12;
-            ctx.save();
-            ctx.shadowBlur=glow; ctx.shadowColor=b.color;
-            // Cercle
-            ctx.beginPath(); ctx.arc(b.x,b.y,14,0,Math.PI*2);
-            ctx.fillStyle=b.color+'33'; ctx.fill();
-            ctx.strokeStyle=b.color; ctx.lineWidth=1.5; ctx.stroke();
-            // Emoji/label
-            ctx.shadowBlur=0; ctx.font='14px Arial'; ctx.textAlign='center'; ctx.textBaseline='middle';
-            ctx.fillText(b.label, b.x, b.y);
+            ctx.save();ctx.shadowBlur=glow;ctx.shadowColor=b.color;
+            ctx.beginPath();ctx.arc(b.x,b.y,14,0,Math.PI*2);ctx.fillStyle=b.color+'33';ctx.fill();ctx.strokeStyle=b.color;ctx.lineWidth=1.5;ctx.stroke();
+            ctx.shadowBlur=0;ctx.font='14px Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(b.label,b.x,b.y);
             ctx.restore();
         });
     }
 };
 
-// ════════════════ GAME ENGINE ════════════════
+// ════════════════════════════════════════
+//  GAME ENGINE
+// ════════════════════════════════════════
 const Game = {
-    canvas: document.getElementById('gameCanvas'),
-    ctx:null, running:false, paused:false, score:0,
+    canvas:document.getElementById('gameCanvas'),
+    ctx:null,running:false,paused:false,score:0,
     player:{x:0,y:0,color:'#00f3ff'},
-    enemies:[], trails:[],
-    currentLevelName:'', burstTimer:0, glitchTimer:0, timeTimer:0,
-    bgParticles:[], animFrame:null,
+    enemies:[],trails:[],bgParticles:[],
+    currentLevelName:'',burstTimer:0,glitchTimer:0,timeTimer:0,animFrame:null,
+    godMode:false,
+    speedMultiplier:1.0,
+    rateMultiplier:1.0,
 
     init(){
-        this.ctx=this.canvas.getContext('2d'); this.resize();
+        this.ctx=this.canvas.getContext('2d');this.resize();
         StatsManager.init();
-        if(StatsManager.data.equippedSkin) this.player.color=StatsManager.data.equippedSkin;
-        for(let i=0;i<80;i++) this.bgParticles.push({x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,size:Math.random()*1.5+0.3,speed:Math.random()*0.4+0.1});
+        if(StatsManager.data.equippedSkin)this.player.color=StatsManager.data.equippedSkin;
+        for(let i=0;i<80;i++)this.bgParticles.push({x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,size:Math.random()*1.5+.3,speed:Math.random()*.4+.1});
         window.addEventListener('resize',()=>this.resize());
         window.addEventListener('keydown',(e)=>{if((e.key==='Escape'||e.key==='p'||e.key==='P')&&this.running)this.togglePause();});
         this.canvas.addEventListener('touchmove',(e)=>{e.preventDefault();this.player.x=e.touches[0].clientX-15;},{passive:false});
-        if(Auth.token&&Auth.user&&Auth.isAdmin()) DevTools.showAdminPanel();
-        Auth._ui(); BgCanvas.init();
+        if(Auth.token&&Auth.user&&Auth.isAdmin())Admin.show();
+        Auth._ui();BgCanvas.init();
     },
 
-    resize(){ this.canvas.width=window.innerWidth; this.canvas.height=window.innerHeight; },
+    resize(){this.canvas.width=window.innerWidth;this.canvas.height=window.innerHeight;},
 
     start(){
         if(this.animFrame)cancelAnimationFrame(this.animFrame);
-        this.running=true;this.paused=false;this.score=0;
-        this.enemies=[];this.trails=[];
+        this.running=true;this.paused=false;this.score=0;this.enemies=[];this.trails=[];
         this.burstTimer=0;this.glitchTimer=0;this.timeTimer=0;this.currentLevelName='';
+        this.speedMultiplier=1.0;this.rateMultiplier=1.0;
         BonusSystem.reset();
-        this.player.x=this.canvas.width/2-15; this.player.y=this.canvas.height-80;
+        // Reset sliders admin
+        if(document.getElementById('ap-speed')){document.getElementById('ap-speed').value=1;document.getElementById('ap-speed-val').innerText='1.0';}
+        if(document.getElementById('ap-rate')){document.getElementById('ap-rate').value=1;document.getElementById('ap-rate-val').innerText='1.0';}
+        this.player.x=this.canvas.width/2-15;this.player.y=this.canvas.height-80;
         document.querySelectorAll('.screen').forEach(s=>s.style.display='none');
         document.getElementById('layer-game').style.display='block';
         document.getElementById('pause-menu').style.display='none';
         BgCanvas.hide();
-        StatsManager.data.gamesPlayed=(StatsManager.data.gamesPlayed||0)+1; StatsManager.save();
+        StatsManager.data.gamesPlayed=(StatsManager.data.gamesPlayed||0)+1;StatsManager.save();
         window.onmousemove=(ev)=>{this.player.x=ev.clientX-15;};
         this.loop();
     },
@@ -663,28 +844,28 @@ const Game = {
         if(!this.running)return;
         this.running=false;this.paused=false;window.onmousemove=null;
         if(this.animFrame)cancelAnimationFrame(this.animFrame);
-        const fs=this.score, lvl=LevelSystem.getCurrentLevel(fs), lvlName=lvl.name;
+        const fs=this.score,lvl=LevelSystem.getCurrentLevel(fs),lvlName=lvl.name;
         StatsManager.data.deathCount++;
         const isNew=fs>StatsManager.data.highScore;
         if(isNew){StatsManager.data.highScore=fs;StatsManager.data.bestLevel=lvlName;}
         StatsManager.save();
         let ce=Math.floor(fs/10),isNewHs=isNew;
-        if(Auth.token){
-            const r=await API.post('/scores/submit',{score:fs,level:lvlName});
-            if(!r.error){ce=r.creditsEarned;isNewHs=r.isNewHighScore;Auth.user.credits=r.newCredits;Auth.user.highScore=r.highScore;if(isNewHs)Auth.user.highScoreLevel=lvlName;localStorage.setItem('nd_user',JSON.stringify(Auth.user));}
-        } else{StatsManager.data.credits+=ce;StatsManager.save();}
+        if(Auth.token){const r=await API.post('/scores/submit',{score:fs,level:lvlName});if(!r.error){ce=r.creditsEarned;isNewHs=r.isNewHighScore;Auth.user.credits=r.newCredits;Auth.user.highScore=r.highScore;if(isNewHs)Auth.user.highScoreLevel=lvlName;localStorage.setItem('nd_user',JSON.stringify(Auth.user));}}
+        else{StatsManager.data.credits+=ce;StatsManager.save();}
         document.getElementById('layer-game').style.display='none';
         document.getElementById('layer-death').style.display='flex';
         BgCanvas.show();
         document.getElementById('death-stats').innerHTML=`<div class="death-score">${fs.toLocaleString()}</div><div class="death-score-label">POINTS</div><div class="death-info-grid"><div class="death-info-item"><div class="death-info-val" style="color:${lvl.color}">${lvlName}</div><div class="death-info-lbl">NIVEAU</div></div><div class="death-info-item"><div class="death-info-val" style="color:#ffcc00">+${ce.toLocaleString()}</div><div class="death-info-lbl">CRÉDITS</div></div><div class="death-info-item"><div class="death-info-val">${LevelSystem.getTierName(fs)}</div><div class="death-info-lbl">TIER</div></div></div>${isNewHs?'<div class="new-record">🏆 NOUVEAU RECORD !</div>':''}${!Auth.token?'<div class="death-login-hint">Connecte-toi pour sauvegarder !</div>':''}`;
-        const gl=document.getElementById('death-glitch-text');let c=0;
-        const gi=setInterval(()=>{gl.style.transform=`translate(${(Math.random()-.5)*6}px,${(Math.random()-.5)*6}px)`;gl.style.opacity=Math.random()>.3?'.5':'0';if(++c>12){clearInterval(gi);gl.style.transform='';gl.style.opacity='.15';}},80);
+        const gl=document.querySelector('.death-glitch');if(gl){let c=0;const gi=setInterval(()=>{gl.style.transform=`translate(${(Math.random()-.5)*6}px,${(Math.random()-.5)*6}px)`;gl.style.opacity=Math.random()>.3?'.5':'0';if(++c>12){clearInterval(gi);gl.style.transform='';gl.style.opacity='.15';}},80);}
     },
 
     quit(){
         if(this.running){StatsManager.data.credits+=Math.floor(this.score/10);if(this.score>StatsManager.data.highScore)StatsManager.data.highScore=this.score;StatsManager.save();}
-        this.running=false;this.paused=false;if(this.animFrame)cancelAnimationFrame(this.animFrame);window.onmousemove=null;
-        document.getElementById('layer-game').style.display='none';document.getElementById('pause-menu').style.display='none';
+        this.running=false;this.paused=false;
+        if(this.animFrame)cancelAnimationFrame(this.animFrame);
+        window.onmousemove=null;
+        document.getElementById('layer-game').style.display='none';
+        document.getElementById('pause-menu').style.display='none';
         UI.show('layer-menu');
     },
 
@@ -717,91 +898,46 @@ const Game = {
         if(next){const pct=Math.min(100,((this.score-lvl.scoreReq)/(next.scoreReq-lvl.scoreReq))*100);document.getElementById('next-level-fill').style.width=pct+'%';document.getElementById('next-level-fill').style.background=lvl.color||'#00f3ff';document.getElementById('next-level-label').innerText=`→ ${next.name} dans ${(next.scoreReq-this.score).toLocaleString()} pts`;}
         else{document.getElementById('next-level-fill').style.width='100%';document.getElementById('next-level-label').innerText='∞ MAX NIVEAU';}
 
-        if(Math.random()<lvl.rate)this._spawn(lvl);
+        // Spawn avec multiplicateur admin
+        if(Math.random()<lvl.rate*this.rateMultiplier)this._spawn(lvl);
 
-        // Burst : vague groupée
-        if(lvl.burst){
-            this.burstTimer++;
-            if(this.burstTimer>=90){
-                this.burstTimer=0;
-                const count=3+Math.floor(this.score/5000); // plus d'ennemis avec le score
-                for(let i=0;i<count;i++)setTimeout(()=>{if(this.running&&!this.paused)this._spawn(lvl);},i*60);
-            }
-        }
-
-        // Glitch : cercle d'ennemis
-        if(lvl.glitch){
-            this.glitchTimer++;
-            if(this.glitchTimer>=160){
-                this.glitchTimer=0;
-                this.canvas.style.filter=`hue-rotate(${Math.random()*360}deg) brightness(2)`;
-                setTimeout(()=>{this.canvas.style.filter='';},120);
-                for(let a=0;a<6;a++){const angle=(a/6)*Math.PI*2;const e=this._mk(lvl);e.x=this.canvas.width/2+Math.cos(angle)*250;e.y=-30;e.vx=Math.cos(angle)*2;this.enemies.push(e);}
-            }
-        }
+        if(lvl.burst){this.burstTimer++;if(this.burstTimer>=90){this.burstTimer=0;const count=3+Math.floor(this.score/5000);for(let i=0;i<count;i++)setTimeout(()=>{if(this.running&&!this.paused)this._spawn(lvl);},i*60);}}
+        if(lvl.glitch){this.glitchTimer++;if(this.glitchTimer>=160){this.glitchTimer=0;this.canvas.style.filter=`hue-rotate(${Math.random()*360}deg) brightness(2)`;setTimeout(()=>{this.canvas.style.filter='';},120);for(let a=0;a<6;a++){const angle=(a/6)*Math.PI*2;const e=this._mk(lvl);e.x=this.canvas.width/2+Math.cos(angle)*250;e.y=-30;e.vx=Math.cos(angle)*2;this.enemies.push(e);}}}
 
         this.timeTimer++;if(this.timeTimer>=60){this.timeTimer=0;StatsManager.incrementTime();}
 
         const W=this.canvas.width,H=this.canvas.height;
         this.bgParticles.forEach(p=>{p.y+=p.speed;if(p.y>H){p.y=0;p.x=Math.random()*W;}});
-        this.trails.push({x:this.player.x+15,y:this.player.y+15,alpha:0.4,color:this.player.color});
+        this.trails.push({x:this.player.x+15,y:this.player.y+15,alpha:.4,color:this.player.color});
         if(this.trails.length>8)this.trails.shift();
-        this.trails.forEach(t=>{t.alpha-=0.04;});
+        this.trails.forEach(t=>{t.alpha-=.04;});
 
-        // Update bonus
-        BonusSystem.update(this.player.x, this.player.y, this.score, this.canvas);
+        BonusSystem.update(this.player.x,this.player.y,this.score,this.canvas);
 
         for(let i=this.enemies.length-1;i>=0;i--){
             const e=this.enemies[i];
-            const spd=e.speed*slowFactor;
-
+            const spd=e.speed*this.speedMultiplier*slowFactor;
             if(e.tracker){
-                // ── FIX TRACKER : vitesse limitée, ne peut pas rester collé ──
-                const dx=(this.player.x+15)-(e.x+12);
-                const dy=(this.player.y+15)-(e.y+12);
-                const dist=Math.hypot(dx,dy)||1;
-                // Toujours descendre + tracking latéral limité
-                e.x+=((dx/dist)*e.trackSpeed)*slowFactor;
-                e.y+=((Math.abs(dy/dist)*spd)+e.trackSpeed*slowFactor)*0.5+1;
+                const dx=(this.player.x+15)-(e.x+12),dy=(this.player.y+15)-(e.y+12),dist=Math.hypot(dx,dy)||1;
+                e.x+=(dx/dist)*e.trackSpeed*this.speedMultiplier*slowFactor;
+                e.y+=((Math.abs(dy/dist)*spd)+e.trackSpeed*this.speedMultiplier*slowFactor)*.5+1;
             } else {
-                if(e.zigzag)e.x+=Math.sin(e.y*0.05+e.phase)*3;
-                e.x+=e.vx||0;
-                e.y+=spd;
+                if(e.zigzag)e.x+=Math.sin(e.y*.05+e.phase)*3;
+                e.x+=e.vx||0;e.y+=spd;
             }
-
-            // Collision
-            if(!DevTools.godMode&&!BonusSystem.active.shield){
+            if(!this.godMode&&!BonusSystem.active.shield){
                 if(Math.hypot(this.player.x+15-(e.x+12),this.player.y+15-(e.y+12))<24){this.stop();return;}
-            } else if(!DevTools.godMode&&BonusSystem.active.shield){
-                if(Math.hypot(this.player.x+15-(e.x+12),this.player.y+15-(e.y+12))<24){
-                    // Bouclier absorbe 1 collision
-                    BonusSystem.active.shield=false;BonusSystem.timers.shield=0;BonusSystem._updateHUD();
-                    this.enemies.splice(i,1);
-                    UI.toast('Bouclier brisé !','error');
-                    continue;
-                }
+            } else if(!this.godMode&&BonusSystem.active.shield){
+                if(Math.hypot(this.player.x+15-(e.x+12),this.player.y+15-(e.y+12))<24){BonusSystem.active.shield=false;BonusSystem.timers.shield=0;BonusSystem._updateHUD();this.enemies.splice(i,1);toast('Bouclier brisé !','error');continue;}
             }
-
             if(e.y>H+60||e.x<-100||e.x>W+100){this.enemies.splice(i,1);this.score+=10;}
         }
         document.getElementById('ui-score').innerText=this.score.toLocaleString();
     },
 
-    // Créer un ennemi avec le bon ratio tracker/normal
     _mk(lvl){
-        const isTracker=lvl.tracker&&Math.random()<(lvl.trackRatio||0.3);
-        const isZigzag=!isTracker&&lvl.zigzag&&Math.random()<0.5;
-        return{
-            x:Math.random()*this.canvas.width, y:-50,
-            speed:lvl.speed+(Math.random()*1.5-0.75),
-            tracker:isTracker,
-            trackSpeed:lvl.speed*0.25, // vitesse de tracking réduite
-            zigzag:isZigzag,
-            phase:Math.random()*Math.PI*2,
-            color:lvl.color||'#ff3838',
-            vx:0,
-            size:18+Math.random()*8
-        };
+        const isTracker=lvl.tracker&&Math.random()<(lvl.trackRatio||.3);
+        return{x:Math.random()*this.canvas.width,y:-50,speed:lvl.speed+(Math.random()*1.5-.75),tracker:isTracker,trackSpeed:lvl.speed*.25,zigzag:!isTracker&&lvl.zigzag&&Math.random()<.5,phase:Math.random()*Math.PI*2,color:lvl.color||'#ff3838',vx:0,size:18+Math.random()*8};
     },
     _spawn(lvl){this.enemies.push(this._mk(lvl));},
 
@@ -814,35 +950,17 @@ const Game = {
 
     draw(){
         const lvl=LevelSystem.getCurrentLevel(this.score),C=this.ctx;
-        // Fond
         C.fillStyle=lvl.bgColor||'#050505';C.fillRect(0,0,this.canvas.width,this.canvas.height);
         C.shadowBlur=0;
-        // Particules fond
         this.bgParticles.forEach(p=>{C.fillStyle=(lvl.color||'#00f3ff')+'18';C.beginPath();C.arc(p.x,p.y,p.size,0,Math.PI*2);C.fill();});
-        // Traînées
         this.trails.forEach(t=>{if(t.alpha<=0)return;C.globalAlpha=t.alpha;C.fillStyle=t.color;C.shadowBlur=8;C.shadowColor=t.color;C.fillRect(t.x-4,t.y-4,8,8);});
         C.globalAlpha=1;
-        // Joueur
         C.shadowBlur=25;C.shadowColor=this.player.color;C.fillStyle=this.player.color;
         C.fillRect(this.player.x,this.player.y,30,30);
         C.fillStyle='#ffffff66';C.fillRect(this.player.x+6,this.player.y+6,10,10);
-        // Bouclier visuel
-        if(BonusSystem.active.shield){
-            C.strokeStyle='#00ff88';C.lineWidth=2;C.shadowColor='#00ff88';C.shadowBlur=20;
-            C.beginPath();C.arc(this.player.x+15,this.player.y+15,24,0,Math.PI*2);C.stroke();
-        }
-        if(DevTools.godMode){C.strokeStyle='#ffcc00';C.lineWidth=2;C.shadowColor='#ffcc00';C.shadowBlur=15;C.strokeRect(this.player.x-5,this.player.y-5,40,40);}
-        // Ennemis
-        this.enemies.forEach(e=>{
-            const c=e.color||'#ff3838';C.shadowBlur=16;C.shadowColor=c;C.fillStyle=c;C.fillRect(e.x,e.y,e.size,e.size);
-            if(e.tracker){
-                // Indicateur visuel tracker : croix sur l'ennemi
-                C.strokeStyle='#ffffff88';C.lineWidth=1;
-                C.strokeRect(e.x-3,e.y-3,e.size+6,e.size+6);
-                C.beginPath();C.moveTo(e.x+e.size/2,e.y-8);C.lineTo(e.x+e.size/2,e.y);C.stroke();
-            }
-        });
-        // Bonus
+        if(BonusSystem.active.shield){C.strokeStyle='#00ff88';C.lineWidth=2;C.shadowColor='#00ff88';C.shadowBlur=20;C.beginPath();C.arc(this.player.x+15,this.player.y+15,24,0,Math.PI*2);C.stroke();}
+        if(this.godMode){C.strokeStyle='#ffcc00';C.lineWidth=2;C.shadowColor='#ffcc00';C.shadowBlur=15;C.strokeRect(this.player.x-5,this.player.y-5,40,40);}
+        this.enemies.forEach(e=>{const c=e.color||'#ff3838';C.shadowBlur=16;C.shadowColor=c;C.fillStyle=c;C.fillRect(e.x,e.y,e.size,e.size);if(e.tracker){C.strokeStyle='#ffffff88';C.lineWidth=1;C.strokeRect(e.x-3,e.y-3,e.size+6,e.size+6);C.beginPath();C.moveTo(e.x+e.size/2,e.y-8);C.lineTo(e.x+e.size/2,e.y);C.stroke();}});
         BonusSystem.draw(C);
         C.shadowBlur=0;
     }
