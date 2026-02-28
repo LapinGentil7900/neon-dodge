@@ -9,10 +9,8 @@ const userSchema = new mongoose.Schema({
     trim: true,
     minlength: 3,
     maxlength: 20,
-    // Stockage en lowercase pour unicité insensible à la casse
     set: (v) => v.toLowerCase()
   },
-  // Pseudo affiché avec la casse originale
   displayName: {
     type: String,
     required: true,
@@ -23,8 +21,8 @@ const userSchema = new mongoose.Schema({
     required: true
   },
   profilePicture: {
-    url: { type: String, default: null },
-    publicId: { type: String, default: null } // Cloudinary public_id pour suppression
+    url:      { type: String, default: null },
+    publicId: { type: String, default: null }
   },
   credits: {
     type: Number,
@@ -38,17 +36,34 @@ const userSchema = new mongoose.Schema({
   },
   highScoreLevel: {
     type: String,
-    default: 'SÉCURITÉ'
+    default: 'TUTORIAL'
   },
   unlockedSkins: {
     type: [String],
-    default: ['neon_blue'] // skin de base offert
+    default: ['neon_blue']
+  },
+  // ── NOUVEAU ──────────────────────────────────
+  role: {
+    type: String,
+    enum: ['player', 'admin'],
+    default: 'player'
+  },
+  banned: {
+    type: Boolean,
+    default: false
+  },
+  bannedReason: {
+    type: String,
+    default: null
+  },
+  bannedAt: {
+    type: Date,
+    default: null
   }
 }, {
   timestamps: true
 });
 
-// Index sur username (déjà unique, mais on force lowercase)
 userSchema.index({ username: 1 });
 
 module.exports = mongoose.model('User', userSchema);
