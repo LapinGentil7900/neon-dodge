@@ -201,7 +201,7 @@
             <button class="ap-btn ap-btn-red" onclick="Admin.resetLeaderboard()">⚠ TOUT RESET</button>
         </div>
         <div id="ap-lead-list" class="ap-list">
-            <div class="ap-empty">Clique ↺ pour charger</div>
+            <div class="ap-empty">👆 Clique ↺ ACTUALISER</div>
         </div>
     </div>
 
@@ -507,7 +507,8 @@ const Admin = {
     open(){
         document.getElementById('admin-panel').classList.add('open');
         document.getElementById('devtools-overlay').classList.add('active');
-        this.refreshTab();
+        // Rafraîchit seulement l'onglet jeu (pas d'appel API), les autres nécessitent ↺
+        if(this._tab==='jeu') this._refreshJeu();
     },
     close(){
         document.getElementById('admin-panel').classList.remove('open');
@@ -520,7 +521,9 @@ const Admin = {
             document.getElementById('aptab-'+t).classList.toggle('active',t===name);
             document.getElementById('ap-'+t).style.display=t===name?'flex':'none';
         });
-        this.refreshTab();
+        // Rafraîchit auto seulement pour l'onglet JEU (pas d'appel API)
+        // Pour joueurs/classement/stats: l'utilisateur clique ↺
+        if(name==='jeu') this._refreshJeu();
     },
 
     refreshTab(){
@@ -539,9 +542,12 @@ const Admin = {
     // ── JOUEURS ──────────────────────────────────────
     async loadUsers(){
         const list=document.getElementById('ap-user-list');
+        if(!Auth.token){list.innerHTML='<div class="ap-error">Non connecté — reconnecte-toi</div>';return;}
         list.innerHTML='<div class="ap-loading">⟳ Chargement...</div>';
         const data=await API.get('/admin/users');
-        if(data.error){list.innerHTML=`<div class="ap-error">${data.error}</div>`;return;}
+        if(!data){list.innerHTML='<div class="ap-error">Pas de réponse serveur</div>';return;}
+        if(data.error){list.innerHTML=`<div class="ap-error">Erreur: ${data.error}</div>`;return;}
+        if(!Array.isArray(data)){list.innerHTML=`<div class="ap-error">Réponse inattendue: ${JSON.stringify(data).slice(0,100)}</div>`;return;}
         _allUsers=data;
         this._renderPills(data);
         this._renderUsers(data);
@@ -621,9 +627,11 @@ const Admin = {
     // ── CLASSEMENT ───────────────────────────────────
     async loadLeaderboard(){
         const list=document.getElementById('ap-lead-list');
+        if(!Auth.token){list.innerHTML='<div class="ap-error">Non connecté — reconnecte-toi</div>';return;}
         list.innerHTML='<div class="ap-loading">⟳ Chargement...</div>';
         const data=await API.get('/admin/users');
-        if(data.error){list.innerHTML=`<div class="ap-error">${data.error}</div>`;return;}
+        if(!data||data.error){list.innerHTML=`<div class="ap-error">Erreur: ${data?.error||'Pas de réponse'}</div>`;return;}
+        if(!Array.isArray(data)){list.innerHTML=`<div class="ap-error">Réponse inattendue: ${JSON.stringify(data).slice(0,100)}</div>`;return;}
         const sorted=[...data].sort((a,b)=>{if(b.pinned&&!a.pinned)return 1;if(a.pinned&&!b.pinned)return-1;return b.highScore-a.highScore;});
         list.innerHTML=sorted.map((u,i)=>`
         <div class="ap-lead-row ${u.pinned?'lead-pinned':''}">
@@ -736,9 +744,10 @@ const Admin = {
     // ── STATS ─────────────────────────────────────────
     async loadGlobalStats(){
         const el=document.getElementById('ap-global-stats');
+        if(!Auth.token){el.innerHTML='<div class="ap-error">Non connecté — reconnecte-toi</div>';return;}
         el.innerHTML='<div class="ap-loading">⟳ Chargement...</div>';
         const d=await API.get('/admin/stats');
-        if(d.error){el.innerHTML=`<div class="ap-error">${d.error}</div>`;return;}
+        if(!d||d.error){el.innerHTML=`<div class="ap-error">Erreur: ${d?.error||'Pas de réponse'}</div>`;return;}
         el.innerHTML=`
             <div class="ap-stat-card"><div class="ap-stat-big">${d.totalUsers}</div><div class="ap-stat-lbl">JOUEURS</div></div>
             <div class="ap-stat-card"><div class="ap-stat-big" style="color:#ff4444">${d.totalBanned}</div><div class="ap-stat-lbl">BANNIS</div></div>
